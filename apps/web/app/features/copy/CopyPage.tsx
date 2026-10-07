@@ -9,9 +9,9 @@ import { PhoneBar } from "../../components/shell/PhoneBar";
  * left rail and its outline in the right (phones get the facts above the text and no outline).
  */
 export function CopyPage({ doc, rendered, eyebrow, footer, aside }: { doc: CopyDocument; rendered: RenderedCopy; eyebrow?: ReactNode; footer?: ReactNode; aside?: ReactNode }) {
-  const facts = (["版本", "生效日期", "运营主体", "备案号"] as const).filter((k) => doc.meta[k]);
+  const facts = (["バージョン", "発効日", "運営主体", "登録番号"] as const).filter((k) => doc.meta[k]);
   const info = facts.length > 0 && (
-    <RailSection title="文档信息">
+    <RailSection title="ドキュメント情報">
       <dl className="space-y-2 text-[12.5px]">
         {facts.map((k) => (
           <div key={k}>
@@ -23,8 +23,8 @@ export function CopyPage({ doc, rendered, eyebrow, footer, aside }: { doc: CopyD
     </RailSection>
   );
   const outline = rendered.outline.length > 2 && (
-    <RailSection title="目录">
-      <nav aria-label="目录">
+    <RailSection title="目次">
+      <nav aria-label="目次">
         <ol className="-ml-px space-y-0.5 border-l border-line">
           {rendered.outline.map((o) => (
             <li key={o.id}>
@@ -39,7 +39,7 @@ export function CopyPage({ doc, rendered, eyebrow, footer, aside }: { doc: CopyD
   );
   return (
     <>
-    <PhoneBar back={{ to: "/more", label: "我的" }} title={doc.title} />
+    <PhoneBar back={{ to: "/more", label: "マイページ" }} title={doc.title} />
     <ArticleLayout
       left={
         <>

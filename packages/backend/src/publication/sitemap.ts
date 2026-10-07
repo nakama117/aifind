@@ -9,11 +9,16 @@ import { sql } from "../db.ts";
 import { cached } from "../lib/cache.ts";
 import { escapeXml } from "../lib/text.ts";
 import { siteUrl } from "./links.ts";
-import { evidenceCondition, listedCondition, selectedCondition } from "./scope.ts";
+import { evidenceCondition, listedCondition, releasedCondition, selectedCondition } from "./scope.ts";
 import { topicPageCounts } from "./topics.ts";
 import { serverModules, type SitemapEntry } from "../modules.ts";
 
 const MAX_URLS = 45_000;
+/** Index maps, not their entries: independently fresh module maps retain their withdrawal semantics. */
+export function sitemapIndexXml(): string {
+  const files = [...new Set(["/sitemap.xml", ...serverModules().flatMap(m => m.sitemap?.files ?? [])])];
+  return `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${files.map(file => `<sitemap><loc>${escapeXml(siteUrl(file))}</loc></sitemap>`).join("")}</sitemapindex>`;
+}
 const TTL_MS = 5 * 60 * 1000;
 const CACHE_FILE = path.join(config.dataDir, "sitemap-last.xml");
 
@@ -60,7 +65,8 @@ async function build(): Promise<string> {
   for (const s of stories) entries.push({ loc: `/story/${s.public_id}`, lastmod: s.latest_at, changefreq: "daily", priority: 0.5 });
   for (const m of serverModules()) if (m.sitemap?.entries) entries.push(...(await m.sitemap.entries()));
   const items = await sql<{ id: string; t: Date }[]>`
-    SELECT article_id AS id, updated_at AS t FROM publications WHERE visibility = 'public' AND indexable ORDER BY timeline_at DESC, article_id DESC LIMIT ${MAX_URLS - entries.length}`;
+    SELECT p.article_id AS id, p.updated_at AS t FROM publications p WHERE p.visibility = 'public' AND p.indexable AND ${releasedCondition(new Date())}
+    ORDER BY p.timeline_at DESC, p.article_id DESC LIMIT ${Math.max(0, MAX_URLS - entries.length)}`;
   for (const it of items) entries.push({ loc: `/items/${it.id}`, lastmod: it.t, changefreq: "monthly", priority: 0.5 });
 
   const body = entries

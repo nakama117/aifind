@@ -1,7 +1,7 @@
 // Selected news timeline: one card per fact, or per standalone article. Only duplicate reports
 // fold together. Each fact stays at its first appearance; other news in its story never moves it.
 import type { GroupInfo, TimelineCard, TimelineFilters, TimelineResponse } from "@aihot/contracts/site";
-import { beijingDate, beijingMidnight } from "@aihot/contracts/time";
+import { tokyoDate, tokyoMidnight } from "@aihot/contracts/time";
 import { sql } from "../db.ts";
 import { cachedByKey } from "../lib/cache.ts";
 import { pickRepresentative, REPRESENTATIVE_COLUMNS, type RepresentativeRow } from "./representative.ts";
@@ -65,7 +65,7 @@ async function queryGroupedAnchors(q: TimelineQuery, now: Date) {
   return rows;
 }
 
-/** Counts requested Beijing days over anchors already sorted newest first. */
+/** Counts requested Tokyo days over anchors already sorted newest first. */
 export function countTimelineDays(grouped: readonly { anchor: number }[], days: ReadonlySet<string>): Record<string, number> {
   const firstBelow = (bound: number) => {
     let lo = 0, hi = grouped.length;
@@ -78,7 +78,7 @@ export function countTimelineDays(grouped: readonly { anchor: number }[], days: 
   };
   const counts: Record<string, number> = {};
   for (const day of days) {
-    const start = beijingMidnight(day).getTime();
+    const start = tokyoMidnight(day).getTime();
     const count = firstBelow(start) - firstBelow(start + 86_400_000);
     if (count) counts[day] = count;
   }
@@ -154,7 +154,7 @@ export async function loadTimeline(q: TimelineQuery): Promise<Omit<TimelineRespo
   });
 
   // Day header counts for the days on this page, over the full grouped set.
-  const days = new Set(page.map((g) => beijingDate(g.anchor_at)));
+  const days = new Set(page.map((g) => tokyoDate(g.anchor_at)));
   const dayCounts = countTimelineDays(grouped, days);
 
   const last = page[page.length - 1];

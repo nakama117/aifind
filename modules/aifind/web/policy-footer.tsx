@@ -1,0 +1,3 @@
+import {Link} from 'react-router';
+import {SITE} from '@aihot/site';
+export function PolicyFooter(){return <footer lang="ja" data-aifind-footer className="border-t border-line bg-surface px-5 pb-24 pt-5 text-xs text-ink-3 lg:pb-8 lg:pl-72"><nav aria-label="サイト情報" className="mx-auto flex max-w-5xl flex-wrap gap-x-5 gap-y-3">{[['/about','このサイトについて'],['/editorial-policy','編集方針'],['/privacy','プライバシー'],['/terms','利用規約'],['/contact','お問い合わせ']].map(([to,label])=><Link key={to} to={to!} className="hover:text-accent hover:underline">{label}</Link>)}</nav><p className="mx-auto mt-4 max-w-5xl">{SITE.operatorDisplayName} · AIを知る、比べる、使いこなす。</p></footer>;}

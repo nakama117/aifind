@@ -1,0 +1,2112 @@
+{
+  "at": "2026-10-04T13:03:29.916Z",
+  "sources": {
+    "eq-creative": {
+      "ok": true,
+      "at": "2026-10-04T13:03:29.324Z",
+      "lastOkAt": "2026-10-04T13:03:29.324Z",
+      "changed": true,
+      "rows": 140,
+      "newModels": 0
+    },
+    "eq-longform": {
+      "ok": true,
+      "at": "2026-10-04T13:03:29.355Z",
+      "lastOkAt": "2026-10-04T13:03:29.355Z",
+      "changed": true,
+      "rows": 140,
+      "newModels": 0
+    }
+  },
+  "round": {
+    "status": "shadow",
+    "runId": "vl03ikqhrcbxbu23mwifkees9",
+    "fingerprint": "e0dcd0e34d4bd5eda32f7ca2efd0ba7ecc3b7df0cff7aa24bbbe97de7c21b80d",
+    "boards": [
+      {
+        "board": "overall",
+        "models": 80,
+        "optimal": true,
+        "ms": 322
+      },
+      {
+        "board": "coding",
+        "models": 28,
+        "optimal": true,
+        "ms": 5
+      },
+      {
+        "board": "reasoning",
+        "models": 48,
+        "optimal": true,
+        "ms": 14
+      },
+      {
+        "board": "knowledge",
+        "models": 68,
+        "optimal": true,
+        "ms": 11
+      },
+      {
+        "board": "professional",
+        "models": 42,
+        "optimal": true,
+        "ms": 8
+      }
+    ]
+  },
+  "publication": {
+    "ok": true
+  },
+  "preview": {
+    "run": {
+      "id": "vl03ikqhrcbxbu23mwifkees9",
+      "status": "shadow",
+      "generatedAt": "2026-10-04T13:03:29.357Z",
+      "method": "2026.10-observed-evidence-v17",
+      "boards": [
+        {
+          "ms": 322,
+          "board": "overall",
+          "models": 80,
+          "optimal": true
+        },
+        {
+          "ms": 5,
+          "board": "coding",
+          "models": 28,
+          "optimal": true
+        },
+        {
+          "ms": 14,
+          "board": "reasoning",
+          "models": 48,
+          "optimal": true
+        },
+        {
+          "ms": 11,
+          "board": "knowledge",
+          "models": 68,
+          "optimal": true
+        },
+        {
+          "ms": 8,
+          "board": "professional",
+          "models": 42,
+          "optimal": true
+        }
+      ]
+    },
+    "problem": null,
+    "inputs": [
+      {
+        "board": "overall",
+        "models": 80,
+        "anchors": 16
+      },
+      {
+        "board": "coding",
+        "models": 28,
+        "anchors": 11
+      },
+      {
+        "board": "reasoning",
+        "models": 48,
+        "anchors": 15
+      },
+      {
+        "board": "knowledge",
+        "models": 68,
+        "anchors": 14
+      },
+      {
+        "board": "professional",
+        "models": 42,
+        "anchors": 11
+      }
+    ],
+    "rankings": [
+      {
+        "board": "coding",
+        "rank": 1,
+        "score": 78.97206226428854,
+        "name": "Claude Fable 5",
+        "slug": "claude-fable-5"
+      },
+      {
+        "board": "coding",
+        "rank": 2,
+        "score": 77.10747815537236,
+        "name": "Claude Opus 5",
+        "slug": "claude-opus-5"
+      },
+      {
+        "board": "coding",
+        "rank": 3,
+        "score": 73.44680246419264,
+        "name": "GPT-5.6 Sol",
+        "slug": "gpt-5-6-sol"
+      },
+      {
+        "board": "coding",
+        "rank": 4,
+        "score": 72.21987402765892,
+        "name": "Kimi K3",
+        "slug": "kimi-k-3"
+      },
+      {
+        "board": "coding",
+        "rank": 5,
+        "score": 68.80243775477564,
+        "name": "GPT-6 Astra",
+        "slug": "gpt-6-astra"
+      },
+      {
+        "board": "coding",
+        "rank": 6,
+        "score": 66.81985736716429,
+        "name": "GLM-5.3",
+        "slug": "glm-5-3"
+      },
+      {
+        "board": "coding",
+        "rank": 7,
+        "score": 64.28605600659635,
+        "name": "GPT-5.5",
+        "slug": "gpt-5-5"
+      },
+      {
+        "board": "coding",
+        "rank": 8,
+        "score": 61.11283764170426,
+        "name": "Gemini 3.7 Flash",
+        "slug": "gemini-3-7-flash"
+      },
+      {
+        "board": "coding",
+        "rank": 9,
+        "score": 59.43194206937168,
+        "name": "GPT-5.6 Luna",
+        "slug": "gpt-5-6-luna"
+      },
+      {
+        "board": "coding",
+        "rank": 10,
+        "score": 59.43194206937168,
+        "name": "GPT-5.6 Terra",
+        "slug": "gpt-5-6-terra"
+      },
+      {
+        "board": "coding",
+        "rank": 11,
+        "score": 57.95670953065568,
+        "name": "GLM-5.3 Flash",
+        "slug": "glm-5-3-flash"
+      },
+      {
+        "board": "coding",
+        "rank": 12,
+        "score": 56.41807581013856,
+        "name": "Grok 4.6",
+        "slug": "grok-4-6"
+      },
+      {
+        "board": "coding",
+        "rank": 13,
+        "score": 56.15573628210714,
+        "name": "Claude Sonnet 5",
+        "slug": "claude-sonnet-5"
+      },
+      {
+        "board": "coding",
+        "rank": 14,
+        "score": 50.758603775944486,
+        "name": "Gemini 3.8 Flash",
+        "slug": "gemini-3-8-flash"
+      },
+      {
+        "board": "coding",
+        "rank": 15,
+        "score": 50.758603775944486,
+        "name": "Claude Opus 4.8",
+        "slug": "claude-opus-4-8"
+      },
+      {
+        "board": "coding",
+        "rank": 16,
+        "score": 47.743987425228646,
+        "name": "Qwen3.8 Max",
+        "slug": "qwen-3-8-max"
+      },
+      {
+        "board": "coding",
+        "rank": 17,
+        "score": 47.743987425228646,
+        "name": "Muse Spark 1.2",
+        "slug": "muse-spark-1-2"
+      },
+      {
+        "board": "coding",
+        "rank": 18,
+        "score": 46.98228764552954,
+        "name": "Muse Spark 1.1",
+        "slug": "muse-spark-1-1"
+      },
+      {
+        "board": "coding",
+        "rank": 19,
+        "score": 41.15371002646791,
+        "name": "GPT-5.4",
+        "slug": "gpt-5-4"
+      },
+      {
+        "board": "coding",
+        "rank": 20,
+        "score": 39.01900657600652,
+        "name": "GLM-5.2",
+        "slug": "glm-5-2"
+      },
+      {
+        "board": "coding",
+        "rank": 21,
+        "score": 32.14868658113149,
+        "name": "Grok 4.5",
+        "slug": "grok-4-5"
+      },
+      {
+        "board": "coding",
+        "rank": 22,
+        "score": 29.171521832195396,
+        "name": "Gemini 3.6 Flash",
+        "slug": "gemini-3-6-flash"
+      },
+      {
+        "board": "coding",
+        "rank": 23,
+        "score": 29.171521832195396,
+        "name": "Gemini 3.5 Flash",
+        "slug": "gemini-3-5-flash"
+      },
+      {
+        "board": "coding",
+        "rank": 24,
+        "score": 26.010285931373406,
+        "name": "Claude Sonnet 4.6",
+        "slug": "claude-sonnet-4-6"
+      },
+      {
+        "board": "coding",
+        "rank": 25,
+        "score": 26.010285931373406,
+        "name": "DeepSeek V4 Pro Preview",
+        "slug": "deepseek-v-4-pro-preview"
+      },
+      {
+        "board": "coding",
+        "rank": 26,
+        "score": 19.92144028568813,
+        "name": "Kimi K2.7 Code",
+        "slug": "kimi-k-2-7-code"
+      },
+      {
+        "board": "coding",
+        "rank": 27,
+        "score": 19.92144028568813,
+        "name": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3-1-pro-preview"
+      },
+      {
+        "board": "coding",
+        "rank": 28,
+        "score": 18.2509481234142,
+        "name": "DeepSeek V4 Flash Preview",
+        "slug": "deepseek-v-4-flash-preview"
+      },
+      {
+        "board": "knowledge",
+        "rank": 1,
+        "score": 82.70131388741686,
+        "name": "GPT-6 Astra",
+        "slug": "gpt-6-astra"
+      },
+      {
+        "board": "knowledge",
+        "rank": 2,
+        "score": 81.88980424302139,
+        "name": "GPT-6.1 Sol",
+        "slug": "gpt-6-1-sol"
+      },
+      {
+        "board": "knowledge",
+        "rank": 3,
+        "score": 80.89818241835151,
+        "name": "Gemini 3.8 Flash",
+        "slug": "gemini-3-8-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 4,
+        "score": 80.2116526255026,
+        "name": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3-1-pro-preview"
+      },
+      {
+        "board": "knowledge",
+        "rank": 5,
+        "score": 79.83216652672759,
+        "name": "Gemini 3.7 Flash",
+        "slug": "gemini-3-7-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 6,
+        "score": 77.20417417787813,
+        "name": "GPT-5.6 Sol",
+        "slug": "gpt-5-6-sol"
+      },
+      {
+        "board": "knowledge",
+        "rank": 7,
+        "score": 77.20417417787813,
+        "name": "Gemini 3.6 Flash",
+        "slug": "gemini-3-6-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 8,
+        "score": 74.78058298513017,
+        "name": "GPT-6 Sol",
+        "slug": "gpt-6-sol"
+      },
+      {
+        "board": "knowledge",
+        "rank": 9,
+        "score": 73.9183532856365,
+        "name": "Gemini 3.5 Flash",
+        "slug": "gemini-3-5-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 10,
+        "score": 73.20115495755876,
+        "name": "Claude Opus 5",
+        "slug": "claude-opus-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 11,
+        "score": 69.18985914985718,
+        "name": "Claude Opus 5.5",
+        "slug": "claude-opus-5-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 12,
+        "score": 67.09617368573082,
+        "name": "Claude Sonnet 5.5",
+        "slug": "claude-sonnet-5-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 13,
+        "score": 67.09617368573082,
+        "name": "Grok 4.7",
+        "slug": "grok-4-7"
+      },
+      {
+        "board": "knowledge",
+        "rank": 14,
+        "score": 64.66343658302968,
+        "name": "GPT-5.4 Pro 2026-03-05",
+        "slug": "gpt-5-4-pro-2026-03-05"
+      },
+      {
+        "board": "knowledge",
+        "rank": 15,
+        "score": 64.66343658302968,
+        "name": "GPT-5.5",
+        "slug": "gpt-5-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 16,
+        "score": 63.85407544322525,
+        "name": "Kimi K3",
+        "slug": "kimi-k-3"
+      },
+      {
+        "board": "knowledge",
+        "rank": 17,
+        "score": 62.78617259483589,
+        "name": "Grok 4.5",
+        "slug": "grok-4-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 18,
+        "score": 62.61603307945847,
+        "name": "Grok 4.6",
+        "slug": "grok-4-6"
+      },
+      {
+        "board": "knowledge",
+        "rank": 19,
+        "score": 62.61603307945847,
+        "name": "Gemini 3 Flash Preview",
+        "slug": "gemini-3-flash-preview"
+      },
+      {
+        "board": "knowledge",
+        "rank": 20,
+        "score": 60.15490145760254,
+        "name": "GPT-5.4 2026-03-05",
+        "slug": "gpt-5-4-2026-03-05"
+      },
+      {
+        "board": "knowledge",
+        "rank": 21,
+        "score": 60.15490145760254,
+        "name": "DeepSeek V4 Pro 0813",
+        "slug": "deepseek-v-4-pro-20260813"
+      },
+      {
+        "board": "knowledge",
+        "rank": 22,
+        "score": 60.15490145760254,
+        "name": "Qwen3.7 Max",
+        "slug": "qwen-3-7-max"
+      },
+      {
+        "board": "knowledge",
+        "rank": 23,
+        "score": 58.022365306182635,
+        "name": "GPT-5.6 Terra",
+        "slug": "gpt-5-6-terra"
+      },
+      {
+        "board": "knowledge",
+        "rank": 24,
+        "score": 58.022365306182635,
+        "name": "Qwen3.8 Max",
+        "slug": "qwen-3-8-max"
+      },
+      {
+        "board": "knowledge",
+        "rank": 25,
+        "score": 58.022365306182635,
+        "name": "Qwen3.8 Max 0902",
+        "slug": "qwen-3-8-max-0902"
+      },
+      {
+        "board": "knowledge",
+        "rank": 26,
+        "score": 58.022365306182635,
+        "name": "Claude Opus 4.8",
+        "slug": "claude-opus-4-8"
+      },
+      {
+        "board": "knowledge",
+        "rank": 27,
+        "score": 55.09340352404057,
+        "name": "Claude Fable 5",
+        "slug": "claude-fable-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 28,
+        "score": 49.43518439217954,
+        "name": "GPT-5.6 Luna",
+        "slug": "gpt-5-6-luna"
+      },
+      {
+        "board": "knowledge",
+        "rank": 29,
+        "score": 46.91324301850747,
+        "name": "GLM-5.3",
+        "slug": "glm-5-3"
+      },
+      {
+        "board": "knowledge",
+        "rank": 30,
+        "score": 46.91324301850747,
+        "name": "DeepSeek V4 Pro Preview",
+        "slug": "deepseek-v-4-pro-preview"
+      },
+      {
+        "board": "knowledge",
+        "rank": 31,
+        "score": 45.14651088756528,
+        "name": "GPT-5.2 2025-12-11",
+        "slug": "gpt-5-2-2025-12-11"
+      },
+      {
+        "board": "knowledge",
+        "rank": 32,
+        "score": 45.14651088756528,
+        "name": "GPT-6 Luna",
+        "slug": "gpt-6-luna"
+      },
+      {
+        "board": "knowledge",
+        "rank": 33,
+        "score": 44.262133056148855,
+        "name": "GLM-5.2",
+        "slug": "glm-5-2"
+      },
+      {
+        "board": "knowledge",
+        "rank": 34,
+        "score": 43.83095486682983,
+        "name": "Claude Opus 4.6",
+        "slug": "claude-opus-4-6"
+      },
+      {
+        "board": "knowledge",
+        "rank": 35,
+        "score": 43.83095486682983,
+        "name": "Qwen3.6 Max Preview",
+        "slug": "qwen-3-6-max-preview"
+      },
+      {
+        "board": "knowledge",
+        "rank": 36,
+        "score": 41.01697375314062,
+        "name": "Kimi K2.6",
+        "slug": "kimi-k-2-6"
+      },
+      {
+        "board": "knowledge",
+        "rank": 37,
+        "score": 41.01697375314062,
+        "name": "DeepSeek V4 Flash 0731",
+        "slug": "deepseek-v-4-flash-20260731"
+      },
+      {
+        "board": "knowledge",
+        "rank": 38,
+        "score": 41.01697375314062,
+        "name": "GPT-5.1 2025-11-13",
+        "slug": "gpt-5-1-2025-11-13"
+      },
+      {
+        "board": "knowledge",
+        "rank": 39,
+        "score": 41.01697375314062,
+        "name": "Qwen3.6 Plus",
+        "slug": "qwen-3-6-plus"
+      },
+      {
+        "board": "knowledge",
+        "rank": 40,
+        "score": 41.01697375314062,
+        "name": "Claude Opus 4.7",
+        "slug": "claude-opus-4-7"
+      },
+      {
+        "board": "knowledge",
+        "rank": 41,
+        "score": 37.784202165001275,
+        "name": "GLM-5.1",
+        "slug": "glm-5-1"
+      },
+      {
+        "board": "knowledge",
+        "rank": 42,
+        "score": 37.784202165001275,
+        "name": "Inkling",
+        "slug": "inkling"
+      },
+      {
+        "board": "knowledge",
+        "rank": 43,
+        "score": 37.784202165001275,
+        "name": "GPT-5 2025-08-07",
+        "slug": "gpt-5-2025-08-07"
+      },
+      {
+        "board": "knowledge",
+        "rank": 44,
+        "score": 32.81406840218124,
+        "name": "Grok 4.3",
+        "slug": "grok-4-3"
+      },
+      {
+        "board": "knowledge",
+        "rank": 45,
+        "score": 32.81406840218124,
+        "name": "Grok 4 20 0309",
+        "slug": "grok-4-20-0309"
+      },
+      {
+        "board": "knowledge",
+        "rank": 46,
+        "score": 32.81406840218124,
+        "name": "Kimi K2.7 Code",
+        "slug": "kimi-k-2-7-code"
+      },
+      {
+        "board": "knowledge",
+        "rank": 47,
+        "score": 32.81406840218124,
+        "name": "Claude Opus 4.5 20251101",
+        "slug": "claude-opus-4-5-20251101"
+      },
+      {
+        "board": "knowledge",
+        "rank": 48,
+        "score": 26.813845002054833,
+        "name": "GPT-5.4 Mini 2026-03-17",
+        "slug": "gpt-5-4-mini-2026-03-17"
+      },
+      {
+        "board": "knowledge",
+        "rank": 49,
+        "score": 26.813845002054833,
+        "name": "Inkling-Small",
+        "slug": "inkling-small"
+      },
+      {
+        "board": "knowledge",
+        "rank": 50,
+        "score": 26.813845002054833,
+        "name": "o3 2025-04-16",
+        "slug": "o-3-2025-04-16"
+      },
+      {
+        "board": "knowledge",
+        "rank": 51,
+        "score": 22.11766779972867,
+        "name": "Qwen3.5 Plus",
+        "slug": "qwen-3-5-plus"
+      },
+      {
+        "board": "knowledge",
+        "rank": 52,
+        "score": 22.11766779972867,
+        "name": "GLM-4.7",
+        "slug": "glm-4-7"
+      },
+      {
+        "board": "knowledge",
+        "rank": 53,
+        "score": 22.11766779972867,
+        "name": "Qwen3-235B-A22B-2507",
+        "slug": "qwen-3-235-b-a-22-b-2507"
+      },
+      {
+        "board": "knowledge",
+        "rank": 54,
+        "score": 20.5303637059659,
+        "name": "Claude Sonnet 5",
+        "slug": "claude-sonnet-5"
+      },
+      {
+        "board": "knowledge",
+        "rank": 55,
+        "score": 16.93397663901211,
+        "name": "Qwen3.6 Flash",
+        "slug": "qwen-3-6-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 56,
+        "score": 16.93397663901211,
+        "name": "Qwen3.5 Flash",
+        "slug": "qwen-3-5-flash"
+      },
+      {
+        "board": "knowledge",
+        "rank": 57,
+        "score": 16.93397663901211,
+        "name": "Claude Sonnet 4.6",
+        "slug": "claude-sonnet-4-6"
+      },
+      {
+        "board": "knowledge",
+        "rank": 58,
+        "score": 16.93397663901211,
+        "name": "Claude Sonnet 4.5 20250929",
+        "slug": "claude-sonnet-4-5-20250929"
+      },
+      {
+        "board": "knowledge",
+        "rank": 59,
+        "score": 16.487387828625327,
+        "name": "o4 mini-2025-04-16",
+        "slug": "o-4-mini-2025-04-16"
+      },
+      {
+        "board": "knowledge",
+        "rank": 60,
+        "score": 16.487387828625327,
+        "name": "GPT-5.4 Nano 2026-03-17",
+        "slug": "gpt-5-4-nano-2026-03-17"
+      },
+      {
+        "board": "knowledge",
+        "rank": 61,
+        "score": 16.487387828625327,
+        "name": "Qwen3 Max 2025-09-23",
+        "slug": "qwen-3-max-2025-09-23"
+      },
+      {
+        "board": "knowledge",
+        "rank": 62,
+        "score": 12.752237085938058,
+        "name": "GPT-5 Mini 2025-08-07",
+        "slug": "gpt-5-mini-2025-08-07"
+      },
+      {
+        "board": "knowledge",
+        "rank": 63,
+        "score": 11.687555326242128,
+        "name": "Gemma 4 31B",
+        "slug": "gemma-4-31-b-it"
+      },
+      {
+        "board": "knowledge",
+        "rank": 64,
+        "score": 11.687555326242128,
+        "name": "Claude Haiku 4.5 20251001",
+        "slug": "claude-haiku-4-5-20251001"
+      },
+      {
+        "board": "knowledge",
+        "rank": 65,
+        "score": 11.687555326242128,
+        "name": "GPT-4.1 2025-04-14",
+        "slug": "gpt-4-1-2025-04-14"
+      },
+      {
+        "board": "knowledge",
+        "rank": 66,
+        "score": 9.815293415996084,
+        "name": "GPT-5 Nano 2025-08-07",
+        "slug": "gpt-5-nano-2025-08-07"
+      },
+      {
+        "board": "knowledge",
+        "rank": 67,
+        "score": 9.455230550756363,
+        "name": "GPT-4.1 Mini 2025-04-14",
+        "slug": "gpt-4-1-mini-2025-04-14"
+      },
+      {
+        "board": "knowledge",
+        "rank": 68,
+        "score": 8.475067328747382,
+        "name": "GPT-4.1 Nano 2025-04-14",
+        "slug": "gpt-4-1-nano-2025-04-14"
+      },
+      {
+        "board": "overall",
+        "rank": 1,
+        "score": 79.5731896563336,
+        "name": "Claude Opus 5.5",
+        "slug": "claude-opus-5-5"
+      },
+      {
+        "board": "overall",
+        "rank": 2,
+        "score": 79.5731896563336,
+        "name": "Claude Fable 5",
+        "slug": "claude-fable-5"
+      },
+      {
+        "board": "overall",
+        "rank": 3,
+        "score": 79.5731896563336,
+        "name": "Claude Fable 5.1",
+        "slug": "claude-fable-5-1"
+      },
+      {
+        "board": "overall",
+        "rank": 4,
+        "score": 77.36745892512629,
+        "name": "Gemini 3.7 Flash",
+        "slug": "gemini-3-7-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 5,
+        "score": 76.97393369195292,
+        "name": "GPT-6 Astra",
+        "slug": "gpt-6-astra"
+      },
+      {
+        "board": "overall",
+        "rank": 6,
+        "score": 75.88557681896987,
+        "name": "Gemini 3.8 Flash",
+        "slug": "gemini-3-8-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 7,
+        "score": 75.88557681896987,
+        "name": "GPT-6.1 Sol",
+        "slug": "gpt-6-1-sol"
+      },
+      {
+        "board": "overall",
+        "rank": 8,
+        "score": 75.18156066921216,
+        "name": "Claude Opus 5",
+        "slug": "claude-opus-5"
+      },
+      {
+        "board": "overall",
+        "rank": 9,
+        "score": 73.76495295666025,
+        "name": "Muse Spark 1.3",
+        "slug": "muse-spark-1-3"
+      },
+      {
+        "board": "overall",
+        "rank": 10,
+        "score": 73.76495295666025,
+        "name": "GPT-5.6 Sol",
+        "slug": "gpt-5-6-sol"
+      },
+      {
+        "board": "overall",
+        "rank": 11,
+        "score": 66.87910849721358,
+        "name": "GPT-6 Sol",
+        "slug": "gpt-6-sol"
+      },
+      {
+        "board": "overall",
+        "rank": 12,
+        "score": 65.7047681049567,
+        "name": "Kimi K3",
+        "slug": "kimi-k-3"
+      },
+      {
+        "board": "overall",
+        "rank": 13,
+        "score": 65.61656598987783,
+        "name": "Qwen3.8 Max",
+        "slug": "qwen-3-8-max"
+      },
+      {
+        "board": "overall",
+        "rank": 14,
+        "score": 65.4095122182055,
+        "name": "Muse Spark 1.2",
+        "slug": "muse-spark-1-2"
+      },
+      {
+        "board": "overall",
+        "rank": 15,
+        "score": 64.64000275721295,
+        "name": "Gemini 3 Pro Preview",
+        "slug": "gemini-3-pro-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 16,
+        "score": 64.64000275721295,
+        "name": "GPT-5.5",
+        "slug": "gpt-5-5"
+      },
+      {
+        "board": "overall",
+        "rank": 17,
+        "score": 63.27036000675552,
+        "name": "Claude Opus 4.8",
+        "slug": "claude-opus-4-8"
+      },
+      {
+        "board": "overall",
+        "rank": 18,
+        "score": 62.12815226400973,
+        "name": "Gemini 3.6 Flash",
+        "slug": "gemini-3-6-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 19,
+        "score": 62.12815226400973,
+        "name": "Gemini 3.5 Flash",
+        "slug": "gemini-3-5-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 20,
+        "score": 62.12815226400973,
+        "name": "Claude Sonnet 5.5",
+        "slug": "claude-sonnet-5-5"
+      },
+      {
+        "board": "overall",
+        "rank": 21,
+        "score": 60.128761289217444,
+        "name": "Grok 4.6",
+        "slug": "grok-4-6"
+      },
+      {
+        "board": "overall",
+        "rank": 22,
+        "score": 60.128761289217444,
+        "name": "Grok 4.7",
+        "slug": "grok-4-7"
+      },
+      {
+        "board": "overall",
+        "rank": 23,
+        "score": 59.17796259150971,
+        "name": "GLM-5.3",
+        "slug": "glm-5-3"
+      },
+      {
+        "board": "overall",
+        "rank": 24,
+        "score": 58.00548628304993,
+        "name": "Claude Opus 4.7",
+        "slug": "claude-opus-4-7"
+      },
+      {
+        "board": "overall",
+        "rank": 25,
+        "score": 58.00548628304993,
+        "name": "GPT-5.4",
+        "slug": "gpt-5-4"
+      },
+      {
+        "board": "overall",
+        "rank": 26,
+        "score": 57.54022184892998,
+        "name": "GPT-5.6 Terra",
+        "slug": "gpt-5-6-terra"
+      },
+      {
+        "board": "overall",
+        "rank": 27,
+        "score": 56.14334198866745,
+        "name": "Claude Opus 4.6",
+        "slug": "claude-opus-4-6"
+      },
+      {
+        "board": "overall",
+        "rank": 28,
+        "score": 56.14334198866745,
+        "name": "DeepSeek V4.1 Flash",
+        "slug": "deepseek-v-4-1-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 29,
+        "score": 56.14334198866745,
+        "name": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3-1-pro-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 30,
+        "score": 54.05881145992317,
+        "name": "Muse Spark 1.1",
+        "slug": "muse-spark-1-1"
+      },
+      {
+        "board": "overall",
+        "rank": 31,
+        "score": 54.05881145992317,
+        "name": "Grok 4.5",
+        "slug": "grok-4-5"
+      },
+      {
+        "board": "overall",
+        "rank": 32,
+        "score": 54.05881145992317,
+        "name": "MiMo-V2.6-Pro",
+        "slug": "mimo-v-2-6-pro"
+      },
+      {
+        "board": "overall",
+        "rank": 33,
+        "score": 54.05881145992317,
+        "name": "DeepSeek V4 Pro 0813",
+        "slug": "deepseek-v-4-pro-20260813"
+      },
+      {
+        "board": "overall",
+        "rank": 34,
+        "score": 48.008606163274195,
+        "name": "Qwen3.7 Max",
+        "slug": "qwen-3-7-max"
+      },
+      {
+        "board": "overall",
+        "rank": 35,
+        "score": 46.720598650606256,
+        "name": "Gemini 3 Flash Preview",
+        "slug": "gemini-3-flash-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 36,
+        "score": 42.839830867155754,
+        "name": "Claude Sonnet 5",
+        "slug": "claude-sonnet-5"
+      },
+      {
+        "board": "overall",
+        "rank": 37,
+        "score": 42.55072230752499,
+        "name": "GPT-5.6 Luna",
+        "slug": "gpt-5-6-luna"
+      },
+      {
+        "board": "overall",
+        "rank": 38,
+        "score": 41.295312844251214,
+        "name": "DeepSeek V4 Flash 0731",
+        "slug": "deepseek-v-4-flash-20260731"
+      },
+      {
+        "board": "overall",
+        "rank": 39,
+        "score": 41.295312844251214,
+        "name": "GLM-5.2",
+        "slug": "glm-5-2"
+      },
+      {
+        "board": "overall",
+        "rank": 40,
+        "score": 41.295312844251214,
+        "name": "Claude Opus 4.5 20251101",
+        "slug": "claude-opus-4-5-20251101"
+      },
+      {
+        "board": "overall",
+        "rank": 41,
+        "score": 41.295312844251214,
+        "name": "GLM-5.3 Flash",
+        "slug": "glm-5-3-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 42,
+        "score": 36.46921766165467,
+        "name": "Claude Sonnet 4.6",
+        "slug": "claude-sonnet-4-6"
+      },
+      {
+        "board": "overall",
+        "rank": 43,
+        "score": 36.46921766165467,
+        "name": "Kimi K2.6",
+        "slug": "kimi-k-2-6"
+      },
+      {
+        "board": "overall",
+        "rank": 44,
+        "score": 35.51540368221337,
+        "name": "GPT-5.2 2025-12-11",
+        "slug": "gpt-5-2-2025-12-11"
+      },
+      {
+        "board": "overall",
+        "rank": 45,
+        "score": 35.21820331582669,
+        "name": "GPT-6 Luna",
+        "slug": "gpt-6-luna"
+      },
+      {
+        "board": "overall",
+        "rank": 46,
+        "score": 34.55918039497497,
+        "name": "DeepSeek V4 Pro Preview",
+        "slug": "deepseek-v-4-pro-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 47,
+        "score": 34.461556151791065,
+        "name": "GLM-5.1",
+        "slug": "glm-5-1"
+      },
+      {
+        "board": "overall",
+        "rank": 48,
+        "score": 34.461556151791065,
+        "name": "GLM-5",
+        "slug": "glm-5"
+      },
+      {
+        "board": "overall",
+        "rank": 49,
+        "score": 31.99594337947607,
+        "name": "Qwen3.7 Plus",
+        "slug": "qwen-3-7-plus"
+      },
+      {
+        "board": "overall",
+        "rank": 50,
+        "score": 31.99594337947607,
+        "name": "Qwen3.8-27B",
+        "slug": "qwen-3-8-27-b"
+      },
+      {
+        "board": "overall",
+        "rank": 51,
+        "score": 27.92291835889589,
+        "name": "Inkling",
+        "slug": "inkling"
+      },
+      {
+        "board": "overall",
+        "rank": 52,
+        "score": 27.508773073697352,
+        "name": "Kimi K2.7 Code",
+        "slug": "kimi-k-2-7-code"
+      },
+      {
+        "board": "overall",
+        "rank": 53,
+        "score": 27.508773073697352,
+        "name": "Gemini 3.5 Flash Lite",
+        "slug": "gemini-3-5-flash-lite"
+      },
+      {
+        "board": "overall",
+        "rank": 54,
+        "score": 25.53161457565631,
+        "name": "Qwen3.6 Plus",
+        "slug": "qwen-3-6-plus"
+      },
+      {
+        "board": "overall",
+        "rank": 55,
+        "score": 25.53161457565631,
+        "name": "Kimi K2.5",
+        "slug": "kimi-k-2-5"
+      },
+      {
+        "board": "overall",
+        "rank": 56,
+        "score": 23.91999545661472,
+        "name": "MiniMax-M3",
+        "slug": "minimax-m-3"
+      },
+      {
+        "board": "overall",
+        "rank": 57,
+        "score": 23.91999545661472,
+        "name": "GPT-5.4 Mini 2026-03-17",
+        "slug": "gpt-5-4-mini-2026-03-17"
+      },
+      {
+        "board": "overall",
+        "rank": 58,
+        "score": 23.91999545661472,
+        "name": "Grok 4.3",
+        "slug": "grok-4-3"
+      },
+      {
+        "board": "overall",
+        "rank": 59,
+        "score": 23.91999545661472,
+        "name": "Claude Sonnet 4.5 20250929",
+        "slug": "claude-sonnet-4-5-20250929"
+      },
+      {
+        "board": "overall",
+        "rank": 60,
+        "score": 23.91999545661472,
+        "name": "Claude Opus 4.1 20250805",
+        "slug": "claude-opus-4-1-20250805"
+      },
+      {
+        "board": "overall",
+        "rank": 61,
+        "score": 21.112067474693706,
+        "name": "DeepSeek V4 Flash Preview",
+        "slug": "deepseek-v-4-flash-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 62,
+        "score": 21.112067474693706,
+        "name": "Qwen3.5-397B-A17B",
+        "slug": "qwen-3-5-397-b-a-17-b"
+      },
+      {
+        "board": "overall",
+        "rank": 63,
+        "score": 21.07683157443198,
+        "name": "Gemini 3.1 Flash Lite Preview",
+        "slug": "gemini-3-1-flash-lite-preview"
+      },
+      {
+        "board": "overall",
+        "rank": 64,
+        "score": 21.07683157443198,
+        "name": "o3 2025-04-16",
+        "slug": "o-3-2025-04-16"
+      },
+      {
+        "board": "overall",
+        "rank": 65,
+        "score": 18.723584067170908,
+        "name": "GLM-4.7",
+        "slug": "glm-4-7"
+      },
+      {
+        "board": "overall",
+        "rank": 66,
+        "score": 15.810297687964438,
+        "name": "Qwen3.5-122B-A10B",
+        "slug": "qwen-3-5-122-b-a-10-b"
+      },
+      {
+        "board": "overall",
+        "rank": 67,
+        "score": 15.810297687964438,
+        "name": "GPT-4.1 2025-04-14",
+        "slug": "gpt-4-1-2025-04-14"
+      },
+      {
+        "board": "overall",
+        "rank": 68,
+        "score": 15.810297687964438,
+        "name": "Inkling-Small",
+        "slug": "inkling-small"
+      },
+      {
+        "board": "overall",
+        "rank": 69,
+        "score": 15.810297687964438,
+        "name": "GPT-5.4 Nano 2026-03-17",
+        "slug": "gpt-5-4-nano-2026-03-17"
+      },
+      {
+        "board": "overall",
+        "rank": 70,
+        "score": 15.225770341459125,
+        "name": "Claude Opus 4 20250514",
+        "slug": "claude-opus-4-20250514"
+      },
+      {
+        "board": "overall",
+        "rank": 71,
+        "score": 12.769962754051887,
+        "name": "Claude Sonnet 4 20250514",
+        "slug": "claude-sonnet-4-20250514"
+      },
+      {
+        "board": "overall",
+        "rank": 72,
+        "score": 12.762718243856593,
+        "name": "Claude Haiku 4.5 20251001",
+        "slug": "claude-haiku-4-5-20251001"
+      },
+      {
+        "board": "overall",
+        "rank": 73,
+        "score": 12.762718243856593,
+        "name": "Qwen3.5-35B-A3B",
+        "slug": "qwen-3-5-35-b-a-3-b"
+      },
+      {
+        "board": "overall",
+        "rank": 74,
+        "score": 11.13578378211117,
+        "name": "GPT-4.1 Mini 2025-04-14",
+        "slug": "gpt-4-1-mini-2025-04-14"
+      },
+      {
+        "board": "overall",
+        "rank": 75,
+        "score": 10.010951043914293,
+        "name": "Qwen3-32B",
+        "slug": "qwen-3-32-b"
+      },
+      {
+        "board": "overall",
+        "rank": 76,
+        "score": 10.010951043914293,
+        "name": "GLM-4.7 Flash",
+        "slug": "glm-4-7-flash"
+      },
+      {
+        "board": "overall",
+        "rank": 77,
+        "score": 10.010951043914293,
+        "name": "gpt-oss-120b",
+        "slug": "gpt-oss-120-b"
+      },
+      {
+        "board": "overall",
+        "rank": 78,
+        "score": 8.448421037392457,
+        "name": "Qwen3-30B-A3B",
+        "slug": "qwen-3-30-b-a-3-b"
+      },
+      {
+        "board": "overall",
+        "rank": 79,
+        "score": 8.429531724730353,
+        "name": "GPT-4.1 Nano 2025-04-14",
+        "slug": "gpt-4-1-nano-2025-04-14"
+      },
+      {
+        "board": "overall",
+        "rank": 80,
+        "score": 7.397460920613391,
+        "name": "gpt-oss-20b",
+        "slug": "gpt-oss-20-b"
+      },
+      {
+        "board": "professional",
+        "rank": 1,
+        "score": 91.58647216921626,
+        "name": "Gemini 4 Argon",
+        "slug": "gemini-4-argon"
+      },
+      {
+        "board": "professional",
+        "rank": 2,
+        "score": 86.70030129406024,
+        "name": "Claude Sonnet 5.5",
+        "slug": "claude-sonnet-5-5"
+      },
+      {
+        "board": "professional",
+        "rank": 3,
+        "score": 86.70030129406024,
+        "name": "Claude Opus 5.5",
+        "slug": "claude-opus-5-5"
+      },
+      {
+        "board": "professional",
+        "rank": 4,
+        "score": 86.15038141123702,
+        "name": "Gemini 3.8 Flash",
+        "slug": "gemini-3-8-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 5,
+        "score": 85.64126017548088,
+        "name": "Claude Fable 5.1",
+        "slug": "claude-fable-5-1"
+      },
+      {
+        "board": "professional",
+        "rank": 6,
+        "score": 85.52440132923438,
+        "name": "Gemini 3.7 Flash",
+        "slug": "gemini-3-7-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 7,
+        "score": 80.70343998199418,
+        "name": "Muse Spark 1.3",
+        "slug": "muse-spark-1-3"
+      },
+      {
+        "board": "professional",
+        "rank": 8,
+        "score": 78.57718034060981,
+        "name": "Claude Fable 5",
+        "slug": "claude-fable-5"
+      },
+      {
+        "board": "professional",
+        "rank": 9,
+        "score": 77.18896572025669,
+        "name": "MiMo-V2.6-Pro",
+        "slug": "mimo-v-2-6-pro"
+      },
+      {
+        "board": "professional",
+        "rank": 10,
+        "score": 73.16263147764683,
+        "name": "Grok 4.6",
+        "slug": "grok-4-6"
+      },
+      {
+        "board": "professional",
+        "rank": 11,
+        "score": 72.23574563097723,
+        "name": "GPT-6 Astra",
+        "slug": "gpt-6-astra"
+      },
+      {
+        "board": "professional",
+        "rank": 12,
+        "score": 70.45117169850009,
+        "name": "GLM-5.3",
+        "slug": "glm-5-3"
+      },
+      {
+        "board": "professional",
+        "rank": 13,
+        "score": 70.45117169850009,
+        "name": "GLM-5.3 Flash",
+        "slug": "glm-5-3-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 14,
+        "score": 68.05349732438992,
+        "name": "GPT-5.6 Terra",
+        "slug": "gpt-5-6-terra"
+      },
+      {
+        "board": "professional",
+        "rank": 15,
+        "score": 62.0258785444378,
+        "name": "Qwen3.8 Max",
+        "slug": "qwen-3-8-max"
+      },
+      {
+        "board": "professional",
+        "rank": 16,
+        "score": 62.0258785444378,
+        "name": "GPT-6.1 Sol",
+        "slug": "gpt-6-1-sol"
+      },
+      {
+        "board": "professional",
+        "rank": 17,
+        "score": 61.14223083473695,
+        "name": "Claude Sonnet 5",
+        "slug": "claude-sonnet-5"
+      },
+      {
+        "board": "professional",
+        "rank": 18,
+        "score": 56.08121036271653,
+        "name": "Grok 4.7",
+        "slug": "grok-4-7"
+      },
+      {
+        "board": "professional",
+        "rank": 19,
+        "score": 56.08121036271653,
+        "name": "GPT-5.5",
+        "slug": "gpt-5-5"
+      },
+      {
+        "board": "professional",
+        "rank": 20,
+        "score": 56.08121036271653,
+        "name": "GPT-5.6 Sol",
+        "slug": "gpt-5-6-sol"
+      },
+      {
+        "board": "professional",
+        "rank": 21,
+        "score": 56.08121036271653,
+        "name": "Gemini 3.6 Flash",
+        "slug": "gemini-3-6-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 22,
+        "score": 52.75350357431668,
+        "name": "Kimi K3",
+        "slug": "kimi-k-3"
+      },
+      {
+        "board": "professional",
+        "rank": 23,
+        "score": 52.75350357431668,
+        "name": "Claude Opus 4.8",
+        "slug": "claude-opus-4-8"
+      },
+      {
+        "board": "professional",
+        "rank": 24,
+        "score": 48.33815346397608,
+        "name": "DeepSeek V4 Flash 0731",
+        "slug": "deepseek-v-4-flash-20260731"
+      },
+      {
+        "board": "professional",
+        "rank": 25,
+        "score": 48.33815346397608,
+        "name": "Grok 4.5",
+        "slug": "grok-4-5"
+      },
+      {
+        "board": "professional",
+        "rank": 26,
+        "score": 48.33815346397608,
+        "name": "GPT-6 Sol",
+        "slug": "gpt-6-sol"
+      },
+      {
+        "board": "professional",
+        "rank": 27,
+        "score": 48.33815346397608,
+        "name": "Claude Opus 4.7",
+        "slug": "claude-opus-4-7"
+      },
+      {
+        "board": "professional",
+        "rank": 28,
+        "score": 48.33815346397608,
+        "name": "Muse Spark 1.2",
+        "slug": "muse-spark-1-2"
+      },
+      {
+        "board": "professional",
+        "rank": 29,
+        "score": 48.33815346397608,
+        "name": "GPT-5.6 Luna",
+        "slug": "gpt-5-6-luna"
+      },
+      {
+        "board": "professional",
+        "rank": 30,
+        "score": 39.859677629663956,
+        "name": "DeepSeek V4 Pro 0813",
+        "slug": "deepseek-v-4-pro-20260813"
+      },
+      {
+        "board": "professional",
+        "rank": 31,
+        "score": 39.859677629663956,
+        "name": "DeepSeek V4.1 Flash",
+        "slug": "deepseek-v-4-1-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 32,
+        "score": 39.859677629663956,
+        "name": "Qwen3.8-27B",
+        "slug": "qwen-3-8-27-b"
+      },
+      {
+        "board": "professional",
+        "rank": 33,
+        "score": 39.859677629663956,
+        "name": "Claude Sonnet 4.6",
+        "slug": "claude-sonnet-4-6"
+      },
+      {
+        "board": "professional",
+        "rank": 34,
+        "score": 39.859677629663956,
+        "name": "Muse Spark 1.1",
+        "slug": "muse-spark-1-1"
+      },
+      {
+        "board": "professional",
+        "rank": 35,
+        "score": 39.859677629663956,
+        "name": "Gemini 3.5 Flash",
+        "slug": "gemini-3-5-flash"
+      },
+      {
+        "board": "professional",
+        "rank": 36,
+        "score": 34.02989035318658,
+        "name": "GLM-5.2",
+        "slug": "glm-5-2"
+      },
+      {
+        "board": "professional",
+        "rank": 37,
+        "score": 33.42478627681053,
+        "name": "GPT-6 Luna",
+        "slug": "gpt-6-luna"
+      },
+      {
+        "board": "professional",
+        "rank": 38,
+        "score": 23.913336547444626,
+        "name": "MiniMax-M3",
+        "slug": "minimax-m-3"
+      },
+      {
+        "board": "professional",
+        "rank": 39,
+        "score": 21.457167772545304,
+        "name": "GLM-5.1",
+        "slug": "glm-5-1"
+      },
+      {
+        "board": "professional",
+        "rank": 40,
+        "score": 19.17182183688646,
+        "name": "Inkling",
+        "slug": "inkling"
+      },
+      {
+        "board": "professional",
+        "rank": 41,
+        "score": 18.609623928001245,
+        "name": "Gemini 3.5 Flash Lite",
+        "slug": "gemini-3-5-flash-lite"
+      },
+      {
+        "board": "professional",
+        "rank": 42,
+        "score": 16.905886318200164,
+        "name": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3-1-pro-preview"
+      },
+      {
+        "board": "reasoning",
+        "rank": 1,
+        "score": 89.49240897157782,
+        "name": "GPT-6 Astra",
+        "slug": "gpt-6-astra"
+      },
+      {
+        "board": "reasoning",
+        "rank": 2,
+        "score": 88.88528237911783,
+        "name": "GPT-6.1 Sol",
+        "slug": "gpt-6-1-sol"
+      },
+      {
+        "board": "reasoning",
+        "rank": 3,
+        "score": 88.21447766167947,
+        "name": "Claude Opus 5.5",
+        "slug": "claude-opus-5-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 4,
+        "score": 86.36090811867365,
+        "name": "Claude Sonnet 5.5",
+        "slug": "claude-sonnet-5-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 5,
+        "score": 85.69120535698768,
+        "name": "GPT-5.6 Sol",
+        "slug": "gpt-5-6-sol"
+      },
+      {
+        "board": "reasoning",
+        "rank": 6,
+        "score": 84.86920091349424,
+        "name": "Claude Fable 5.1",
+        "slug": "claude-fable-5-1"
+      },
+      {
+        "board": "reasoning",
+        "rank": 7,
+        "score": 84.79056451025295,
+        "name": "GPT-6 Sol",
+        "slug": "gpt-6-sol"
+      },
+      {
+        "board": "reasoning",
+        "rank": 8,
+        "score": 82.23529248552306,
+        "name": "Claude Opus 5",
+        "slug": "claude-opus-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 9,
+        "score": 81.49103708361956,
+        "name": "Claude Fable 5",
+        "slug": "claude-fable-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 10,
+        "score": 77.54907038280655,
+        "name": "GPT-5.5",
+        "slug": "gpt-5-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 11,
+        "score": 77.54907038280655,
+        "name": "GPT-5.6 Terra",
+        "slug": "gpt-5-6-terra"
+      },
+      {
+        "board": "reasoning",
+        "rank": 12,
+        "score": 74.098166978593,
+        "name": "Gemini 3.8 Flash",
+        "slug": "gemini-3-8-flash"
+      },
+      {
+        "board": "reasoning",
+        "rank": 13,
+        "score": 70.6468312002605,
+        "name": "Claude Opus 4.8",
+        "slug": "claude-opus-4-8"
+      },
+      {
+        "board": "reasoning",
+        "rank": 14,
+        "score": 70.6468312002605,
+        "name": "Gemini 3.7 Flash",
+        "slug": "gemini-3-7-flash"
+      },
+      {
+        "board": "reasoning",
+        "rank": 15,
+        "score": 69.65950743351878,
+        "name": "DeepSeek V4 Pro 0813",
+        "slug": "deepseek-v-4-pro-20260813"
+      },
+      {
+        "board": "reasoning",
+        "rank": 16,
+        "score": 67.60739127785232,
+        "name": "Muse Spark 1.3",
+        "slug": "muse-spark-1-3"
+      },
+      {
+        "board": "reasoning",
+        "rank": 17,
+        "score": 64.06937164797098,
+        "name": "Qwen3.8 Max",
+        "slug": "qwen-3-8-max"
+      },
+      {
+        "board": "reasoning",
+        "rank": 18,
+        "score": 61.63319362374365,
+        "name": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3-1-pro-preview"
+      },
+      {
+        "board": "reasoning",
+        "rank": 19,
+        "score": 61.25296626129989,
+        "name": "GPT-5.6 Luna",
+        "slug": "gpt-5-6-luna"
+      },
+      {
+        "board": "reasoning",
+        "rank": 20,
+        "score": 61.25296626129989,
+        "name": "Grok 4.6",
+        "slug": "grok-4-6"
+      },
+      {
+        "board": "reasoning",
+        "rank": 21,
+        "score": 60.62315076927085,
+        "name": "GPT-5.2 2025-12-11",
+        "slug": "gpt-5-2-2025-12-11"
+      },
+      {
+        "board": "reasoning",
+        "rank": 22,
+        "score": 59.30523481687068,
+        "name": "Kimi K3",
+        "slug": "kimi-k-3"
+      },
+      {
+        "board": "reasoning",
+        "rank": 23,
+        "score": 58.39729967219182,
+        "name": "Gemini 3.5 Flash",
+        "slug": "gemini-3-5-flash"
+      },
+      {
+        "board": "reasoning",
+        "rank": 24,
+        "score": 55.91317536431616,
+        "name": "Grok 4.5",
+        "slug": "grok-4-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 25,
+        "score": 54.0193871563934,
+        "name": "Claude Sonnet 5",
+        "slug": "claude-sonnet-5"
+      },
+      {
+        "board": "reasoning",
+        "rank": 26,
+        "score": 54.0193871563934,
+        "name": "Grok 4.7",
+        "slug": "grok-4-7"
+      },
+      {
+        "board": "reasoning",
+        "rank": 27,
+        "score": 52.74687138970129,
+        "name": "Gemini 3.6 Flash",
+        "slug": "gemini-3-6-flash"
+      },
+      {
+        "board": "reasoning",
+        "rank": 28,
+        "score": 52.23231928492956,
+        "name": "DeepSeek V4 Flash 0731",
+        "slug": "deepseek-v-4-flash-20260731"
+      },
+      {
+        "board": "reasoning",
+        "rank": 29,
+        "score": 48.55049045283987,
+        "name": "GPT-6 Luna",
+        "slug": "gpt-6-luna"
+      },
+      {
+        "board": "reasoning",
+        "rank": 30,
+        "score": 48.55049045283987,
+        "name": "GLM-5.3",
+        "slug": "glm-5-3"
+      },
+      {
+        "board": "reasoning",
+        "rank": 31,
+        "score": 47.730080664522106,
+        "name": "Claude Opus 4.7",
+        "slug": "claude-opus-4-7"
+      },
+      {
+        "board": "reasoning",
+        "rank": 32,
+        "score": 44.59260219999607,
+        "name": "Qwen3.7 Max",
+        "slug": "qwen-3-7-max"
+      },
+      {
+        "board": "reasoning",
+        "rank": 33,
+        "score": 44.59260219999607,
+        "name": "Claude Opus 4.6",
+        "slug": "claude-opus-4-6"
+      },
+      {
+        "board": "reasoning",
+        "rank": 34,
+        "score": 35.54820972197203,
+        "name": "GLM-5.2",
+        "slug": "glm-5-2"
+      },
+      {
+        "board": "reasoning",
+        "rank": 35,
+        "score": 35.54820972197203,
+        "name": "Kimi K2.6",
+        "slug": "kimi-k-2-6"
+      },
+      {
+        "board": "reasoning",
+        "rank": 36,
+        "score": 33.68492354041284,
+        "name": "GPT-5.4 Nano 2026-03-17",
+        "slug": "gpt-5-4-nano-2026-03-17"
+      },
+      {
+        "board": "reasoning",
+        "rank": 37,
+        "score": 32.426772944402394,
+        "name": "DeepSeek V4 Pro Preview",
+        "slug": "deepseek-v-4-pro-preview"
+      },
+      {
+        "board": "reasoning",
+        "rank": 38,
+        "score": 28.824118073147776,
+        "name": "Kimi K2.7 Code",
+        "slug": "kimi-k-2-7-code"
+      },
+      {
+        "board": "reasoning",
+        "rank": 39,
+        "score": 27.520421601084983,
+        "name": "Inkling",
+        "slug": "inkling"
+      },
+      {
+        "board": "reasoning",
+        "rank": 40,
+        "score": 27.520421601084983,
+        "name": "Grok 4.3",
+        "slug": "grok-4-3"
+      },
+      {
+        "board": "reasoning",
+        "rank": 41,
+        "score": 27.520421601084983,
+        "name": "Claude Opus 4.5 20251101",
+        "slug": "claude-opus-4-5-20251101"
+      },
+      {
+        "board": "reasoning",
+        "rank": 42,
+        "score": 27.036389273938163,
+        "name": "Claude Sonnet 4.6",
+        "slug": "claude-sonnet-4-6"
+      },
+      {
+        "board": "reasoning",
+        "rank": 43,
+        "score": 24.39212000318383,
+        "name": "GLM-5.3 Flash",
+        "slug": "glm-5-3-flash"
+      },
+      {
+        "board": "reasoning",
+        "rank": 44,
+        "score": 23.740447036339173,
+        "name": "Qwen3.6 Plus",
+        "slug": "qwen-3-6-plus"
+      },
+      {
+        "board": "reasoning",
+        "rank": 45,
+        "score": 23.740447036339173,
+        "name": "GPT-5.4 Mini 2026-03-17",
+        "slug": "gpt-5-4-mini-2026-03-17"
+      },
+      {
+        "board": "reasoning",
+        "rank": 46,
+        "score": 21.681613768957074,
+        "name": "Qwen3.6-27B",
+        "slug": "qwen-3-6-27-b"
+      },
+      {
+        "board": "reasoning",
+        "rank": 47,
+        "score": 21.283324994033986,
+        "name": "MiniMax-M3",
+        "slug": "minimax-m-3"
+      },
+      {
+        "board": "reasoning",
+        "rank": 48,
+        "score": 21.283324994033986,
+        "name": "Gemini 3.5 Flash Lite",
+        "slug": "gemini-3-5-flash-lite"
+      }
+    ],
+    "snapshots": [
+      {
+        "source_key": "arena-creative-writing",
+        "published_at": "2026-10-02T00:00:00.000Z",
+        "fetched_at": "2026-10-04T11:02:00.821Z",
+        "record_count": 385,
+        "source_url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset"
+      },
+      {
+        "source_key": "arena-vision",
+        "published_at": "2026-10-02T00:00:00.000Z",
+        "fetched_at": "2026-10-04T11:02:01.085Z",
+        "record_count": 146,
+        "source_url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset"
+      },
+      {
+        "source_key": "deepswe-v1-1",
+        "published_at": "2026-09-22T06:27:15.860Z",
+        "fetched_at": "2026-10-04T11:02:05.708Z",
+        "record_count": 28,
+        "source_url": "https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json"
+      },
+      {
+        "source_key": "epoch-chess",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:02:05.469Z",
+        "record_count": 138,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "epoch-frontiermath",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:02:05.331Z",
+        "record_count": 81,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "epoch-frontiermath-tier4",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:02:05.414Z",
+        "record_count": 62,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "epoch-gpqa",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:00:47.277Z",
+        "record_count": 216,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "epoch-mystery",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:02:05.602Z",
+        "record_count": 73,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "epoch-simpleqa",
+        "published_at": "2026-09-29T22:00:34.000Z",
+        "fetched_at": "2026-10-04T11:00:47.221Z",
+        "record_count": 77,
+        "source_url": "https://epoch.ai/data/benchmark_data.zip"
+      },
+      {
+        "source_key": "eq-creative",
+        "published_at": null,
+        "fetched_at": "2026-10-04T13:03:29.257Z",
+        "record_count": 131,
+        "source_url": "https://eqbench.com/creative_writing.js"
+      },
+      {
+        "source_key": "eq-longform",
+        "published_at": null,
+        "fetched_at": "2026-10-04T13:03:29.329Z",
+        "record_count": 130,
+        "source_url": "https://eqbench.com/creative_writing_longform.js"
+      },
+      {
+        "source_key": "livebench-coding",
+        "published_at": "2026-09-29T19:01:46.000Z",
+        "fetched_at": "2026-10-04T11:00:47.153Z",
+        "record_count": 62,
+        "source_url": "https://livebench.ai/"
+      },
+      {
+        "source_key": "livebench-reasoning",
+        "published_at": "2026-09-29T19:01:46.000Z",
+        "fetched_at": "2026-10-04T11:00:47.189Z",
+        "record_count": 62,
+        "source_url": "https://livebench.ai/"
+      },
+      {
+        "source_key": "livebench-writing",
+        "published_at": "2026-09-29T19:01:46.000Z",
+        "fetched_at": "2026-10-04T11:00:47.109Z",
+        "record_count": 62,
+        "source_url": "https://livebench.ai/"
+      },
+      {
+        "source_key": "mercor-apex-agents",
+        "published_at": "2026-09-08T00:00:00.000Z",
+        "fetched_at": "2026-10-04T11:02:07.786Z",
+        "record_count": 50,
+        "source_url": "https://www.mercor.com/apex/apex-agents-leaderboard/"
+      },
+      {
+        "source_key": "vals-finance-agent",
+        "published_at": "2026-10-01T00:00:00.000Z",
+        "fetched_at": "2026-10-04T11:02:07.822Z",
+        "record_count": 72,
+        "source_url": "https://www.vals.ai/benchmarks/fabv2"
+      }
+    ]
+  },
+  "stats": {
+    "scores": 2195,
+    "scored_models": 610,
+    "metrics": 16
+  }
+}

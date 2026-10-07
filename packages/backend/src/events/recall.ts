@@ -4,7 +4,7 @@
 // post it replies to or quotes. A membership counts as evidence only when its report is not a
 // composite (latestCompositeCondition).
 import { sql } from "../db.ts";
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { sha256 } from "../lib/ids.ts";
 import { embeddingsAvailable, ensureEmbeddings } from "../providers/embeddings.ts";
 import { lexicalSimilarity, reportText, type CandidateView, type ReportView, type ReadingContext } from "./relate.ts";
@@ -237,7 +237,7 @@ export async function candidateViews(recalled: Recalled[]): Promise<CandidateVie
       selectedReport: selected ? { title: selected.title, summary: selected.summary, source: selected.source, firstParty: selected.first_party, at: selected.at } : null,
       report: {
         title: row.title, source: row.source, firstParty: row.first_party, at: row.at, summary: row.summary,
-        frame: { subject: row.subject, action: row.action, object: row.object, occurredAt: row.occurred_at ? beijingDate(row.occurred_at) : null },
+        frame: { subject: row.subject, action: row.action, object: row.object, occurredAt: row.occurred_at ? tokyoDate(row.occurred_at) : null },
       },
     }];
   });

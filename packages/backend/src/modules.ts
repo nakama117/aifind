@@ -11,7 +11,7 @@ import type { QueueOptions } from "./jobs/queue.ts";
 import type { Finding } from "./notify/feishu.ts";
 import type { Topic, TopicMember } from "./publication/topics.ts";
 
-/** A cron schedule (Asia/Shanghai), recorded in job_runs like the engine's (apps/worker/src/schedules.ts). */
+/** A cron schedule (Asia/Tokyo), recorded in job_runs like the engine's (apps/worker/src/schedules.ts). */
 export interface Scheduled {
   name: string;
   cron: string;
@@ -191,6 +191,8 @@ export interface ServerModule {
   };
   llms?: () => Promise<LlmsLines> | LlmsLines;
   sitemap?: {
+    /** Independently served maps in the sitemap index; their own route owns freshness. */
+    files?: string[];
     /** After the engine's content pages (the topics), before the site's own (agent, about, terms). */
     pages?: SitemapEntry[];
     /** After the stories. */
@@ -225,7 +227,7 @@ export interface ServerModule {
        * The members it may name, read again with the page, and its part from them as they are now: one no
        * longer selected is missing, `topics` is its current membership. Null when it has no part on the page.
        */
-      read: (ask: TopicPageAsk) => { recheck: string[]; part: (current: ReadonlyMap<string, TopicMember>) => unknown } | null;
+      read: (ask: TopicPageAsk) => { recheck: string[]; part: (current: ReadonlyMap<string, TopicMember>) => unknown | Promise<unknown> } | null;
     };
     /** Company marks by topic slug, drawn over the engine's monograms. */
     marks?: () => Promise<Record<string, Brand>>;

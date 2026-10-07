@@ -1,38 +1,44 @@
 import { SITE } from "@aihot/site";
 import { Form, Link, useNavigate, useSearchParams } from "react-router";
 import type { Route } from "./+types/content";
-import type { AdminContentRow, AdminContentSearch } from "@aihot/contracts/admin";
+import type { AdminContentSearch } from "@aihot/contracts/admin";
 import { adminGet } from "../../lib/admin.server";
 import { VISIBILITY_LABEL } from "../../features/admin/labels";
-import { AdminPage, Badge, Button, Card, DataTable, Empty, Input, Time } from "../../features/admin/ui";
+import { AdminPage, Badge, Button, Card, DataTable, Input, Pager, Select, Time } from "../../features/admin/ui";
 
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const q = new URL(request.url).searchParams.get("q")?.trim() ?? "";
-  if (!q) return { q, rows: [] as AdminContentRow[] };
-  const { rows } = await adminGet<AdminContentSearch>(request, `/api/admin/content?q=${encodeURIComponent(q)}`);
-  return { q, rows };
+  return adminGet<AdminContentSearch>(request, `/api/admin/content${new URL(request.url).search}`);
 }
 
-export const meta: Route.MetaFunction = () => [{ title: `内容诊断 · ${SITE.name} 后台` }];
+export const meta: Route.MetaFunction = () => [{ title: `内容管理 · ${SITE.name} 后台` }];
 
 export default function Content({ loaderData }: Route.ComponentProps) {
-  const { q, rows } = loaderData;
+  const { rows, total, page, pageSize, sources } = loaderData;
   const [sp] = useSearchParams();
   const navigate = useNavigate();
   return (
-    <AdminPage title="内容诊断" subtitle="按 ID、原文链接或标题找到任何一条内容，看它从信源到公开出口的完整链路；下架、仅摘要、人工修正和重处理都在详情页。">
-      <Form method="get" className="mb-5 flex max-w-2xl gap-2">
-        <Input name="q" defaultValue={sp.get("q") ?? ""} placeholder="内容 ID、URL 或标题关键词" aria-label="搜索内容" autoFocus />
-        <Button type="submit" tone="primary">查找</Button>
+    <AdminPage title="内容管理" subtitle="按发现时间列出全部文章。点击标题可修改日文标题与摘要、调整精选、撤稿或恢复，也可查看评分、费用与操作记录。">
+      <Form key={sp.toString()} method="get" className="mb-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr_1fr_auto]">
+        <Input name="q" defaultValue={sp.get("q") ?? ""} placeholder="内容 ID、URL 或日文标题关键词" aria-label="搜索内容" />
+        <Select name="state" aria-label="发布状态" defaultValue={sp.get("state") ?? ""}>
+          <option value="">全部状态</option><option value="public">公开</option><option value="summary-only">仅摘要</option>
+          <option value="withdrawn">已撤稿</option><option value="unpublished">未公开</option><option value="failed">处理失败</option>
+        </Select>
+        <Select name="selected" aria-label="精选状态" defaultValue={sp.get("selected") ?? ""}>
+          <option value="">全部精选状态</option><option value="true">精选</option><option value="false">普通资讯</option>
+        </Select>
+        <Select name="source" aria-label="信源" defaultValue={sp.get("source") ?? ""}>
+          <option value="">全部信源</option>{sources.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+        </Select>
+        <Button type="submit" tone="primary">筛选</Button>
       </Form>
-      {q && (
-        <Card pad={false} title={`“${q}” 的结果`} right={<span>{rows.length === 50 ? "仅显示最近 50 条" : `${rows.length} 条`}</span>}>
+        <Card pad={false} title={`共 ${total} 条内容`} right={<Link to="/admin/content" className="text-accent">清除筛选</Link>}>
           <DataTable
             rows={rows}
             rowKey={(r) => r.id}
             onRowClick={(r) => navigate(`/admin/content/${r.id}`)}
-            empty="没有找到。URL 会先规范化再比对；标题支持中英文片段。"
+            empty="没有符合条件的内容。可清除筛选，或尝试日文标题、原文标题和原文链接。"
             columns={[
               {
                 key: "t",
@@ -61,8 +67,7 @@ export default function Content({ loaderData }: Route.ComponentProps) {
             ]}
           />
         </Card>
-      )}
-      {!q && <Empty>输入 ID、链接或标题开始查找。</Empty>}
+      <Pager page={page} hasMore={page * pageSize < total} />
     </AdminPage>
   );
 }

@@ -1,0 +1,513 @@
+{
+  "at": "2026-10-04T12:05:27.875Z",
+  "sourceDatabase": "aisignal_launch",
+  "restoredDatabase": "aisignal_restore_20261004",
+  "pass": true,
+  "tablesCompared": 71,
+  "excludedTableData": [
+    "public.admin_users",
+    "public.admin_sessions"
+  ],
+  "secretScan": "PASS",
+  "snapshotSha256": "5125c42a67c062e40e976399dec1d04b2573090d24e07b7112e4ea075e4ca20e",
+  "bytes": 3245532,
+  "tables": [
+    {
+      "schema": "pgboss",
+      "table": "bam",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "job",
+      "rows": 1458,
+      "digest": "085581a80d3d9ad1dfe4b0f88d2a3104",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "job_common",
+      "rows": 1458,
+      "digest": "085581a80d3d9ad1dfe4b0f88d2a3104",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "job_dependency",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "queue",
+      "rows": 26,
+      "digest": "01193de087ddad71ea3b016f5b7cd0d8",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "queue_stats",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "queue_stats_20261004",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "queue_stats_20261005",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "schedule",
+      "rows": 16,
+      "digest": "40384adf4e28f8c520c4229c00078152",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "subscription",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "version",
+      "rows": 1,
+      "digest": "fcb9ecd139b4db3d29ab755eb9bdb7eb",
+      "pass": true
+    },
+    {
+      "schema": "pgboss",
+      "table": "warning",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "admin_sessions",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "admin_users",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "analyses",
+      "rows": 171,
+      "digest": "a4e33d05a4aa33367fa661d986fa9747",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "article_discoveries",
+      "rows": 146,
+      "digest": "c2e5eb788a2f75b544a63d13e87a4803",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "article_revisions",
+      "rows": 252,
+      "digest": "1418f59375e092cf3b315499f282a6c5",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "articles",
+      "rows": 146,
+      "digest": "7d3ea1d3441629186204201f2ff07544",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "audit_log",
+      "rows": 18,
+      "digest": "ed476bd3a7add5c15f207efcff7615ae",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "budgets",
+      "rows": 10,
+      "digest": "f09b36d1b1299d4909196f7676c8075c",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "codex_monitor_events",
+      "rows": 3,
+      "digest": "a8879fbcc3f244f51896059521e89275",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "codex_monitor_state",
+      "rows": 2,
+      "digest": "284df0868b47e0ebe3258ecffe02b0b8",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "deliveries",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "delivery_leases",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "editorial_overrides",
+      "rows": 10,
+      "digest": "83d4e3b925c88913b1d64dac954fa222",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "embeddings",
+      "rows": 16,
+      "digest": "b508e6dcaecc26005828cc8b48e7098a",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "fact_articles",
+      "rows": 3,
+      "digest": "f8efec2111bfceb1de7103111a3e5112",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "facts",
+      "rows": 3,
+      "digest": "3078ae248879831318c21e83eb908425",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "feedback",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "feedback_bans",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "fetch_runs",
+      "rows": 8,
+      "digest": "89c82c5f98265058f038df28a908471f",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "fx_rates",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "grouping_decisions",
+      "rows": 3,
+      "digest": "d7e428acd469ce0cd2d00a6ea3f39836",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "grouping_overrides",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "hot_rankings",
+      "rows": 13,
+      "digest": "07287d76defe74a2d9dd0f5183bece0c",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "ingest_events",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "job_runs",
+      "rows": 129,
+      "digest": "1f3ddcb9cb22d259969758e7d5ee49d6",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_aliases",
+      "rows": 4265,
+      "digest": "898cff68985028fe7e8d489d2bb3a2a8",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_calibrations",
+      "rows": 17,
+      "digest": "e4c79c0ca8c6bc2452aa7dd4c28281f3",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_models",
+      "rows": 942,
+      "digest": "1091bccf76a72122c17123488de96ccb",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_prices",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_rankings",
+      "rows": 247,
+      "digest": "912c7906a715227f7aba0ddc2b95a6d8",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_runs",
+      "rows": 1,
+      "digest": "0f40bceb301b77094f96d4395b732261",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_scores",
+      "rows": 1915,
+      "digest": "c9cbc3f5091928aeb38930b0b33e5a77",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "lb_snapshots",
+      "rows": 14,
+      "digest": "1ec16e8bb57f74cfbbc4368654f2c131",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "notify_targets",
+      "rows": 2,
+      "digest": "ba7ba8c89a0ade70d824059ecb07cdb9",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "pool_search",
+      "rows": 146,
+      "digest": "cdd1001cf3bc0f067e8f3290845d7c51",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "provider_pauses",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "publications",
+      "rows": 146,
+      "digest": "07867979c57bbd83f72b5ea59acecf6e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "quote_translations",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "receipt_attempts",
+      "rows": 1013,
+      "digest": "c850d76fc55b625d8fb104af282b4f97",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "receipts",
+      "rows": 1012,
+      "digest": "df321ed659552c49a4e256d9e11bbc9d",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "report_revisions",
+      "rows": 17,
+      "digest": "ce4e48bab455e52149e2e987e09f5ed6",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "reports",
+      "rows": 60,
+      "digest": "555ca8ca2c314a6746968084e25c2f14",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "schema_migrations",
+      "rows": 56,
+      "digest": "594a2f99e28cc7885144557431d93198",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "selectbench_results",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "selectbench_runs",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "selected_ledger",
+      "rows": 102,
+      "digest": "0961a7ffcb9ebcbdb8a9915b4dc8ad52",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "selected_state",
+      "rows": 86,
+      "digest": "29834b5dd88c7e8bfce109eb6eda0e58",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "service_prices",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "settings",
+      "rows": 6,
+      "digest": "2224136109ce298d4b6a3410a25b95bd",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "sources",
+      "rows": 12,
+      "digest": "06d19c969426dd45c1e9b56dc953d7cd",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "stories",
+      "rows": 3,
+      "digest": "0e031e9c71e57d5b4516cdd65fbea926",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "story_aliases",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "story_digests",
+      "rows": 3,
+      "digest": "a9d879141c41ce4d855202edef423c35",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "story_heat_hourly",
+      "rows": 3,
+      "digest": "1ac5d6facd2aa2f7c7b87fd0b8d09c7e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "story_links",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "story_signals",
+      "rows": 3,
+      "digest": "f6731f6127f33690ce36e021291682ac",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "topic_chronicles",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "translation_attempts",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    },
+    {
+      "schema": "public",
+      "table": "translations",
+      "rows": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "pass": true
+    }
+  ]
+}

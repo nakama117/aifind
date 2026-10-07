@@ -47,12 +47,13 @@ function Masthead({ report, index }: { report: ReportDetail; index: ReportNaviga
             <Nameplate which={report.kind} className="block h-[44px] w-auto @[520px]:h-[58px] @[880px]:h-[74px] @[1040px]:h-[84px]" />
           </h1>
           <p className="mt-3 text-[11.5px] tracking-[0.36em] text-ink-4 @[880px]:mt-4 @[880px]:text-[12.5px]">{REPORTS.imprint}</p>
+          {report.retrospective && <p className="mt-3 text-sm leading-relaxed text-ink-3">補編：原文の発表日をもとに、{new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", dateStyle: "long" }).format(new Date(report.generatedAt))}に編集しました。当時の配信記録ではありません。</p>}
         </div>
         {/* 报眼: the box beside the nameplate, as a Chinese daily sets it: the issue and the date in the
             nameplate's dots, and on wider paper the issue calendar beside them. */}
         <div className="flex shrink-0 items-stretch well rounded-panel">
           <div className="flex w-[112px] flex-col items-center justify-center px-2 py-3 text-center @[880px]:w-[150px] @[880px]:py-4">
-            <span className="text-[11px] tracking-[0.2em] text-ink-4">第 {report.issueNumber} 期</span>
+            <span className="text-[11px] tracking-[0.2em] text-ink-4">第 {report.issueNumber} 号</span>
             <Halftone seed={`${report.kind}-${report.key}-date`} className="num mt-2 whitespace-nowrap text-[44px] font-black leading-[0.95] tracking-[-0.04em] text-ink @[880px]:text-[64px]">
               {mark.figure}
             </Halftone>
@@ -70,7 +71,7 @@ function Masthead({ report, index }: { report: ReportDetail; index: ReportNaviga
             <span className="text-[12px] text-ink-4">{m.unit}</span>
           </span>
         ))}
-        <span className="ml-auto whitespace-nowrap text-[12px] text-ink-4">约 {report.readingMinutes} 分钟读完</span>
+        <span className="ml-auto whitespace-nowrap text-[12px] text-ink-4">約 {report.readingMinutes} 分で読めます</span>
       </div>
     </header>
   );
@@ -82,7 +83,7 @@ function Source({ c, size = 16 }: { c: ReportCitation; size?: number }) {
     <span className="inline-flex min-w-0 items-center gap-1.5">
       <SourceAvatar name={c.sourceName} iconUrl={c.sourceIconUrl} iconSrcSet={c.sourceIconSrcSet} size={size} />
       <span className="truncate">{c.sourceName}</span>
-      {c.firstParty && <Badge tone="accent">一手</Badge>}
+      {c.firstParty && <Badge tone="accent">一次情報</Badge>}
     </span>
   );
 }
@@ -93,7 +94,7 @@ function Source({ c, size = 16 }: { c: ReportCitation; size?: number }) {
  */
 function Original({ c, className = "" }: { c: ReportCitation; className?: string }) {
   return (
-    <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`阅读${c.sourceName}原文：${c.title}（新标签页）`} className={`${LINK} text-[12.5px] text-ink-3 ${className}`}>
+    <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${c.sourceName}を読む　原文：${c.title}（新しいタブ）`} className={`${LINK} text-[12.5px] text-ink-3 ${className}`}>
       原文 <IconArrowUpRight size={12} />
     </a>
   );
@@ -129,8 +130,8 @@ function Related({ items, className = "" }: { items: ReportCitation[]; className
 function Coverage({ c }: { c: ReportCitation }) {
   return (
     <>
-      {!!c.otherSources && <span className="shrink-0 text-ink-4">另有 {c.otherSources} 家信源报道</span>}
-      {c.followUp && <Badge title={`${monthDay(c.followUp)}的日报报道过这件事，这里是新进展`}>跟进</Badge>}
+      {!!c.otherSources && <span className="shrink-0 text-ink-4">ほか {c.otherSources} 社の情報源が報道</span>}
+      {c.followUp && <Badge title={`${monthDay(c.followUp)}の日報で取り上げた話題に新たな進展`}>フォロー</Badge>}
     </>
   );
 }
@@ -204,7 +205,7 @@ function leadStoryOf(report: ReportDetail): ReportCitation | null {
   return report.sections.flatMap((s) => s.items).find((c) => c.itemId === report.leadItemId && c.available) ?? null;
 }
 
-const WITHDRAWN_NOTE = "该内容已按来源方要求下架或调整展示方式。";
+const WITHDRAWN_NOTE = "提供元の要請により、この記事は削除されたか、表示方法が変更されています。";
 
 /**
  * Sections as pages. A story cited twice appears once, and
@@ -243,7 +244,7 @@ function LeadPicture({ cover, onError, priority = false, className = "" }: { cov
           width={cover.width ?? undefined} height={cover.height ?? undefined}
           alt="" loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} decoding="async" onError={onError} className="size-full object-cover" />
       </div>
-      {cover.caption && <figcaption className="mt-2.5 line-clamp-2 text-[12.5px] leading-[1.6] text-ink-4">图 · {cover.caption}</figcaption>}
+      {cover.caption && <figcaption className="mt-2.5 line-clamp-2 text-[12.5px] leading-[1.6] text-ink-4">図・ {cover.caption}</figcaption>}
     </figure>
   );
 }
@@ -254,8 +255,8 @@ function LeadPicture({ cover, onError, priority = false, className = "" }: { cov
  */
 function Overview({ text }: { text: string }) {
   return (
-    <section aria-label="本期导读" className="border-b border-line py-7 @[880px]:py-9">
-      <Kicker>本期导读</Kicker>
+    <section aria-label="今号の案内" className="border-b border-line py-7 @[880px]:py-9">
+      <Kicker>今号の案内</Kicker>
       <p className="mt-4 max-w-[46em] text-[16.5px] leading-[1.9] text-ink-2 @[560px]:text-justify @[880px]:text-[17.5px]">{text}</p>
     </section>
   );
@@ -275,14 +276,14 @@ function FrontPage({ report, pages, leadStory, count }: { report: ReportDetail; 
   const dek = daily || !leadStory ? (report.lead?.leadParagraph ?? leadStory?.summary ?? report.overview) : leadStory.summary;
   const highlights = report.highlights.filter((h) => !leadStory || keyOf(h) !== keyOf(leadStory)).slice(0, 3);
   const inPage = new Set(pages.flatMap((p) => p.items.map((c) => c.itemId)).filter(Boolean));
-  const period = daily ? "今日" : report.kind === "weekly" ? "本周" : "本月";
-  const index = [...pages.map((p) => ({ id: p.id, label: p.label, n: `${p.items.length} 件` })), ...(report.flashes.length > 0 ? [{ id: "s-flash", label: "快讯", n: `${report.flashes.length} 条` }] : [])];
+  const period = daily ? "今日" : report.kind === "weekly" ? "今週" : "今月";
+  const index = [...pages.map((p) => ({ id: p.id, label: p.label, n: `${p.items.length}件` })), ...(report.flashes.length > 0 ? [{ id: "s-flash", label: "速報", n: `${report.flashes.length}件` }] : [])];
 
   return (
-    <section aria-label="头版" className="grid @[880px]:grid-cols-[minmax(0,1fr)_300px] @[1040px]:grid-cols-[minmax(0,1fr)_340px]">
+    <section aria-label="一面" className="grid @[880px]:grid-cols-[minmax(0,1fr)_300px] @[1040px]:grid-cols-[minmax(0,1fr)_340px]">
       {/* On a phone the headline comes before a landscape picture, so the first screen carries the news. */}
       <div id={leadStory ? (anchorOf(leadStory) ?? undefined) : undefined} className="flex min-w-0 scroll-mt-[calc(var(--bar-h)+1.5rem)] flex-col py-7 @[880px]:border-r @[880px]:border-line @[880px]:py-10 @[880px]:pr-10">
-        <Kicker>{byEvent ? "头条" : "本期导读"}</Kicker>
+        <Kicker>{byEvent ? "トップニュース" : "今号の案内"}</Kicker>
         {cover && wide && <LeadPicture cover={cover} onError={() => setBroken(cover.url)} priority className="order-2 mt-5 @[560px]:order-1" />}
         <h2 className="order-1 mt-4 text-[32px] font-black leading-[1.28] tracking-[-0.03em] text-ink [text-wrap:balance] @[520px]:text-[40px] @[560px]:order-2 @[1040px]:text-[48px] @[1040px]:leading-[1.22]">
           {leadStory?.itemId ? (
@@ -312,7 +313,7 @@ function FrontPage({ report, pages, leadStory, count }: { report: ReportDetail; 
       <aside className="min-w-0 border-t border-line py-7 @[880px]:border-t-0 @[880px]:py-10 @[880px]:pl-8">
         {highlights.length > 0 && (
           <>
-            <Kicker>{period}看点</Kicker>
+            <Kicker>{period}注目ポイント</Kicker>
             <ol className="mt-2">
               {highlights.map((h, i) => {
                 const anchor = anchorOf(h);
@@ -344,8 +345,8 @@ function FrontPage({ report, pages, leadStory, count }: { report: ReportDetail; 
           </>
         )}
         {index.length > 0 && (
-          <nav aria-label="本期版面" className={highlights.length > 0 ? "mt-8" : ""}>
-            <Kicker>本期版面</Kicker>
+          <nav aria-label="今号の紙面" className={highlights.length > 0 ? "mt-8" : ""}>
+            <Kicker>今号の紙面</Kicker>
             <ol className="mt-3">
               {index.map((p, i) => (
                 <li key={p.id}>
@@ -387,7 +388,7 @@ function Neighbours({ report, index }: { report: ReportDetail; index: ReportNavi
   const cell = "group flex min-w-0 flex-col py-6";
   const title = "mt-2.5 line-clamp-2 text-[16px] font-bold leading-[1.5] text-ink transition-colors group-hover:text-accent @[880px]:text-[18px]";
   return (
-    <nav aria-label={report.kind === "daily" ? "前后日报" : "前后各期"} className="mt-16 grid grid-cols-2 border-y border-line-strong">
+    <nav aria-label={report.kind === "daily" ? "前後の日報" : "前後の号"} className="mt-16 grid grid-cols-2 border-y border-line-strong">
       {report.prev ? (
         <Link to={reportPath(report.kind, report.prev)} className={`${cell} pr-5 @[880px]:pr-10`}>
           <span className="inline-flex items-center gap-1 text-[12px] text-ink-4">
@@ -418,7 +419,7 @@ function History({ report, index }: { report: ReportDetail; index: ReportNavigat
   const label = KIND_LABEL[report.kind];
   return (
     <section id="report-history" className="scroll-mt-[calc(var(--bar-h)+1.5rem)] pt-12">
-      <Kicker>{before(subjectAfter("往期", label), label)}{label}</Kicker>
+      <Kicker>{before(subjectAfter("バックナンバー", label), label)}{label}</Kicker>
       <ul className="mt-3">
         {others.map((e) => (
           <li key={e.key}>
@@ -438,9 +439,9 @@ export function reportOutline(report: ReportDetail): OutlineEntry[] {
   const pages = pagesOf(report, leadStoryOf(report));
   if (pages.length === 0 && report.flashes.length === 0) return [];
   return [
-    { id: "report-start", text: "头版", level: 2, mark: "" },
-    ...pages.map((p, i) => ({ id: p.id, text: p.label, level: 2, mark: pad(i + 1), note: `${p.items.length} 件` })),
-    ...(report.flashes.length > 0 ? [{ id: "s-flash", text: "快讯", level: 2, mark: pad(pages.length + 1), note: `${report.flashes.length} 条` }] : []),
+    { id: "report-start", text: "一面", level: 2, mark: "" },
+    ...pages.map((p, i) => ({ id: p.id, text: p.label, level: 2, mark: pad(i + 1), note: `${p.items.length}件` })),
+    ...(report.flashes.length > 0 ? [{ id: "s-flash", text: "速報", level: 2, mark: pad(pages.length + 1), note: `${report.flashes.length}件` }] : []),
   ];
 }
 
@@ -453,7 +454,7 @@ export function ReportPaper({ report, index }: { report: ReportDetail; index: Re
     <article className="@container">
       <Masthead report={report} index={index} />
       {count === 0 && report.flashes.length === 0 ? (
-        <p className="py-16 text-center text-[14px] text-ink-4">本期没有入选内容。</p>
+        <p className="py-16 text-center text-[14px] text-ink-4">今号に掲載する記事はありません。</p>
       ) : (
         <>
           {!daily && leadStory && report.overview && <Overview text={report.overview} />}
@@ -465,7 +466,7 @@ export function ReportPaper({ report, index }: { report: ReportDetail; index: Re
         <SectionPage key={p.id} id={p.id} no={i + 1} label={p.label}>
           {p.summary && (
             <p className="border-b border-line py-5 text-[15.5px] leading-[1.9] text-ink-2 @[560px]:text-justify">
-              <span className="mr-2 font-semibold text-accent">本版导读</span>
+              <span className="mr-2 font-semibold text-accent">本版の案内</span>
               {p.summary}
             </p>
           )}
@@ -474,7 +475,7 @@ export function ReportPaper({ report, index }: { report: ReportDetail; index: Re
       ))}
 
       {report.flashes.length > 0 && (
-        <SectionPage id="s-flash" no={pages.length + 1} label="快讯">
+        <SectionPage id="s-flash" no={pages.length + 1} label="速報">
           <ul className={`${COLUMNS} @[1040px]:columns-3`}>
             {report.flashes.map((f, i) => (
               <li key={`${keyOf(f)}-${i}`} className="flex break-inside-avoid gap-2.5 border-b border-line py-3 text-[14.5px] leading-[1.65]">
@@ -493,7 +494,7 @@ export function ReportPaper({ report, index }: { report: ReportDetail; index: Re
                     <span className="text-ink">{f.title}</span>
                   )}
                   {f.available && <span className="ml-2 text-[12px] text-ink-4">{f.sourceName}</span>}
-                  {f.available && f.followUp && <Badge className="ml-2 align-[1px]" title={`${monthDay(f.followUp)}的日报报道过这件事，这里是新进展`}>跟进</Badge>}
+                  {f.available && f.followUp && <Badge className="ml-2 align-[1px]" title={`${monthDay(f.followUp)}の日報で取り上げた話題に新たな進展`}>フォロー</Badge>}
                 </span>
               </li>
             ))}
@@ -504,11 +505,11 @@ export function ReportPaper({ report, index }: { report: ReportDetail; index: Re
       <Neighbours report={report} index={index} />
       {!daily && <History report={report} index={index} />}
       <footer className="py-10 text-center">
-        <div className="text-[13px] font-semibold tracking-[0.6em] text-ink-4">（本期完）</div>
+        <div className="text-[13px] font-semibold tracking-[0.6em] text-ink-4">（今号終わり）</div>
         <p className="mt-3 text-[12px] text-ink-4">
-          {`${SITE.name} `}{KIND_LABEL[report.kind]}由编辑系统根据公开来源自动{daily ? "编辑" : "综合"}，每条均附原文 ·{" "}
+          {`${SITE.name} `}{KIND_LABEL[report.kind]}編集システムが公開情報をもとに自動{daily ? "編集" : "総合"}、各記事に原文付き・{" "}
           <Link to={daily ? "/daily/archive" : "#report-history"} viewTransition={daily} className="font-medium text-ink-3 transition-colors hover:text-accent">
-            {daily ? "日报合订本" : `往期${KIND_LABEL[report.kind]}`}
+            {daily ? "日報合本" : `バックナンバー：${KIND_LABEL[report.kind]}`}
           </Link>
         </p>
       </footer>

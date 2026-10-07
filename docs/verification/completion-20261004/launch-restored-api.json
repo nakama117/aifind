@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-04T13:25:37.133Z",
+  "database": "aisignal_restore_completion_20261004",
+  "pass": true,
+  "paidCalls": 0,
+  "results": [
+    {
+      "path": "/api/v1/items?limit=20",
+      "status": 200,
+      "bytes": 14458
+    },
+    {
+      "path": "/api/v1/dailies/latest",
+      "status": 200,
+      "bytes": 1860
+    },
+    {
+      "path": "/api/v1/weeklies/latest",
+      "status": 200,
+      "bytes": 10809
+    },
+    {
+      "path": "/api/v1/monthlies/latest",
+      "status": 200,
+      "bytes": 24598
+    },
+    {
+      "path": "/api/site/reports/monthly/latest-page",
+      "status": 200,
+      "bytes": 25208
+    },
+    {
+      "path": "/api/v1/leaderboard/boards/overall",
+      "status": 200,
+      "bytes": 21851
+    },
+    {
+      "path": "/api/v1/codex-resets",
+      "status": 200,
+      "bytes": 10578
+    },
+    {
+      "path": "/api/site/topics/openai",
+      "status": 200,
+      "bytes": 4655
+    },
+    {
+      "path": "/feed.xml",
+      "status": 200,
+      "bytes": 54333
+    },
+    {
+      "path": "/feed/monthly.xml",
+      "status": 200,
+      "bytes": 17001
+    }
+  ]
+}

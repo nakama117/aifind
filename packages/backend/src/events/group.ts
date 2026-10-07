@@ -16,11 +16,11 @@
 // story get another look when a report founds a fact close to them (rematchSignals); history
 // (isHistorical) founds no event. Runs serially (queue concurrency 1).
 import { modelFor } from "../editorial/models.ts";
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { sql, type Db, type Tx } from "../db.ts";
 import { newShortId, newUuid } from "../lib/ids.ts";
 import { chatJson } from "../providers/llm.ts";
-import { completeReceipt } from "../providers/receipts.ts";
+import { BudgetExceededError, completeReceipt, ReceiptBusyError } from "../providers/receipts.ts";
 import { embeddingsAvailable } from "../providers/embeddings.ts";
 import { isHistorical, STALE_ON_DISCOVERY_MS } from "../content/materials.ts";
 import { enqueue, QUEUES, shutdownSignal } from "../jobs/queue.ts";
@@ -109,8 +109,8 @@ async function createStory(db: Db, title: string, at: Date): Promise<number> {
 }
 
 async function createFact(db: Db, storyId: number, title: string, frame: Record<string, any> | null, at: Date): Promise<number> {
-  let occurred = typeof frame?.occurredAt === "string" && /^\d{4}-\d{2}-\d{2}$/.test(frame.occurredAt) ? new Date(`${frame.occurredAt}T00:00:00+08:00`) : null;
-  if (occurred && (!Number.isFinite(+occurred) || beijingDate(occurred) !== frame!.occurredAt)) occurred = null;
+  let occurred = typeof frame?.occurredAt === "string" && /^\d{4}-\d{2}-\d{2}$/.test(frame.occurredAt) ? new Date(`${frame.occurredAt}T00:00:00+09:00`) : null;
+  if (occurred && (!Number.isFinite(+occurred) || tokyoDate(occurred) !== frame!.occurredAt)) occurred = null;
   const conditions = Array.isArray(frame?.conditions) ? frame.conditions.map((c: { text?: string }) => c.text).filter(Boolean).join("；") || null : null;
   const [row] = await db<{ id: number }[]>`
     INSERT INTO facts (public_id, story_id, title, subject, action, object, conditions, occurred_at, created_at)
@@ -252,7 +252,8 @@ export async function groupArticle(articleId: string, opts: GroupOptions = {}): 
     const receiptId = error && typeof error === 'object' && 'receiptId' in error && typeof error.receiptId === 'number' ? error.receiptId : null;
     // A late failed model call must not undo an editor's completed decision, or a fact already
     // committed before an optional downstream operation failed. Shutdown leaves work pending.
-    await sql`UPDATE articles SET grouping_status = ${shutdownSignal.signal.aborted ? 'pending' : 'failed'},
+    const waiting = shutdownSignal.signal.aborted || error instanceof BudgetExceededError || error instanceof ReceiptBusyError;
+    await sql`UPDATE articles SET grouping_status = ${waiting ? 'pending' : 'failed'},
       grouped_at = NULL, grouping_receipt_id = ${receiptId}, grouping_error = ${String(error).slice(0, 2000)}
       WHERE id = ${articleId} AND revision = ${revision} AND grouping_status <> 'complete' AND ${!(error instanceof GroupingSupersededError)}`;
     await publishArticle(articleId);

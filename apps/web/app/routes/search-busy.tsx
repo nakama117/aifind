@@ -5,7 +5,7 @@ import { titled } from "../lib/seo";
 export const handle: Screen = { tab: "featured" };
 
 export function meta() {
-  return [{ title: titled("搜索繁忙") }, { name: "robots", content: "noindex, follow" }];
+  return [{ title: titled("検索が混み合っています") }, { name: "robots", content: "noindex, follow" }];
 }
 
 export function headers() {

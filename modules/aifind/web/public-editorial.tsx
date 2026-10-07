@@ -1,0 +1,10 @@
+import { data,redirect,useLoaderData } from 'react-router';
+import { loadOr404 } from '@aihot/web/lib/api.server';
+import { pageMeta } from '@aihot/web/lib/seo';
+import type { PublicEditorial,PublicEditorialResolution } from '../editorial/public-contracts.ts';
+import { EditorialView } from './editorial-view.tsx';
+export const headers=()=>({'Cache-Control':'no-store'});
+export const handle={tab:'compare',name:'編集ページ'};
+export async function loader({request,params}:{request:Request;params:{slug?:string}}){const path=new URL(request.url).pathname.startsWith('/categories/')?'categories':new URL(request.url).pathname.startsWith('/howto/')?'howto':'compare';const r=await loadOr404<PublicEditorialResolution>('/api/site/aifind/'+path+'/'+encodeURIComponent(params.slug??''),{signal:request.signal});if(r.kind==='redirect')throw redirect('/'+path+'/'+r.slug,{status:301,headers:headers()});if(r.kind!=='found')throw data({message:'not_found'},{status:404,headers:headers()});return data(r.document,{headers:headers()});}
+export function meta({loaderData:d}:{loaderData?:PublicEditorial}){if(!d)return pageMeta({title:'編集ページが見つかりません',path:'/compare',noindex:true});const path=(d.type==='comparison'?'/compare/':d.type==='guide'?'/howto/':'/categories/')+d.slug,origin=new URL(d.canonicalUrl).origin;const tags=pageMeta({title:d.seoTitle||d.title,description:d.seoDescription||d.excerpt,path,image:origin+'/og/aifind-editorial'+path+'.png',type:'article',jsonLd:{'@context':'https://schema.org','@type':'WebPage',name:d.title,url:d.canonicalUrl,description:d.excerpt,datePublished:d.publishedAt,...(d.type==='guide'?{breadcrumb:{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'使い方',item:origin+'/howto'},{'@type':'ListItem',position:2,name:d.title,item:d.canonicalUrl}]}}:{})}});return[...tags.filter(t=>!(('rel'in t&&t.rel==='canonical')||('property'in t&&t.property==='og:url'))),{tagName:'link',rel:'canonical',href:d.canonicalUrl},{property:'og:url',content:d.canonicalUrl}];}
+export default function PublicEditorialPage(){return <EditorialView document={useLoaderData<typeof loader>()}/>;}

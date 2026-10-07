@@ -7,6 +7,7 @@ import type { AddressInfo } from "node:net";
 import { after, before, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { CATEGORY_KEYS } from "@aihot/contracts/taxonomy";
+import { apiDeadlineCache } from "../app/lib/api.server.ts";
 
 let web: ChildProcess;
 let origin: string;
@@ -18,6 +19,10 @@ const api = createServer((req, res) => {
   const url = new URL(req.url!, "http://api.local");
   apiCookies.push(req.headers.cookie);
   res.setHeader("Content-Type", "application/json");
+  if (url.pathname === "/api/site/aifind/products" || url.pathname === "/api/site/aifind/home") {
+    res.setHeader("Cache-Control", "no-store");
+    return res.end(JSON.stringify({ products: [], comparisons: [], categories: [], limit: 6, offset: 0, hasMore: false }));
+  }
   if (url.pathname === "/api/site/meta") {
     const respond = () => res.end(JSON.stringify({ changelogVersion: "2026-09-28T12:00" }));
     return metaDelayMs ? setTimeout(respond, metaDelayMs) : respond();
@@ -28,7 +33,11 @@ const api = createServer((req, res) => {
     res.setHeader("Cache-Control", "public, max-age=30, s-maxage=30");
     return res.end(JSON.stringify({ filters, cards: [], nextCursor: null, dayCounts: [], hot: null }));
   }
-  if (url.pathname === "/api/site/hot") return res.end(JSON.stringify({ entries: [] }));
+  if (url.pathname === "/api/site/hot") {
+    res.setHeader("X-Accel-Expires", `@${deadline}`);
+    res.setHeader("Cache-Control", "public, max-age=30, s-maxage=30");
+    return res.end(JSON.stringify({ entries: [] }));
+  }
   if (url.pathname === "/api/site/echo-client") return res.end(JSON.stringify({ forwarded: req.headers["x-forwarded-for"], real: req.headers["x-real-ip"] }));
   if (url.pathname === "/api/site/items/long-lived") return res.end(JSON.stringify({ id: "long-lived", title: "t" }));
   if (url.pathname === "/api/site/contact") return res.end(JSON.stringify({ wechatQr: "/qr.png", feishuQr: "/qr.png" }));
@@ -77,8 +86,8 @@ test("public route subsets produce the same complete navigation data; filters st
   const answers = await Promise.all(["", "?_routes=root", "?_routes=routes%2Fhome", "?_routes=unknown"].map(async (query) => {
     const res = await fetch(`${origin}/_.data${query}`);
     assert.equal(res.status, 200);
-    assert.match(res.headers.get("Cache-Control")!, /^public,/);
-    assert.equal(res.headers.get("X-Accel-Expires"), `@${deadline}`);
+    assert.equal(res.headers.get("Cache-Control"), "private, no-store");
+    assert.equal(res.headers.get("X-Accel-Expires"), "0");
     assert.doesNotMatch(res.headers.get("Cache-Control")!, /stale/);
     const body = await res.text();
     assert.ok(body.includes("root") && body.includes("routes/home"));
@@ -95,8 +104,10 @@ test("public route subsets produce the same complete navigation data; filters st
 test("HTML and navigation share freshness; cookies do not personalize public results", async () => {
   const html = await fetch(`${origin}/`);
   assert.equal(html.status, 200);
-  assert.equal(html.headers.get("X-Accel-Expires"), `@${deadline}`);
-  assert.match(await html.text(), /精选/);
+  // A home module with withdrawal-sensitive products makes both HTML and navigation uncacheable.
+  assert.equal(html.headers.get("Cache-Control"), "private, no-store");
+  assert.equal(html.headers.get("X-Accel-Expires"), "0");
+  assert.match(await html.text(), /おすすめ/);
   const plain = await fetch(`${origin}/about.data`);
   const signedIn = await fetch(`${origin}/about.data?_routes=root`, { headers: { cookie: "admin_session=private; reader=returning" } });
   assert.match(plain.headers.get("Cache-Control")!, /^public,/);
@@ -140,26 +151,27 @@ test("admin data and actions never become public cache entries", async () => {
 test("browser freshness shares the selected deadline, including slow sibling loaders", async () => {
   const savedDeadline = deadline;
   try {
+    // News-only installations retain this absolute deadline policy; products require the stricter no-store policy.
+    const source=new Headers({"X-Accel-Expires":"@1009"});
+    assert.deepEqual(apiDeadlineCache(60,1001000,source),{"Cache-Control":"public, s-maxage=8","X-Accel-Expires":"@1009"});
+    assert.deepEqual(apiDeadlineCache(60,1010000,source),{"Cache-Control":"no-cache","X-Accel-Expires":"0"});
     deadline = Math.floor(Date.now() / 1000) + 20;
     for (const pathname of ["/", "/_.data?_routes=routes%2Fhome"]) {
       const res = await fetch(origin + pathname);
       const cc = res.headers.get("Cache-Control")!;
-      const browser = Number(cc.match(/(?:^|,)\s*max-age=(\d+)/)![1]);
-      const shared = Number(cc.match(/(?:^|,)\s*s-maxage=(\d+)/)![1]);
-      assert.ok(browser > 0 && browser === shared);
-      assert.ok(Date.parse(res.headers.get("Date")!) / 1000 + browser <= deadline);
-      assert.equal(res.headers.get("X-Accel-Expires"), `@${deadline}`);
-      assert.match(cc, /must-revalidate/);
+      assert.equal(res.status,200);
+      assert.equal(cc,"private, no-store");
+      assert.equal(res.headers.get("X-Accel-Expires"), "0");
       assert.doesNotMatch(cc, /stale/);
       await res.text();
     }
-    // The selected loader initially grants a positive TTL, but root metadata finishes after it.
+    // Slow sibling loaders cannot turn a withdrawal-sensitive homepage into a cached response.
     deadline = Math.floor(Date.now() / 1000) + 2;
     metaDelayMs = 2300;
     await Promise.all(["/", "/_.data?_routes=routes%2Fhome"].map(async (pathname) => {
       const res = await fetch(origin + pathname);
       assert.equal(res.status, 200);
-      assert.equal(res.headers.get("Cache-Control"), "no-cache");
+      assert.equal(res.headers.get("Cache-Control"), "private, no-store");
       assert.equal(res.headers.get("X-Accel-Expires"), "0");
       await res.text();
     }));

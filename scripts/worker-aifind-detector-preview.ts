@@ -1,0 +1,11 @@
+import {assertPreviewWrites} from '../modules/aifind/preview/config.ts';
+assertPreviewWrites(process.env);
+if(['COLLECT_ENABLED','MODEL_CALLS_ENABLED','FEISHU_CONTENT_PUSH_ENABLED','FEISHU_INTERNAL_ENABLED','INDEXNOW_SUBMIT_ENABLED','AIFIND_DETECTOR_ENABLED'].some(k=>process.env[k]!=='false'))throw new Error('Synthetic Preview worker requires every external valve false');
+const {installModules}=await import('@aihot/backend/modules');
+const {aifindServer}=await import('../modules/aifind/server.ts');
+const {getBoss,workModuleQueues,stopBoss}=await import('@aihot/backend/jobs/queue');
+const {closeDb}=await import('@aihot/backend/db');
+installModules([aifindServer]);await workModuleQueues(await getBoss());
+console.log(JSON.stringify({syntheticPreviewWorker:process.pid,schedules:false,externalActions:false}));
+let stopping=false;const stop=async()=>{if(stopping)return;stopping=true;await stopBoss();await closeDb();process.exit(0);};
+process.on('SIGTERM',stop);process.on('SIGINT',stop);

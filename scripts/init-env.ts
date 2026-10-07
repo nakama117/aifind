@@ -1,22 +1,23 @@
-// Creates .env from .env.example with fresh random secrets and an admin password, and prints the password
-// once. Refuses to overwrite an existing .env.   node scripts/init-env.ts [--llm-key <key>]
+// Complete .env without replacing existing credentials. Secrets are only written to disk.
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { parseEnv } from "node:util";
 
-if (existsSync(".env")) {
-  console.error(".env 已经存在，没有覆盖。要重新生成，先把它改名或删掉。");
-  process.exit(1);
+const template = readFileSync(".env.example", "utf8");
+const existing = existsSync(".env") ? readFileSync(".env", "utf8") : "";
+const values = parseEnv(existing);
+const secrets: Record<string, number> = { ADMIN_PASSWORD: 18, SESSION_SECRET: 32, IMG_PROXY_SIGN_SECRET: 32, POSTGRES_PASSWORD: 18 };
+let text = existing;
+for (const [key, fallback] of Object.entries(parseEnv(template))) {
+  if (values[key] !== undefined && (values[key] !== "" || !secrets[key])) continue;
+  const value = secrets[key] ? randomBytes(secrets[key]).toString("hex") : fallback;
+  if (values[key] !== undefined) {
+    text = text.replace(new RegExp(`^${key}=.*$`, "m"), `${key}=${JSON.stringify(value)}`);
+  } else {
+    if (text && !text.endsWith("\n")) text += "\n";
+    text += `${key}=${JSON.stringify(value)}\n`;
+  }
 }
-const password = randomBytes(12).toString("base64url");
-const keyAt = process.argv.indexOf("--llm-key");
-const llmKey = keyAt > 0 ? (process.argv[keyAt + 1] ?? "") : "";
-const text = readFileSync(".env.example", "utf8")
-  .replace(/^ADMIN_PASSWORD=$/m, `ADMIN_PASSWORD=${password}`)
-  .replace(/^SESSION_SECRET=$/m, `SESSION_SECRET=${randomBytes(32).toString("hex")}`)
-  .replace(/^IMG_PROXY_SIGN_SECRET=$/m, `IMG_PROXY_SIGN_SECRET=${randomBytes(32).toString("hex")}`)
-  .replace(/^POSTGRES_PASSWORD=$/m, `POSTGRES_PASSWORD=${randomBytes(18).toString("hex")}`)
-  .replace(/^LLM_API_KEY=$/m, `LLM_API_KEY=${llmKey}`);
-writeFileSync(".env", text, { mode: 0o600 });
-console.log("已生成 .env。");
-console.log(`管理员密码：${password}（也写在 .env 的 ADMIN_PASSWORD 里）`);
-if (!llmKey) console.log("还差一步：在 .env 里填上 LLM_API_KEY（以及 LLM_BASE_URL、LLM_MODEL，默认是 DeepSeek）。");
+if (text !== existing) writeFileSync(".env", text, { mode: 0o600 });
+console.log("本地配置已补齐，已有设置保持不变。管理员密码和 API 密钥仅保存在 .env 中。");
+if (!values.OPENAI_API_KEY) console.log("请通过安全配置输入 OPENAI_API_KEY；不要把密钥写进命令参数或聊天。");

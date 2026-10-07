@@ -111,7 +111,7 @@ export function SearchOverlay() {
       ref={panel}
       role="dialog"
       aria-modal="true"
-      aria-label="搜索"
+      aria-label="検索"
       tabIndex={-1}
       inert={!shown}
       className={`fixed inset-0 z-[75] flex flex-col bg-bg pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] transition-[opacity,transform] duration-200 ease-[var(--ease-out-quart)] lg:hidden ${shown ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
@@ -131,7 +131,7 @@ export function SearchOverlay() {
         className="flex h-14 shrink-0 items-center gap-1 pl-4 pr-1 pt-[env(safe-area-inset-top)]"
       >
         <label className="relative flex-1">
-          <span className="sr-only">搜索标题、摘要和正文</span>
+          <span className="sr-only">タイトル、概要、本文を検索</span>
           <IconSearch size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-4" />
           <input
             ref={input}
@@ -139,7 +139,7 @@ export function SearchOverlay() {
             type="search"
             onInput={(e) => setHasText(!!e.currentTarget.value)}
             tabIndex={shown ? 0 : -1}
-            placeholder="搜索标题、摘要和正文"
+            placeholder="タイトル、概要、本文を検索"
             maxLength={200}
             autoComplete="off"
             enterKeyHint="search"
@@ -148,7 +148,7 @@ export function SearchOverlay() {
           {hasText && (
             <button
               type="button"
-              aria-label="清空"
+              aria-label="クリア"
               tabIndex={shown ? 0 : -1}
               onClick={() => {
                 if (input.current) input.current.value = "";
@@ -162,7 +162,7 @@ export function SearchOverlay() {
           )}
         </label>
         <button type="button" tabIndex={shown ? 0 : -1} onClick={close} className="h-11 shrink-0 px-3 text-[16px] text-accent">
-          取消
+          キャンセル
         </button>
       </Form>
 
@@ -171,9 +171,9 @@ export function SearchOverlay() {
           {recent.length > 0 && (
             <section className="pt-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-[13px] font-semibold text-ink-3">最近搜索</h2>
+                <h2 className="text-[13px] font-semibold text-ink-3">最近の検索</h2>
                 <button type="button" onClick={clearRecentSearches} className="-mr-2 h-11 px-2 text-[13px] text-ink-4">
-                  清除
+                  クリア
                 </button>
               </div>
               <div className="mt-1.5 flex flex-wrap gap-2">
@@ -188,7 +188,7 @@ export function SearchOverlay() {
 
           {companies.length > 0 && (
             <section className="pt-6">
-              <h2 className="text-[13px] font-semibold text-ink-3">按主题找</h2>
+              <h2 className="text-[13px] font-semibold text-ink-3">トピックから探す</h2>
               <div className="mt-2.5 flex flex-wrap gap-2">
                 {companies.map((t) => (
                   <Link viewTransition key={t.slug} to={`/topics/${t.slug}`} className={`${chip} bg-bg-sunk text-ink-2 ring-1 ring-inset ring-line-soft active:bg-bg-muted dark:bg-bg-muted/60`}>
@@ -196,7 +196,7 @@ export function SearchOverlay() {
                   </Link>
                 ))}
                 <Link viewTransition to="/topics" className={`${chip} gap-0.5 font-medium text-accent`}>
-                  全部 {more!.topics.length} 个主题
+                  すべて {more!.topics.length} 件のトピック
                 </Link>
               </div>
             </section>
@@ -204,7 +204,7 @@ export function SearchOverlay() {
 
           {(more?.hot.length ?? 0) > 0 && (
             <section className="pt-6">
-              <h2 className="text-[13px] font-semibold text-ink-3">正在热议</h2>
+              <h2 className="text-[13px] font-semibold text-ink-3">話題沸騰中</h2>
               <ol className="mt-1 divide-y divide-line-soft">
                 {more!.hot.map((h, i) => (
                   <li key={h.to}>

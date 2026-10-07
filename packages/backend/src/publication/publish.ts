@@ -1,3 +1,4 @@
+import { isJapaneseText } from "@aihot/contracts/language";
 // Publishing: derive the public projection of one article from its material, the latest judgement,
 // manual overrides and grouping, then record selected-set changes in the sync ledger.
 // Rebuilding only re-reads stored results; it never calls a model.
@@ -242,11 +243,11 @@ export async function publishArticleTx(tx: Tx, articleId: string, options: Publi
   const now = options.now ?? new Date();
 
   const f = override?.fields ?? {};
-  const isChineseTitle = article.language === "zh" || /[一-鿿]/.test(article.title);
+  const isJapaneseTitle = isJapaneseText(article.title, article.language);
   // An X post carries its Chinese in the summary and translation; without a Chinese title its own
   // text is the title, where an article would still be a half-finished card.
   const zhTitle = analysis?.title_zh?.trim() ? analysis.title_zh : null;
-  const title = pickString(f.title, zhTitle ?? (isChineseTitle || article.x_post ? collapseWhitespace(article.title) : null));
+  const title = pickString(f.title, zhTitle ?? (isJapaneseTitle || article.x_post ? collapseWhitespace(article.title) : null));
   const summary = pickString(f.summary, analysis?.summary_zh ?? null);
   const category = pickString(f.category, analysis?.category ?? null);
   const tags = Array.isArray(f.tags) ? (f.tags as string[]) : [...new Set([...(analysis?.tags ?? []), ...(analysis?.subjects ?? []).map((s) => `entity:${s}`)])];
@@ -267,7 +268,7 @@ export async function publishArticleTx(tx: Tx, articleId: string, options: Publi
   const channel = channelOf(source.kind, hasXPost);
   const bodyMode = bodyModeOf(source, article.body_status, !!article.body_text && article.body_text.length > 0);
   const syndicate = mayRedistribute(source, bodyMode);
-  const originalTitle = isChineseTitle && title === collapseWhitespace(article.title) ? null : collapseWhitespace(article.title);
+  const originalTitle = isJapaneseTitle && title === collapseWhitespace(article.title) ? null : collapseWhitespace(article.title);
 
   // Waiting candidates are readable in the pool, with no selected seat, sync entry or push.
   // Completion stamps the actual release after lock waits, including across report cutoffs.

@@ -122,6 +122,7 @@ function pageCache(req: import("node:http").IncomingMessage, res: import("node:h
 }
 
 async function handle(req: import("node:http").IncomingMessage, res: import("node:http").ServerResponse) {
+  if (process.env.SITE_PREVIEW === "true") res.setHeader("X-Robots-Tag", "noindex, nofollow");
   const raw = req.url ?? "/";
   const qi = raw.indexOf("?");
   const pathname = qi >= 0 ? raw.slice(0, qi) : raw;

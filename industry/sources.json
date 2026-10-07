@@ -1,5 +1,5 @@
 {
-  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里新建、修改和暂停。字段说明见 docs/customize.md。",
+  "$comment": "AI Signal JP 首批官方候选来源。技术验证与权利核验记录见 docs/source-review.md。未经完整核验的保持停用；后台启用前须确认。",
   "sources": [
     {
       "id": "rss-openai-news",
@@ -14,12 +14,13 @@
       "tier": "T1",
       "owner_entity_id": "openai",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-google-deepmind",
@@ -34,33 +35,13 @@
       "tier": "T1",
       "owner_entity_id": "google",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-research",
-      "name": "Google Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://research.google/blog/rss/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-hugging-face",
@@ -75,13 +56,13 @@
       "tier": "T1",
       "owner_entity_id": "hugging-face",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方",
-        "开源"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-microsoft-research",
@@ -96,13 +77,13 @@
       "tier": "T1",
       "owner_entity_id": "microsoft",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方",
-        "研究"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-nvidia-blog",
@@ -117,12 +98,13 @@
       "tier": "T1",
       "owner_entity_id": "nvidia",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-aws-ml",
@@ -135,15 +117,15 @@
         }
       },
       "tier": "T1",
-      "owner_entity_id": null,
+      "owner_entity_id": "amazon",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方",
-        "教程"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-github-ai",
@@ -156,215 +138,161 @@
         }
       },
       "tier": "T1",
-      "owner_entity_id": null,
+      "owner_entity_id": "microsoft",
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
-      "id": "rss-mistral",
-      "name": "Mistral AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://mistral.ai/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "id": "web-anthropic",
+      "name": "Anthropic",
+      "owner_entity_id": "anthropic",
+      "kind": "web_list",
+      "enabled": false,
       "tier": "T1",
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 60,
       "tags": [
-        "官方"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-bair",
-      "name": "Berkeley AI Research",
-      "kind": "rss",
+      "syndicate_fulltext": false,
       "config": {
-        "feedUrl": "https://bair.berkeley.edu/blog/feed.xml",
+        "url": "https://www.anthropic.com/news",
+        "parseMode": "html",
+        "itemSelector": "main a[class*=\"PublicationList\"], main a[class*=\"FeaturedGrid\"]",
+        "titleSelector": "h2, h3, [class*=\"title\"], [class*=\"heading\"]",
+        "publishedAtSelector": "time",
+        "allowUrlPrefixes": [
+          "https://www.anthropic.com/"
+        ],
+        "publishedAtUtcOffset": "+00:00",
         "_aihot": {
           "initialBackfillLimit": 8
         }
-      },
+      }
+    },
+    {
+      "id": "web-sakana-ai",
+      "name": "Sakana AI",
+      "owner_entity_id": "sakana-ai",
+      "kind": "web_list",
+      "enabled": false,
       "tier": "T1",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-the-verge-ai",
-      "name": "The Verge · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "媒体"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-techcrunch-ai",
-      "name": "TechCrunch · AI",
-      "kind": "rss",
+      "syndicate_fulltext": false,
       "config": {
-        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+        "url": "https://sakana.ai/blog/",
+        "parseMode": "html",
+        "itemSelector": "article",
+        "linkSelector": "h1 a",
+        "titleSelector": "h1 a",
+        "publishedAtSelector": "time",
+        "allowUrlPrefixes": [
+          "https://sakana.ai/"
+        ],
+        "publishedAtUtcOffset": "+09:00",
         "_aihot": {
           "initialBackfillLimit": 8
         }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
+      }
+    },
+    {
+      "id": "web-preferred-networks",
+      "name": "Preferred Networks",
+      "owner_entity_id": "preferred-networks",
+      "kind": "web_list",
+      "enabled": false,
+      "tier": "T1",
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "媒体"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-ars-technica-ai",
-      "name": "Ars Technica · AI",
-      "kind": "rss",
+      "syndicate_fulltext": false,
       "config": {
-        "feedUrl": "https://arstechnica.com/ai/feed/",
+        "url": "https://www.preferred.jp/ja/news/",
+        "parseMode": "html",
+        "itemSelector": "div:has(> h2 > a[href^=\"/ja/news/\"])",
+        "linkSelector": "h2 a",
+        "titleSelector": "h2 a",
+        "publishedAtSelector": "time",
+        "allowUrlPrefixes": [
+          "https://www.preferred.jp/ja/news/"
+        ],
+        "publishedAtUtcOffset": "+09:00",
         "_aihot": {
           "initialBackfillLimit": 8
         }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
+      }
+    },
+    {
+      "id": "web-geniac",
+      "name": "GENIAC",
+      "owner_entity_id": "geniac",
+      "kind": "web_list",
+      "enabled": false,
+      "tier": "T1",
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "媒体"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mit-tech-review-ai",
-      "name": "MIT Technology Review · AI",
-      "kind": "rss",
+      "syndicate_fulltext": false,
       "config": {
-        "feedUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+        "url": "https://geniac.meti.go.jp/",
+        "parseMode": "html",
+        "itemSelector": "a.renew2026-news-card",
+        "titleSelector": ".renew2026-news-card-ttl",
+        "publishedAtSelector": "time",
+        "allowUrlPrefixes": [
+          "https://geniac.meti.go.jp/geniac_magazine/"
+        ],
+        "publishedAtUtcOffset": "+09:00",
         "_aihot": {
           "initialBackfillLimit": 8
         }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      }
     },
     {
-      "id": "rss-the-decoder",
-      "name": "The Decoder",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://the-decoder.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
+      "id": "web-riken-aip",
+      "name": "RIKEN AIP / 理研AIP",
+      "owner_entity_id": "riken-aip",
+      "kind": "web_list",
+      "enabled": false,
+      "tier": "T1",
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "媒体"
+        "公式"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-simon-willison",
-      "name": "Simon Willison",
-      "kind": "rss",
+      "syndicate_fulltext": false,
       "config": {
-        "feedUrl": "https://simonwillison.net/atom/everything/",
+        "url": "https://aip.riken.jp/news-list/?lang=ja",
+        "parseMode": "html",
+        "itemSelector": ".box-title a",
+        "publishedAtSelector": "time",
+        "allowUrlPrefixes": [
+          "https://aip.riken.jp/news/"
+        ],
+        "publishedAtUtcOffset": "+09:00",
         "_aihot": {
           "initialBackfillLimit": 8
         }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "个人"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-import-ai",
-      "name": "Import AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://importai.substack.com/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "个人",
-        "周刊"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-latent-space",
-      "name": "Latent Space",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.latent.space/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "个人"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      }
     }
   ]
 }

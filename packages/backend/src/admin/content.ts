@@ -4,7 +4,7 @@
 // overrides with a version check, are re-projected to every public exit, and are audited.
 import { z } from "zod";
 import { correctReportClassification } from "../reports/correct.ts";
-import type { AdminContentChain, AdminContentRow, AdminPublication, BeforeJson } from "@aihot/contracts/admin";
+import type { AdminContentChain, AdminContentSearch, AdminPublication, BeforeJson } from "@aihot/contracts/admin";
 import { ARTICLE_ID_PATTERN, CATEGORY_KEYS } from "@aihot/contracts/taxonomy";
 import { sql, type Tx } from "../db.ts";
 import { enqueue, QUEUES } from "../jobs/queue.ts";
@@ -16,22 +16,38 @@ import { requestRegroup } from "../events/corrections.ts";
 import { computeHotRanking, storedHotRanking } from "../events/hot.ts";
 import { audit, auditHistory, Conflict } from "../audit.ts";
 
-export async function searchContent(q: string): Promise<BeforeJson<AdminContentRow>[]> {
-  const term = q.trim();
-  if (!term) return [];
-  const read = (where: ReturnType<typeof sql>) => sql<BeforeJson<AdminContentRow>[]>`
-    SELECT a.id, coalesce(p.title, a.title) AS title, a.url, s.name AS source, a.discovered_at, a.processing_state,
-           p.visibility, p.selected, p.score
-    FROM articles a JOIN sources s ON s.id = a.source_id LEFT JOIN publications p ON p.article_id = a.id
-    WHERE ${where} ORDER BY a.discovered_at DESC, a.id LIMIT 50`;
-  // Exact lookups use the identity indexes; a title search must not force a full-table join for an ID.
-  if (ARTICLE_ID_PATTERN.test(term)) {
-    const found = await read(sql`a.id = ${term}`);
-    if (found.length) return found;
+const ContentFilters = z.object({
+  q: z.string().trim().max(300).optional(), source: z.string().max(120).optional(),
+  state: z.enum(["", "public", "summary-only", "withdrawn", "unpublished", "failed"]).optional(),
+  selected: z.enum(["", "true", "false"]).optional(), page: z.coerce.number().int().min(1).max(100000).default(1),
+});
+
+export async function listContent(input: { q?: string; source?: string; state?: string; selected?: string; page?: number | string } = {}): Promise<BeforeJson<AdminContentSearch>> {
+  const f = ContentFilters.parse(input);
+  const term = f.q ?? "";
+  let search = sql`true`;
+  if (term) {
+    const exact = ARTICLE_ID_PATTERN.test(term) && (await sql`SELECT 1 FROM articles WHERE id = ${term}`).length > 0;
+    const url = /^https?:\/\//i.test(term) ? normalizeUrl(term) : null;
+    const pattern = `%${term.replace(/[\\%_]/g, "\\$&")}%`;
+    search = exact ? sql`a.id = ${term}` : url
+      ? sql`(a.url IN (${term}, ${url}) OR a.identity_key IN (${identityKeyForUrl(term)}, ${identityKeyForUrl(term, { keepFragment: true })}))`
+      : sql`(a.title ILIKE ${pattern} OR p.title ILIKE ${pattern})`;
   }
-  const url = /^https?:\/\//i.test(term) ? normalizeUrl(term) : null;
-  if (url) return read(sql`a.url IN (${term}, ${url}) OR a.identity_key IN (${identityKeyForUrl(term)}, ${identityKeyForUrl(term, { keepFragment: true })})`);
-  return read(sql`a.title ILIKE ${`%${term}%`} OR p.title ILIKE ${`%${term}%`}`);
+  const state = f.state === "unpublished" ? sql`p.article_id IS NULL` : f.state === "failed" ? sql`a.processing_state = 'failed'`
+    : f.state ? sql`p.visibility = ${f.state}` : sql`true`;
+  const where = sql`${search} AND ${state} AND ${f.source ? sql`a.source_id = ${f.source}` : sql`true`}
+    AND ${f.selected ? sql`p.selected = ${f.selected === "true"}` : sql`true`}`;
+  const pageSize = 50;
+  const [rows, [count], sources] = await Promise.all([
+    sql<BeforeJson<AdminContentSearch>["rows"]>`SELECT a.id, coalesce(p.title, a.title) AS title, a.url, s.name AS source,
+      a.discovered_at, a.processing_state, p.visibility, p.selected, p.score
+      FROM articles a JOIN sources s ON s.id = a.source_id LEFT JOIN publications p ON p.article_id = a.id
+      WHERE ${where} ORDER BY a.discovered_at DESC, a.id LIMIT ${pageSize} OFFSET ${(f.page - 1) * pageSize}`,
+    sql<{ total: number }[]>`SELECT count(*)::int AS total FROM articles a LEFT JOIN publications p ON p.article_id = a.id WHERE ${where}`,
+    sql<{ id: string; name: string }[]>`SELECT id, name FROM sources ORDER BY name, id`,
+  ]);
+  return { rows, total: count!.total, page: f.page, pageSize, sources };
 }
 
 type Chain = BeforeJson<AdminContentChain>;

@@ -11,12 +11,12 @@
  * feedLabel 是分类 RSS 标题里的名字（不写就用 label）。公开接口、RSS 和 MCP 里要把一类并进另一类发布，写在站点设置里（site/site.ts 的 PUBLIC_CATEGORIES）。
  */
 export const CATEGORIES = [
-  { key: "ai-models", label: "模型", feedLabel: "AI 模型", section: "模型发布/更新", guide: "模型本身的发布、版本、权重开放、能力或价格变化，以及既有榜单上的模型成绩。公布一次跑分不是发布新基准，也不是教程。" },
-  { key: "ai-products", label: "产品", feedLabel: "AI 产品", section: "产品发布/更新", guide: "可使用的 AI 产品、功能、应用、工具、API、平台和工程组件的发布更新。模型厂商发布的推理框架、算子库、硬件适配组件仍是产品，不能因为厂商名归成模型。" },
-  { key: "industry", label: "行业", feedLabel: "行业动态", section: "行业动态", guide: "已发生的公司经营、融资并购、人事、合作、诉讼、政策、真实安全事故及调查进展。新闻由当事人发帖、带有态度，也不因此变成观点。" },
-  { key: "paper", label: "论文", feedLabel: "论文", section: "论文研究", guide: "以新研究方法、实验设计与发现为核心的论文、技术报告、新基准或研究数据集。系统性红队实验属于研究；既有榜单成绩归模型，真实事故的新闻调查归行业。" },
-  { key: "tip", label: "教程", section: "技巧与观点", guide: "读者可以照着使用的方法、提示词、工具用法、工程实践复盘与技术讲解。重点是可复用的做法；单纯发布工具归产品，只有态度和预测而无做法归观点。", commentary: true },
-  { key: "opinion", label: "观点", section: "技巧与观点", guide: "重点是作者的解释、判断、主张、预测、评论或访谈观点。讨论市场不自动归行业，作者是名人不自动归观点。", commentary: true },
+  { key: "ai-models", label: "モデル", feedLabel: "AIモデル", section: "モデルの公開・更新", guide: "模型本身的发布、版本、权重开放、能力或价格变化，以及既有榜单上的模型成绩。公布一次跑分不是发布新基准，也不是教程。" },
+  { key: "ai-products", label: "プロダクト", feedLabel: "AIプロダクト", section: "プロダクトの公開・更新", guide: "可使用的 AI 产品、功能、应用、工具、API、平台和工程组件的发布更新。模型厂商发布的推理框架、算子库、硬件适配组件仍是产品，不能因为厂商名归成模型。" },
+  { key: "industry", label: "業界", feedLabel: "業界動向", section: "業界動向", guide: "已发生的公司经营、融资并购、人事、合作、诉讼、政策、真实安全事故及调查进展。新闻由当事人发帖、带有态度，也不因此变成观点。" },
+  { key: "paper", label: "研究", feedLabel: "研究", section: "論文・研究", guide: "以新研究方法、实验设计与发现为核心的论文、技术报告、新基准或研究数据集。系统性红队实验属于研究；既有榜单成绩归模型，真实事故的新闻调查归行业。" },
+  { key: "tip", label: "活用・解説", section: "活用とオピニオン", guide: "读者可以照着使用的方法、提示词、工具用法、工程实践复盘与技术讲解。重点是可复用的做法；单纯发布工具归产品，只有态度和预测而无做法归观点。", commentary: true },
+  { key: "opinion", label: "オピニオン", section: "活用とオピニオン", guide: "重点是作者的解释、判断、主张、预测、评论或访谈观点。讨论市场不自动归行业，作者是名人不自动归观点。", commentary: true },
 ] as const satisfies ReadonlyArray<{ key: string; label: string; feedLabel?: string; section: string; guide: string; commentary?: true }>;
 
 /**
@@ -24,7 +24,7 @@ export const CATEGORIES = [
  * category 是类别，tag 是标签，两者都对上才算；unit 接在数字后面。
  * 没有这样一类的行业设成 null，报头就不显示这个数。
  */
-export const RELEASE: { category: string; tag: string; unit: string } | null = { category: "ai-models", tag: "模型发布", unit: "个新模型" };
+export const RELEASE: { category: string; tag: string; unit: string } | null = { category: "ai-models", tag: "モデル公開", unit: "件の新モデル" };
 
 /** 周报月报的总述可以直接写、不必在报道里找到出处的行业通用词（小写）。站名会自动算进去。 */
 export const PLAIN_TERMS: readonly string[] = ["ai", "api", "llm", "gpu", "agi", "ceo", "ipo"];
@@ -39,29 +39,29 @@ export const ITEM_TYPES = ["model_release", "product_launch", "tool_or_prompt", 
 
 /** 每篇资料的第一个标签必须是这些“分类标签”之一。 */
 export const CATEGORY_TAGS = [
-  "产品更新", "模型发布", "论文/研究", "开源/仓库", "教程/实践", "现象/趋势", "大佬观点", "评测/基准", "安全/对齐", "行业动态", "政策/监管",
-  "非AI/通用工具", "其他",
+  "プロダクト更新", "モデル公開", "論文・研究", "オープンソース", "活用・実践", "動向・トレンド", "オピニオン", "評価・ベンチマーク", "安全性・アラインメント", "業界動向", "政策・規制",
+  "AI以外・汎用ツール", "その他",
 ] as const;
 
 /** 可选的主题标签。 */
 export const TOPIC_TAGS = [
-  "Agent", "编码", "推理", "多模态", "语音", "视频", "图像生成", "RAG", "端侧", "数据/训练", "搜索", "部署/工程", "开源生态", "具身智能", "MCP/工具调用",
+  "Agent", "コーディング", "推論", "マルチモーダル", "音声", "動画", "画像生成", "RAG", "オンデバイス", "データ・学習", "検索", "運用・エンジニアリング", "オープンソース動向", "エンボディドAI", "MCP・ツール呼び出し",
 ] as const;
 
 /** 可选的实体标签（公司、机构、平台）。 */
-export const ENTITY_TAGS = ["OpenAI", "Anthropic", "DeepSeek", "DeepMind", "Google", "Meta", "Microsoft", "xAI", "Hugging Face", "GitHub", "arXiv"] as const;
+export const ENTITY_TAGS = ["OpenAI", "Anthropic", "DeepSeek", "DeepMind", "Google", "Meta", "Microsoft", "xAI", "Hugging Face", "GitHub", "arXiv", "Sakana AI", "Preferred Networks", "GENIAC", "RIKEN AIP"] as const;
 
 /** 模型常写的近义词，统一成词表里的写法。 */
 export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
-  "教程/玩法": "教程/实践", "技巧/最佳实践": "教程/实践", "合作/生态": "行业动态", "融资/收购": "行业动态", "公司动态": "行业动态",
-  合作: "行业动态", 生态: "行业动态", 融资: "行业动态", 收购: "行业动态", 投资: "行业动态", 并购: "行业动态",
-  政策: "政策/监管", 监管: "政策/监管", 法规: "政策/监管", 安全: "安全/对齐", 对齐: "安全/对齐",
-  论文: "论文/研究", 研究: "论文/研究", paper: "论文/研究", papers: "论文/研究",
-  "open-source": "开源/仓库", 开源: "开源/仓库", 仓库: "开源/仓库", repo: "开源/仓库",
-  教程: "教程/实践", 玩法: "教程/实践", 指南: "教程/实践", 技巧: "教程/实践", 最佳实践: "教程/实践", 实践: "教程/实践",
-  产品: "产品更新", 更新: "产品更新", 发布: "模型发布", 模型: "模型发布", 趋势: "现象/趋势", 现象: "现象/趋势", 观点: "大佬观点",
-  视频生成: "视频", 非ai: "非AI/通用工具", "non-ai": "非AI/通用工具", 通用工具: "非AI/通用工具", 工程工具: "非AI/通用工具",
-  安全扫描: "非AI/通用工具", devops: "非AI/通用工具", 行业: "行业动态", 动态: "行业动态",
+  "教程/玩法": "活用・実践", "技巧/最佳实践": "活用・実践", "合作/生态": "業界動向", "融资/收购": "業界動向", "公司动态": "業界動向",
+  合作: "業界動向", 生态: "業界動向", 融资: "業界動向", 收购: "業界動向", 投资: "業界動向", 并购: "業界動向",
+  政策: "政策・規制", 监管: "政策・規制", 法规: "政策・規制", 安全: "安全性・アラインメント", 对齐: "安全性・アラインメント",
+  论文: "論文・研究", 研究: "論文・研究", paper: "論文・研究", papers: "論文・研究",
+  "open-source": "オープンソース", 开源: "オープンソース", 仓库: "オープンソース", repo: "オープンソース",
+  教程: "活用・実践", 玩法: "活用・実践", 指南: "活用・実践", 技巧: "活用・実践", 最佳实践: "活用・実践", 实践: "活用・実践",
+  产品: "プロダクト更新", 更新: "プロダクト更新", 发布: "モデル公開", 模型: "モデル公開", 趋势: "動向・トレンド", 现象: "動向・トレンド", 观点: "オピニオン",
+  视频生成: "動画", 非ai: "AI以外・汎用ツール", "non-ai": "AI以外・汎用ツール", 通用工具: "AI以外・汎用ツール", 工程工具: "AI以外・汎用ツール",
+  安全扫描: "AI以外・汎用ツール", devops: "AI以外・汎用ツール", 行业: "業界動向", 动态: "業界動向",
 };
 
 // ── 公司与主体 ──────────────────────────────────────────────────────────────────────────
@@ -72,6 +72,11 @@ export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
  * 把事实的主体对到发布方时也认它们。
  */
 export const ENTITIES: Record<string, { name: string; displayTag: string | null; aliases: string[]; otherNames?: string[] }> = {
+  "sakana-ai": { name: "Sakana AI", displayTag: "Sakana AI", aliases: ["Sakana AI", "サカナAI"] },
+  "preferred-networks": { name: "Preferred Networks", displayTag: "Preferred Networks", aliases: ["Preferred Networks", "PFN", "プリファードネットワークス", "PLaMo"] },
+  geniac: { name: "GENIAC", displayTag: "GENIAC", aliases: ["GENIAC", "経済産業省", "METI", "NEDO"] },
+  "riken-aip": { name: "RIKEN AIP", displayTag: "RIKEN AIP", aliases: ["RIKEN AIP", "理研AIP", "革新知能統合研究センター", "理化学研究所"] },
+  amazon: { name: "Amazon / AWS", displayTag: null, aliases: ["Amazon", "AWS", "アマゾン"] },
   "world-labs": { name: "World Labs", displayTag: null, aliases: ["World Labs"] },
   "thinking-machines": { name: "Thinking Machines Lab", displayTag: null, aliases: ["Thinking Machines"] },
   amd: { name: "AMD", displayTag: null, aliases: ["AMD", "Advanced Micro Devices"] },
@@ -97,6 +102,10 @@ export const ENTITIES: Record<string, { name: string; displayTag: string | null;
  * 行业没有这个问题时可以留空数组。
  */
 export const IDENTITY_LEXICON: ReadonlyArray<{ id: string; name: string; patterns: RegExp[] }> = [
+  { id: "sakana-ai", name: "Sakana AI", patterns: [/sakana\s?ai|サカナAI/i] },
+  { id: "preferred-networks", name: "Preferred Networks", patterns: [/preferred networks|\bpfn\b|プリファードネットワークス|\bplamo\b/i] },
+  { id: "geniac", name: "GENIAC", patterns: [/geniac/i] },
+  { id: "riken-aip", name: "RIKEN AIP", patterns: [/riken|理研|理化学研究所|革新知能統合研究センター/i] },
   { id: "openai", name: "OpenAI", patterns: [/openai|chatgpt|\bgpt-?[o\d]|\bsora\b|\bcodex\b/i] },
   { id: "anthropic", name: "Anthropic", patterns: [/anthropic|\bclaude\b/i, /\b(?:opus|sonnet|haiku)\s*\d+(?:[.\-]\d+)*\b/i, /\bfable\s*\d+(?:[.\-]\d+)*\b|\bmythos\b/i] },
   { id: "google", name: "Google / Gemini", patterns: [/google|deepmind|\bgemini\b|notebooklm|\bveo\s?\d|\bAlphaFold\b|\bAMIE\b/i] },

@@ -102,8 +102,7 @@
 - `wordmark.svg`、`wordmark-dark.svg`（可选）：分享图和海报上的字标，深色版用在深色的分享图上；没有就用站名文字。
 - `nameplates/`：日报、周报、月报页顶部的报头字（比如“AI日报”）。换了行业词以后重新生成：
   ```bash
-  npm pack @fontsource/noto-sans-sc@5.3.0 && tar xzf fontsource-noto-sans-sc-5.3.0.tgz
-  node scripts/nameplates.ts package
+  node scripts/nameplates.ts
   ```
 - 关于页的二维码：在后台“设置”里上传，或者把图片放进 `site/brand/contact/`。
 

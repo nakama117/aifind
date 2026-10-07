@@ -29,15 +29,15 @@ interface FeedMeta {
 const CACHE = { edgeCacheSeconds: 300, staleWhileRevalidateSeconds: 900 };
 
 /** What the all feed leaves out: what the site names (FEED_COPY), then what the engine always leaves out. */
-const LEFT_OUT = [...FEED_COPY.allLeavesOut, "未审内容", "低相关条目", "已合并重复条目"];
+const LEFT_OUT = [...FEED_COPY.allLeavesOut, "未審査コンテンツ", "関連度の低い項目", "重複項目を統合済み"];
 
 const FEEDS: FeedMeta[] = [
-  { id: "selected", path: "/feed.xml", title: `${SITE.name} — 精选`, description: `最新 50 条 ${SITE.name} 精选摘要，保留标题、站内阅读与原文入口；需要阅读器内全文可改订 /feed/full.xml。`, homePath: "/", pollHintMinutes: 30, ...CACHE },
-  { id: "selected-full", path: "/feed/full.xml", title: `${SITE.name} — 精选全文`, description: "与精选摘要相同的最新 50 条；仅对明确允许再分发的来源内联正文，其余仍提供摘要和阅读入口。", homePath: "/", pollHintMinutes: 30, ...CACHE },
-  { id: "all", path: "/feed/all.xml", title: `${SITE.name} — ${subjectAfter("全部", "动态")}`, description: `最近 7 天公开动态，按真实发布时间倒序；不含${LEFT_OUT.slice(0, -1).join("、")}和${LEFT_OUT.at(-1)}。`, homePath: "/all", pollHintMinutes: 30, ...CACHE },
-  { id: "daily", path: "/feed/daily.xml", title: `${SITE.name} 日报`, description: `${SITE.name} 每天 08:00 北京时间发布的精编日报，保留最近 30 期。`, homePath: "/daily", pollHintMinutes: 30, ...CACHE },
-  { id: "weekly", path: "/feed/weekly.xml", title: `${SITE.name} 周报`, description: `${SITE.name} 每周一 10:00 北京时间发布的周报：从上周每天的日报里选出的大事，按栏目分好，附总述；保留最近 12 期。`, homePath: "/weekly", pollHintMinutes: 180, ...CACHE },
-  { id: "monthly", path: "/feed/monthly.xml", title: `${SITE.name} 月报`, description: `${SITE.name} 每月 1 日 10:30 北京时间发布的月报：从上个月每天的日报里选出的大事，按栏目分好，附总述；保留最近 12 期。`, homePath: "/monthly", pollHintMinutes: 360, ...CACHE },
+  { id: "selected", path: "/feed.xml", title: `${SITE.name} — 厳選記事`, description: `${SITE.name}の最新50件を厳選した要約版です。タイトル、サイト内での閲覧リンク、原文へのリンクを掲載します。リーダーで全文を読むには、/feed/full.xml に切り替えてください。`, homePath: "/", pollHintMinutes: 30, ...CACHE },
+  { id: "selected-full", path: "/feed/full.xml", title: `${SITE.name} — 厳選全文版`, description: "厳選要約版と同じ最新50件です。再配信が明確に許可されているソースのみ本文を掲載し、それ以外は要約と閲覧リンクを提供します。", homePath: "/", pollHintMinutes: 30, ...CACHE },
+  { id: "all", path: "/feed/all.xml", title: `${SITE.name} — ${subjectAfter("すべて", "最新情報")}`, description: `過去7日間に公開された情報を、実際の公開日時の降順で掲載しています。以下は含まれません：${LEFT_OUT.slice(0, -1).join("、")}および${LEFT_OUT.at(-1)}。`, homePath: "/all", pollHintMinutes: 30, ...CACHE },
+  { id: "daily", path: "/feed/daily.xml", title: `${SITE.name}の日報`, description: `${SITE.name}が毎日08:00（日本時間）に公開する厳選日報です。直近30号を保持します。`, homePath: "/daily", pollHintMinutes: 30, ...CACHE },
+  { id: "weekly", path: "/feed/weekly.xml", title: `${SITE.name}の週報`, description: `${SITE.name}の週報：毎週月曜10:00（日本時間）に配信。先週の日報から主要なニュースを選び、カテゴリ別に整理して総括を付記します。最新12号を保存します。`, homePath: "/weekly", pollHintMinutes: 180, ...CACHE },
+  { id: "monthly", path: "/feed/monthly.xml", title: `${SITE.name}の月報`, description: `${SITE.name}の月報：毎月1日10:30（日本時間）に配信。先月の日報から主要なニュースを選び、カテゴリ別に整理して総括を付記します。最新12号を保存します。`, homePath: "/monthly", pollHintMinutes: 360, ...CACHE },
 ];
 
 /** A feed by its id; a category feed shares the poll hint and caching of the feed it narrows. */
@@ -80,7 +80,7 @@ function channel(meta: { title: string; description: string; homePath: string; s
     <title>${escapeXml(meta.title)}</title>
     <link>${escapeXml(siteUrl(meta.homePath))}</link>
     <description>${escapeXml(meta.description)}</description>
-    <language>zh-CN</language>
+    <language>${SITE.locale}</language>
     <atom:link href="${escapeXml(siteUrl(meta.selfPath))}" rel="self" type="application/rss+xml" />
     <ttl>${meta.ttl}</ttl>
     <generator>${escapeXml(`${SITE.name} (${siteUrl("/agent")})`)}</generator>
@@ -109,19 +109,21 @@ function fullContent(r: FeedRow, aihot: string): string | null {
   if (x?.text) {
     html = textToHtml(x.translation ?? x.text);
     if (x.quoted?.text) {
-      html += `<blockquote><p>引用 @${escapeXml(x.quoted.handle)}：</p>${textToHtml(x.quoted.translation ?? x.quoted.text)}${x.quoted.url ? `<p><a href="${escapeXml(x.quoted.url)}">${escapeXml(x.quoted.url)}</a></p>` : ""}</blockquote>`;
+      html += `<blockquote><p>@${escapeXml(x.quoted.handle)}の投稿を引用：</p>${textToHtml(x.quoted.translation ?? x.quoted.text)}${x.quoted.url ? `<p><a href="${escapeXml(x.quoted.url)}">${escapeXml(x.quoted.url)}</a></p>` : ""}</blockquote>`;
     }
   } else if (r.body_html) {
     html = exportTranslation(r) ?? r.body_html;
   }
   if (!html) return null;
-  return `${proxyBodyImages(html, true, FEED_IMAGE_SECONDS)}<p>—— 本文由 ${escapeXml(SITE.name)} 聚合整理，完整版与${escapeXml(subjectAfter("更多", "动态"))}见 <a href="${aihot}">${aihot}</a></p>`;
+  return `${proxyBodyImages(html, true, FEED_IMAGE_SECONDS)}<p>—— 本文は${escapeXml(SITE.name)}が集約・編集しています。全文と${escapeXml(subjectAfter("その他", "最新情報"))}はこちら <a href="${aihot}">${aihot}</a></p>`;
 }
 
 function itemXml(r: FeedRow, includeContent: boolean): string {
   const aihot = itemUrl(r.id);
   const summary = r.summary ?? "";
-  const description = `<p>${escapeXml(summary)}</p>\n<p>🔗 <a href="${escapeXml(r.url)}">阅读原文</a></p>\n<p>via ${escapeXml(SITE.name)} · <a href="${aihot}">${aihot}</a></p>`;
+  const description = `<p>${escapeXml(summary)}</p>
+<p>🔗 <a href="${escapeXml(r.url)}">原文を読む</a></p>
+<p>${escapeXml(SITE.name)}経由 · <a href="${aihot}">${aihot}</a></p>`;
   const publicCategory = toPublicApiCategory(r.category);
   const category = publicCategory ? `\n      <category>${escapeXml(feedCategoryLabel(publicCategory))}</category>` : "";
   let content = "";
@@ -166,7 +168,7 @@ export async function itemFeed(kind: ItemFeedKind, category: PublicApiCategoryKe
         left(a.body_text, 400) AS body_text, a.body_html, tr.body_html AS tr_html, tr.complete AS tr_complete` : sql``}
     FROM page JOIN publications p ON p.article_id = page.article_id JOIN sources s ON s.id = p.source_id
     ${includeContent ? sql`LEFT JOIN articles a ON a.id = p.article_id AND p.syndicate
-      LEFT JOIN translations tr ON tr.article_id = p.article_id AND tr.lang = 'zh' AND tr.revision >= a.revision
+      LEFT JOIN translations tr ON tr.article_id = p.article_id AND tr.lang = 'ja' AND tr.revision >= a.revision
       LEFT JOIN quote_translations qt ON p.channel = 'x' AND qt.tweet_id = substring(a.x_post->'quoted'->>'url' from '/status/([0-9]+)')` : sql``}
     ORDER BY coalesce(p.published_at, p.discovered_at) DESC, p.article_id DESC`;
   const m = feedMeta(kind);
@@ -174,10 +176,10 @@ export async function itemFeed(kind: ItemFeedKind, category: PublicApiCategoryKe
   if (category) {
     const label = feedCategoryLabel(category);
     meta = {
-      title: includeContent ? `${SITE.name} — ${label}全文` : `${SITE.name} — ${label}`,
+      title: includeContent ? `${SITE.name} — ${label}の全文` : `${SITE.name} — ${label}`,
       description: includeContent
-        ? `${SITE.name} 每日精选「${label}」分类全文源。仅对明确允许再分发的来源内联正文。`
-        : `${SITE.name} 每日精选「${label}」${subjectAfter("分类", "动态")}摘要，按分类订阅、不被全量精选刷屏。`,
+        ? `${SITE.name}の「${label}」カテゴリから、毎日厳選した記事を配信する全文フィードです。再配信が明確に許可されたソースのみ、本文を掲載します。`
+        : `${SITE.name}の「${label}」カテゴリの${subjectAfter("カテゴリ", "最新情報")}概要を毎日厳選して配信します。カテゴリ別に購読でき、厳選記事をすべて配信するため、記事が埋もれることもありません。`,
       homePath: "/",
       selfPath: includeContent ? `/feed/full/category/${category}.xml` : `/feed/category/${category}.xml`,
       ttl: m.pollHintMinutes,
@@ -189,17 +191,20 @@ export async function itemFeed(kind: ItemFeedKind, category: PublicApiCategoryKe
   return channel(meta, items);
 }
 
-const ISSUE_NAME: Record<ReportKind, string> = { daily: "日报", weekly: "周报", monthly: "月报" };
+const ISSUE_NAME: Record<ReportKind, string> = { daily: "日報", weekly: "週報", monthly: "月報" };
 /** Issues each report feed keeps: a month of dailies, a quarter of weeklies, a year of monthlies. */
 const ISSUES_KEPT: Record<ReportKind, number> = { daily: 30, weekly: 12, monthly: 12 };
 
 /** One issue: its headline, its lead (a weekly's or monthly's overview) and its contents, each entry linking to its page. */
 function issueXml(kind: ReportKind, r: FeedIssue): string {
   const url = kind === "daily" ? dailyUrl(r.key) : periodUrl(kind, r.key);
-  const name = `${SITE.name} ${ISSUE_NAME[kind]}`;
+  const name = `${r.retrospective ? "【補編】" : ""}${SITE.name} ${ISSUE_NAME[kind]}`;
   const title = r.headline ? `${name} · ${r.key} — ${r.headline}` : `${name} · ${r.key}`;
   const contents = r.sections.map((s) => `<p><strong>${escapeXml(s.label)}</strong></p>\n<ul>${s.items.map((i) => `<li><a href="${escapeXml(i.link)}">${escapeXml(i.title)}</a></li>`).join("")}</ul>`);
-  const description = [`<p>${escapeXml(r.leadParagraph ?? r.headline ?? "")}</p>`, ...contents, `<p>via ${escapeXml(SITE.name)} · <a href="${url}">${url}</a></p>`].join("\n");
+  const description = [
+    ...(r.retrospective ? ["<p>補編：原文の発表日をもとに後日編集しました。当時の配信記録ではありません。</p>"] : []),
+    `<p>${escapeXml(r.leadParagraph ?? r.headline ?? "")}</p>`, ...contents, `<p>via ${escapeXml(SITE.name)} · <a href="${url}">${url}</a></p>`,
+  ].join("\n");
   return `    <item>
       <title>${cdata(title)}</title>
       <link>${url}</link>

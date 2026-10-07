@@ -320,7 +320,7 @@ export async function loadTopicPage(slug: string, page: number, now?: Date): Pro
   const groupName = TOPIC_GROUPS.find((g) => g.key === topic.group)?.name ?? "";
   return {
     topic: { ...summarize(topic, seats, index.at, brands, live), groupName, poolTotal: pool },
-    modules: Object.fromEntries(parts.map((part) => [part.name, part.part(live)])),
+    modules: Object.fromEntries(await Promise.all(parts.map(async (part) => [part.name, await part.part(live)]))),
     items: rows.map(toFeedItemSummary),
     page,
     pageCount,

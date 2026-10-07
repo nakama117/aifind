@@ -1,6 +1,7 @@
 // Backups restore: a real database dump and file archive (uploads and feedback screenshots) are
 // unpacked and read back; the object store is a stand-in inside this process.
 import { tag } from "./setup.ts";
+import { createTestDatabase, dropTestDatabase } from "./database-cleanup.ts";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -58,7 +59,7 @@ after(async () => {
   for (const [key, value] of Object.entries(originalEnv)) {
     if (value === undefined) delete process.env[key]; else process.env[key] = value;
   }
-  for (const name of databases) await sql.unsafe(`DROP DATABASE "${name}" WITH (FORCE)`);
+  for (const name of databases) await dropTestDatabase(config.databaseUrl, name);
   await closeDb();
   for (const root of roots) await rm(root, { recursive: true, force: true });
 });
@@ -94,7 +95,7 @@ test("a real paired restore opens a feedback screenshot when forwarding is disab
   // Next to this file's own database, and dropped with it.
   const name = `${new URL(config.databaseUrl).pathname.slice(1)}_restore_test`;
   assert.match(name, /^[a-z0-9_]+_test$/);
-  await sql.unsafe(`CREATE DATABASE "${name}"`);
+  await createTestDatabase(config.databaseUrl, name);
   databases.add(name);
   const restoredUrl = new URL(config.databaseUrl);
   restoredUrl.pathname = `/${name}`;
@@ -187,7 +188,7 @@ exec "$BACKUP_TEST_TAR" "$@"
   }
 }
 
-test("packing retries once and a successful retry preserves the screenshot", async () => {
+test("packing retries once and a successful retry preserves the screenshot", { skip: process.platform === "win32" ? "POSIX shell executable fixture; covered by Linux CI" : false }, async () => {
   await save("feedback-screenshots/retry.png");
   await withPackingFailures(1, async count => {
     assert.equal((await runBackup(NOW)).uploaded, true);
@@ -197,7 +198,7 @@ test("packing retries once and a successful retry preserves the screenshot", asy
   assert.deepEqual(await readFile(path.join(data, "feedback-screenshots/retry.png")), PNG);
 });
 
-test("persistent packing failure still sends the database and reports incomplete backup", async () => {
+test("persistent packing failure still sends the database and reports incomplete backup", { skip: process.platform === "win32" ? "POSIX shell executable fixture; covered by Linux CI" : false }, async () => {
   await save("feedback-screenshots/failure.png");
   await withPackingFailures(2, async count => {
     await assert.rejects(runBackup(NOW), /database backed up, but the file archive failed/);

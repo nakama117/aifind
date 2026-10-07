@@ -1,0 +1,7 @@
+{
+  "name": "@aihot/codex-monitor",
+  "private": true,
+  "type": "module",
+  "exports": { "./module": "./module.ts", "./server": "./server.ts", "./web": "./web.tsx", "./contracts": "./contracts.ts" },
+  "dependencies": { "@aihot/api": "*", "@aihot/backend": "*", "@aihot/contracts": "*", "@aihot/site": "*", "@aihot/web": "*", "cheerio": "1.2.0", "fastify": "5.12.5", "react": "19.3.0", "react-router": "8.4.0", "zod": "4.6.5" }
+}

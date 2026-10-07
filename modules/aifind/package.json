@@ -1,0 +1,23 @@
+{
+  "name": "@aihot/aifind",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./module.ts",
+    "./web": "./web.tsx",
+    "./server": "./server.ts",
+    "./contracts": "./contracts.ts",
+    "./catalog/*": "./catalog/*.ts",
+    "./publication/*": "./publication/*.ts"
+  },
+  "dependencies": {
+    "@aihot/api": "*",
+    "@aihot/backend": "*",
+    "@aihot/contracts": "*",
+    "@aihot/web": "*",
+    "fastify": "5.12.5",
+    "react": "19.3.0",
+    "react-router": "8.4.0",
+    "zod": "4.6.5"
+  }
+}

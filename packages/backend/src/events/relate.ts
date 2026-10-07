@@ -9,7 +9,7 @@
 // relation with both reports fully described is what makes the judge usable: a yes/no question with
 // "prefer no" refused half of the true merges (measured on labelled pairs).
 import { z } from "zod";
-import { beijingDate, beijingTime } from "@aihot/contracts/time";
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
 import { promptText, promptVersion } from "../editorial/prompts.ts";
 
 export const RELATE_PROMPT_VERSION = promptVersion("group-pair", "group-signal");
@@ -87,7 +87,7 @@ export const SignalSchema = z.object({
 });
 
 function when(at: Date | null): string {
-  return at ? `${beijingDate(at)} ${beijingTime(at)}` : "未知";
+  return at ? `${tokyoDate(at)} ${tokyoTime(at)}` : "未知";
 }
 
 export function describeReport(r: ReportView, label: string, extra = "", summaryLimit = 360): string {

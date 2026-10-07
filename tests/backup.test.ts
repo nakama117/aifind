@@ -43,7 +43,7 @@ after(async () => {
   await closeDb();
 });
 
-test("an unreadable upload directory cannot become a successful empty backup", async () => {
+test("an unreadable upload directory cannot become a successful empty backup", { skip: process.platform === "win32" ? "POSIX symlink-loop fixture; covered by Linux CI" : false }, async () => {
   await rm(uploads, { recursive: true, force: true });
   keys.length = 0;
   assert.equal((await runBackup(new Date("2026-09-29T20:10:00Z"))).uploaded, true);

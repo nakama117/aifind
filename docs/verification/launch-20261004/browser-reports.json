@@ -1,0 +1,72 @@
+{
+  "at": "2026-10-04T12:08:18.070Z",
+  "results": [
+    {
+      "device": "desktop",
+      "kind": "daily",
+      "status": 200,
+      "originalLinks": 1,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "device": "desktop",
+      "kind": "weekly",
+      "status": 200,
+      "originalLinks": 12,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "device": "desktop",
+      "kind": "monthly",
+      "status": 200,
+      "originalLinks": 30,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "device": "mobile",
+      "kind": "daily",
+      "status": 200,
+      "originalLinks": 1,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "device": "mobile",
+      "kind": "weekly",
+      "status": 200,
+      "originalLinks": 12,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "device": "mobile",
+      "kind": "monthly",
+      "status": 200,
+      "originalLinks": 30,
+      "retrospective": true,
+      "overflow": false
+    },
+    {
+      "kind": "daily",
+      "api": true,
+      "rss": true,
+      "agent": true
+    },
+    {
+      "kind": "weekly",
+      "api": true,
+      "rss": true,
+      "agent": true
+    },
+    {
+      "kind": "monthly",
+      "api": true,
+      "rss": true,
+      "agent": true
+    }
+  ],
+  "errors": []
+}

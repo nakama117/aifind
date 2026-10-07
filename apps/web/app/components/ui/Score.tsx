@@ -15,13 +15,13 @@ export function ScoreLabel({ score, compact = false }: { score: number | null; c
   const tier = TIERS.find((t) => value >= t.min)!;
   return (
     <span
-      title={`AI 评分 ${value}/100`}
-      aria-label={`AI 评分 ${value} 分`}
+      title={`AIスコア ${value}/100`}
+      aria-label={`AIスコア：${value}点`}
       className={`inline-flex h-[20px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2 ring-1 ring-inset ${tier.className}`}
     >
       {!compact && (
         <>
-          <span className="text-[11px] font-medium leading-none opacity-80">AI 评分</span>
+          <span className="text-[11px] font-medium leading-none opacity-80">AIスコア</span>
           <span className="h-2.5 w-px bg-current opacity-25" aria-hidden="true" />
         </>
       )}

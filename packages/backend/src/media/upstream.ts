@@ -1,9 +1,9 @@
 // The upstream budget of image fetches. The image proxy is the one path where the origin fetches
 // third-party bytes on a reader's behalf (vision analysis shares it), so a site may cap them per minute
-// and per Beijing day (site.ts DEPLOYMENT.imageUpstreamBudget; IMGPROXY_UPSTREAM_MB_PER_MINUTE and
+// and per Tokyo day (site.ts DEPLOYMENT.imageUpstreamBudget; IMGPROXY_UPSTREAM_MB_PER_MINUTE and
 // IMGPROXY_UPSTREAM_GB_PER_DAY win). Past it, uncached images get 503 until the window resets (cached ones
 // are still served); a spent day goes into the alerts' digest.
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { DEPLOYMENT } from "@aihot/site";
 import { sql } from "../db.ts";
 import type { Finding } from "../notify/feishu.ts";
@@ -23,7 +23,7 @@ let tripped: string | null = null;
 export function upstreamAllowed(now = Date.now()): { ok: true } | { ok: false; reason: string } {
   const m = Math.floor(now / 60_000);
   if (minute.at !== m) minute = { at: m, bytes: 0 };
-  const d = beijingDate(now);
+  const d = tokyoDate(now);
   if (day.key !== d) day = { key: d, bytes: 0 };
   if (minute.bytes >= MINUTE_BUDGET) return trip("minute", now);
   if (day.bytes >= DAY_BUDGET) return trip("day", now);

@@ -37,7 +37,7 @@ async function tree(p: Poster): Promise<Node> {
       display: "flex",
       flexDirection: "column",
       padding: "84px 88px 72px",
-      fontFamily: "Noto Sans SC",
+      fontFamily: "Noto Sans JP",
       color: INK,
       backgroundColor: "#f5f6f5",
       backgroundImage: "radial-gradient(circle at 100% 0%, rgba(23,107,117,0.16), rgba(245,246,245,0) 52%), radial-gradient(circle at 0% 100%, rgba(44,226,232,0.10), rgba(245,246,245,0) 45%)",
@@ -51,12 +51,12 @@ async function tree(p: Poster): Promise<Node> {
         h("div", { width: 12, height: 12, borderRadius: 999, backgroundColor: ACCENT, marginRight: 16 }),
         h("div", { display: "flex", fontSize: 30, fontWeight: 700, color: ACCENT, letterSpacing: 1 }, clamp(p.kicker, 20)),
         p.score !== null
-          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(23,107,117,0.09)", fontSize: 26, color: "#0f5a63" }, `精选 · ${Math.round(p.score)} 分`)
+          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(23,107,117,0.09)", fontSize: 26, color: "#0f5a63" }, `ピックアップ · ${Math.round(p.score)}点`)
           : null,
       ].filter(Boolean)),
       h("div", { display: "flex", marginTop: 30, fontSize: titleSize, fontWeight: 700, lineHeight: 1.3, color: INK }, title),
       summary ? h("div", { display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.7, color: "#3a484c" }, summary) : null,
-      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#66757a" }, clamp(`来源：${p.source}`, 34)),
+      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#66757a" }, clamp(`出典：${p.source}`, 34)),
       h("div", { display: "flex", flex: 1 }),
       h(
         "div",
@@ -64,8 +64,8 @@ async function tree(p: Poster): Promise<Node> {
         [
           h("img", { width: 200, height: 200 }, undefined, { src: qr, width: 200, height: 200 }),
           h("div", { display: "flex", flexDirection: "column", marginLeft: 44, flex: 1 }, [
-            h("div", { display: "flex", fontSize: 36, fontWeight: 700, color: INK }, "长按识别二维码"),
-            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#66757a" }, "阅读全文、中文译文与原文链接"),
+            h("div", { display: "flex", fontSize: 36, fontWeight: 700, color: INK }, "長押ししてQRコードを読み取る"),
+            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#66757a" }, "全文、日本語訳、原文リンク"),
             h("div", { display: "flex", marginTop: 22, fontSize: 26, color: ACCENT }, SITE_HOST),
           ]),
         ],

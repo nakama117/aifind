@@ -1,0 +1,780 @@
+{
+  "at": "2026-10-04T13:08:25.222Z",
+  "results": [
+    {
+      "interaction": "content list",
+      "total": "共 146 条内容",
+      "rows": 50
+    },
+    {
+      "interaction": "pagination",
+      "pass": true
+    },
+    {
+      "interaction": "selection filter resets page",
+      "pass": true
+    },
+    {
+      "interaction": "Japanese content search",
+      "pass": true
+    },
+    {
+      "interaction": "editor dialog",
+      "pass": true
+    },
+    {
+      "device": "desktop",
+      "path": "/admin/content",
+      "title": "内容管理",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "desktop",
+      "path": "/admin/seo",
+      "title": "SEO 与上线配置",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "desktop",
+      "path": "/admin/model-leaderboard",
+      "title": "模型排行榜",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "desktop",
+      "path": "/admin/monitor",
+      "title": "Codex 公告监控",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "desktop",
+      "path": "/admin/topic-chronicle",
+      "title": "主题大事记",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "mobile",
+      "path": "/admin/content",
+      "title": "内容管理",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "mobile",
+      "path": "/admin/seo",
+      "title": "SEO 与上线配置",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "mobile",
+      "path": "/admin/model-leaderboard",
+      "title": "模型排行榜",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "mobile",
+      "path": "/admin/monitor",
+      "title": "Codex 公告监控",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "device": "mobile",
+      "path": "/admin/topic-chronicle",
+      "title": "主题大事记",
+      "overflow": false,
+      "noindex": true,
+      "status": 200
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "title": "AI Signal JP — AI業界の最新動向 · 毎日の厳選ニュースと日報",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/",
+      "description": "世界と日本のAIニュースを、短い日本語の要約で。モデル、プロダクト、研究、業界の動きと実践に役立つ情報を、原文へのリンクとともにお届けします。",
+      "og": "http://127.0.0.1:3100/og/site.png",
+      "noindex": true,
+      "schemas": [
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": "http://127.0.0.1:3100/#organization",
+            "name": "AI Signal JP",
+            "url": "http://127.0.0.1:3100",
+            "logo": "http://127.0.0.1:3100/icon.png"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "http://127.0.0.1:3100/#website",
+            "name": "AI Signal JP",
+            "url": "http://127.0.0.1:3100",
+            "description": "世界と日本のAIニュースを、短い日本語の要約で。モデル、プロダクト、研究、業界の動きと実践に役立つ情報を、原文へのリンクとともにお届けします。",
+            "inLanguage": "ja-JP",
+            "publisher": {
+              "@id": "http://127.0.0.1:3100/#organization"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Dataset",
+            "@id": "http://127.0.0.1:3100/#dataset",
+            "name": "AI Signal JP — AI 業界ニュースデータセット",
+            "description": "継続的に更新される日本語 AI 業界ニュース：各記事に日本語の要約、評価、原文の出典を掲載しています。毎日の厳選記事と AI 日報はRSSと公開APIで取得できます。",
+            "url": "http://127.0.0.1:3100",
+            "inLanguage": "ja-JP",
+            "isAccessibleForFree": true,
+            "keywords": [
+              "AI情報",
+              "AIニュース",
+              "AI日報",
+              "AI業界の最新動向"
+            ],
+            "creator": {
+              "@id": "http://127.0.0.1:3100/#organization"
+            },
+            "publisher": {
+              "@id": "http://127.0.0.1:3100/#organization"
+            },
+            "distribution": [
+              {
+                "@type": "DataDownload",
+                "name": "厳選RSS",
+                "encodingFormat": "application/rss+xml",
+                "contentUrl": "http://127.0.0.1:3100/feed.xml"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "すべてのニュースRSS",
+                "encodingFormat": "application/rss+xml",
+                "contentUrl": "http://127.0.0.1:3100/feed/all.xml"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "AI 日報 RSS",
+                "encodingFormat": "application/rss+xml",
+                "contentUrl": "http://127.0.0.1:3100/feed/daily.xml"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "AI 週報 RSS",
+                "encodingFormat": "application/rss+xml",
+                "contentUrl": "http://127.0.0.1:3100/feed/weekly.xml"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "AI 月報 RSS",
+                "encodingFormat": "application/rss+xml",
+                "contentUrl": "http://127.0.0.1:3100/feed/monthly.xml"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "公開API v1",
+                "encodingFormat": "application/json",
+                "contentUrl": "http://127.0.0.1:3100/api/v1/items"
+              },
+              {
+                "@type": "DataDownload",
+                "name": "OpenAPI",
+                "encodingFormat": "application/json",
+                "contentUrl": "http://127.0.0.1:3100/openapi-v1.json"
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "AI Signal JP · おすすめ",
+            "url": "http://127.0.0.1:3100/",
+            "numberOfItems": 20,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "MicrosoftとHugging Face、AIエージェントの状態変更を20回反復で評価するThinkingBoxを公開"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Ai2、科学文献レポート生成モデル「AstaBrief 8B」をオープンソース化"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "ServiceNow CoreAIが企業向けAIエージェントの学習データ生成手法「AutoSynthData」を紹介"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Anthropic、Claude Frontier Academyを開始し、2027年末までに1万人のエンジニア育成を目指す"
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Google DeepMind、長時間の複雑なタスクに対応するGemini 4 Argonを発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "name": "Google DeepMind、タンパク質向け透かし技術「SynthID Bio」を発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "name": "Hugging Face、オープンソース・多言語対応の音声合成モデルを評価するOpen TTS Leaderboardを公開"
+              },
+              {
+                "@type": "ListItem",
+                "position": 8,
+                "name": "NVIDIA Kumo Tabular、表形式データ予測向け基盤モデルを公開"
+              },
+              {
+                "@type": "ListItem",
+                "position": 9,
+                "name": "ProvenanceGuard、MCPエージェントの主張と情報源の帰属を照合する検証手法を発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 10,
+                "name": "OpenAIがコーディングやPC操作向けのGPT-6.1 Solを発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 11,
+                "name": "H Company、GUI・コード・MCP・APIを扱うエージェントモデル「Holo4」を公開"
+              },
+              {
+                "@type": "ListItem",
+                "position": 12,
+                "name": "Anthropic、Claude Sonnet 5.5を発表 Sonnet 5より30%超高速化"
+              },
+              {
+                "@type": "ListItem",
+                "position": 13,
+                "name": "Google DeepMind、Gemini 3.8 Live with Live AvatarをGemini Enterpriseで提供開始"
+              },
+              {
+                "@type": "ListItem",
+                "position": 14,
+                "name": "Liquid AI、視覚言語モデル「LFM2.5-VL-3B」向けDSparkドラフトモデルを公開"
+              },
+              {
+                "@type": "ListItem",
+                "position": 15,
+                "name": "Google、Private AI Computeにサーバー側の永続メモリを追加する技術更新を発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 16,
+                "name": "Google DeepMind、Gemini 3.8 Flash TTSとGemini 3.8 Flash-Lite TTSを発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 17,
+                "name": "Sakana AI、ユルゲン・シュミットフーバー氏をChief Scientific Advisorに迎え、RSI Labにも参画"
+              },
+              {
+                "@type": "ListItem",
+                "position": 18,
+                "name": "Anthropic、ClaudeがDNA反復配列に関連する新規酵素系ARTを発見したと報告"
+              },
+              {
+                "@type": "ListItem",
+                "position": 19,
+                "name": "OpenAI、GPT-6 SolとLunaを発表"
+              },
+              {
+                "@type": "ListItem",
+                "position": 20,
+                "name": "UK AISI、EvalEvalのEvaluation Cardsで評価結果を公開"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "path": "/topics/openai",
+      "status": 200,
+      "title": "OpenAI / ChatGPTの最新情報と年表 · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/topics/openai",
+      "description": "9月29日更新：OpenAIがコーディングやPC操作向けのGPT-6.1 Solを発表。OpenAIの最新動向を網羅。GPTシリーズのモデル、ChatGPTやSoraの製品、企業戦略や人事を継続的に追跡します。",
+      "og": "http://127.0.0.1:3100/og/topics/openai.png",
+      "noindex": true,
+      "schemas": [
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": "http://127.0.0.1:3100/topics/openai#collection",
+            "url": "http://127.0.0.1:3100/topics/openai",
+            "name": "OpenAI / ChatGPTの最新情報",
+            "description": "9月29日更新：OpenAIがコーディングやPC操作向けのGPT-6.1 Solを発表。OpenAIの最新動向を網羅。GPTシリーズのモデル、ChatGPTやSoraの製品、企業戦略や人事を継続的に追跡します。",
+            "inLanguage": "ja-JP",
+            "isPartOf": {
+              "@id": "http://127.0.0.1:3100/#website"
+            },
+            "dateModified": "2026-09-29T10:00:00.000Z",
+            "mainEntity": {
+              "@type": "ItemList",
+              "name": "OpenAI / ChatGPTの最新情報 · 年表",
+              "numberOfItems": 6,
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "OpenAIがコーディングやPC操作向けのGPT-6.1 Solを発表"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "GPT-6.1 Solの提供を開始"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "GPT-5を発表"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "GPT-4oを発表"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 5,
+                  "name": "GPT-4を発表"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 6,
+                  "name": "ChatGPTの研究プレビューを公開"
+                }
+              ]
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "AI Signal JP",
+                "item": "http://127.0.0.1:3100/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "テーマ",
+                "item": "http://127.0.0.1:3100/topics"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "OpenAI / ChatGPT",
+                "item": "http://127.0.0.1:3100/topics/openai"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "path": "/leaderboard",
+      "status": 200,
+      "title": "総合モデルランキング · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/leaderboard",
+      "description": "公開評価から AI モデルを比較。実測、欠測、出典と評価条件を分けて掲載します。",
+      "og": "http://127.0.0.1:3100/og/site.png",
+      "noindex": true,
+      "schemas": [
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "総合モデルランキング",
+            "url": "http://127.0.0.1:3100/leaderboard",
+            "inLanguage": "ja-JP",
+            "dateModified": "2026-10-04T13:03:29.357Z",
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListOrder": "https://schema.org/ItemListOrderAscending",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Claude Opus 5.5",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-opus-5-5"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Claude Fable 5",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-fable-5"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Claude Fable 5.1",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-fable-5-1"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "Gemini 3.7 Flash",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-7-flash"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 5,
+                  "name": "GPT-6 Astra",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-6-astra"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 6,
+                  "name": "Gemini 3.8 Flash",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-8-flash"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 7,
+                  "name": "GPT-6.1 Sol",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-6-1-sol"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 8,
+                  "name": "Claude Opus 5",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-opus-5"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 9,
+                  "name": "Muse Spark 1.3",
+                  "url": "http://127.0.0.1:3100/leaderboard/muse-spark-1-3"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 10,
+                  "name": "GPT-5.6 Sol",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-5-6-sol"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 11,
+                  "name": "GPT-6 Sol",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-6-sol"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 12,
+                  "name": "Kimi K3",
+                  "url": "http://127.0.0.1:3100/leaderboard/kimi-k-3"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 13,
+                  "name": "Qwen3.8 Max",
+                  "url": "http://127.0.0.1:3100/leaderboard/qwen-3-8-max"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 14,
+                  "name": "Muse Spark 1.2",
+                  "url": "http://127.0.0.1:3100/leaderboard/muse-spark-1-2"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 15,
+                  "name": "Gemini 3 Pro Preview",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-pro-preview"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 16,
+                  "name": "GPT-5.5",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-5-5"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 17,
+                  "name": "Claude Opus 4.8",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-opus-4-8"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 18,
+                  "name": "Gemini 3.6 Flash",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-6-flash"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 19,
+                  "name": "Gemini 3.5 Flash",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-5-flash"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 20,
+                  "name": "Claude Sonnet 5.5",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-sonnet-5-5"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 21,
+                  "name": "Grok 4.6",
+                  "url": "http://127.0.0.1:3100/leaderboard/grok-4-6"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 22,
+                  "name": "Grok 4.7",
+                  "url": "http://127.0.0.1:3100/leaderboard/grok-4-7"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 23,
+                  "name": "GLM-5.3",
+                  "url": "http://127.0.0.1:3100/leaderboard/glm-5-3"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 24,
+                  "name": "Claude Opus 4.7",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-opus-4-7"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 25,
+                  "name": "GPT-5.4",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-5-4"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 26,
+                  "name": "GPT-5.6 Terra",
+                  "url": "http://127.0.0.1:3100/leaderboard/gpt-5-6-terra"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 27,
+                  "name": "Claude Opus 4.6",
+                  "url": "http://127.0.0.1:3100/leaderboard/claude-opus-4-6"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 28,
+                  "name": "DeepSeek V4.1 Flash",
+                  "url": "http://127.0.0.1:3100/leaderboard/deepseek-v-4-1-flash"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 29,
+                  "name": "Gemini 3.1 Pro Preview",
+                  "url": "http://127.0.0.1:3100/leaderboard/gemini-3-1-pro-preview"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 30,
+                  "name": "Muse Spark 1.1",
+                  "url": "http://127.0.0.1:3100/leaderboard/muse-spark-1-1"
+                }
+              ]
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "モデルランキング",
+                "item": "http://127.0.0.1:3100/leaderboard"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "path": "/codex-reset",
+      "status": 200,
+      "title": "Codex リセットの公式告知 · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/codex-reset",
+      "description": "Codex の利用枠リセットと保存型リセットの告知、確認根拠、履歴を確認。正確な時刻は日本時間、時刻不明の記録は原文の日付で表示します。",
+      "og": "http://127.0.0.1:3100/og/site.png",
+      "noindex": true,
+      "schemas": []
+    },
+    {
+      "path": "/items/rcys6vyw5de5vftn1f4qy66ae",
+      "status": 200,
+      "title": "Google DeepMindと英国政府、Geminiを活用した住宅計画審査AIの試作を開始 · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/items/rcys6vyw5de5vftn1f4qy66ae",
+      "description": "Google DeepMindは英国政府などと、Geminiを活用して住宅計画申請の審査を支援するAIツールの試作を開始しました。データ整理、関連政策の特定、住民意見の要約、評価報告書の草案作成を担い、計画担当官が全内容を確認して最終判断します。Barnet、Camden、Dorsetで初期試験を行い、政府は2027年から全国の自治体で利用可能にする計画です。",
+      "og": "http://127.0.0.1:3100/og/items/rcys6vyw5de5vftn1f4qy66ae.png",
+      "noindex": true,
+      "schemas": [
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "@id": "http://127.0.0.1:3100/items/rcys6vyw5de5vftn1f4qy66ae#article",
+            "isPartOf": {
+              "@id": "http://127.0.0.1:3100/#website"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "http://127.0.0.1:3100/items/rcys6vyw5de5vftn1f4qy66ae"
+            },
+            "url": "http://127.0.0.1:3100/items/rcys6vyw5de5vftn1f4qy66ae",
+            "headline": "Google DeepMindと英国政府、Geminiを活用した住宅計画審査AIの試作を開始",
+            "image": "http://127.0.0.1:3100/og/items/rcys6vyw5de5vftn1f4qy66ae.png",
+            "description": "Google DeepMindは英国政府などと、Geminiを活用して住宅計画申請の審査を支援するAIツールの試作を開始しました。データ整理、関連政策の特定、住民意見の要約、評価報告書の草案作成を担い、計画担当官が全内容を確認して最終判断します。Barnet、Camden、Dorsetで初期試験を行い、政府は2027年から全国の自治体で利用可能にする計画です。",
+            "inLanguage": "ja-JP",
+            "datePublished": "2026-06-16T21:29:50.000Z",
+            "dateModified": "2026-06-16T21:29:50.000Z",
+            "isAccessibleForFree": true,
+            "author": {
+              "@id": "http://127.0.0.1:3100/#organization"
+            },
+            "publisher": {
+              "@id": "http://127.0.0.1:3100/#organization"
+            },
+            "isBasedOn": "https://deepmind.google/blog/unlocking-uk-house-building-with-ai-accelerated-planning/"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "AI Signal JP",
+                "item": "http://127.0.0.1:3100/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "すべての更新情報",
+                "item": "http://127.0.0.1:3100/all"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Google DeepMindと英国政府、Geminiを活用した住宅計画審査AIの試作を開始",
+                "item": "http://127.0.0.1:3100/items/rcys6vyw5de5vftn1f4qy66ae"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "path": "/monthly/2026-09",
+      "status": 200,
+      "title": "【補編】AI 月報 · 2026-09 · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/monthly/2026-09",
+      "description": "AnthropicはClaude Fable 5.1とClaude Mythos 5.1を発表し、一般向けと審査済み利用者向けで利用条件を分けました。Google DeepMindはWeatherNext 3やGemini 3.8の音声・推論モデルを発表し、予測や音声機能を広げています。Hugging FaceはGGUFのローカル実行やコーディングエージェント向け記憶ツールを公開し、開発環境を拡充しました。AnthropicはClaudeの悪用事例や評価環境でのインシデントを報告し、安全対策と調査も公表しました。",
+      "og": "http://127.0.0.1:3100/og/reports/monthly/2026-09.png",
+      "noindex": true,
+      "schemas": [
+        {
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          "@id": "http://127.0.0.1:3100/monthly/2026-09#article",
+          "isPartOf": {
+            "@id": "http://127.0.0.1:3100/#website"
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http://127.0.0.1:3100/monthly/2026-09"
+          },
+          "url": "http://127.0.0.1:3100/monthly/2026-09",
+          "headline": "AI Signal JP 月報 · 2026-09",
+          "image": "http://127.0.0.1:3100/og/reports/monthly/2026-09.png",
+          "description": "AnthropicはClaude Fable 5.1とClaude Mythos 5.1を発表し、一般向けと審査済み利用者向けで利用条件を分けました。Google DeepMindはWeatherNext 3やGemini 3.8の音声・推論モデルを発表し、予測や音声機能を広げています。Hugging FaceはGGUFのローカル実行やコーディングエージェント向け記憶ツールを公開し、開発環境を拡充しました。AnthropicはClaudeの悪用事例や評価環境でのインシデントを報告し、安全対策と調査も公表しました。",
+          "inLanguage": "ja-JP",
+          "datePublished": "2026-10-04T12:03:14.661Z",
+          "dateModified": "2026-10-04T12:03:14.661Z",
+          "articleSection": [
+            "モデルの公開・更新",
+            "プロダクトの公開・更新",
+            "業界動向",
+            "論文・研究",
+            "活用とオピニオン"
+          ],
+          "isAccessibleForFree": true,
+          "author": {
+            "@id": "http://127.0.0.1:3100/#organization"
+          },
+          "publisher": {
+            "@id": "http://127.0.0.1:3100/#organization"
+          }
+        }
+      ]
+    },
+    {
+      "path": "/all?q=no-match-for-qa-xyz",
+      "status": 200,
+      "title": "検索：no-match-for-qa-xyz · AI Signal JP",
+      "lang": "ja-JP",
+      "canonical": "http://127.0.0.1:3100/all?q=no-match-for-qa-xyz",
+      "description": "AI Signal JPに掲載されたAIのニュースを一覧できます。チャンネル、カテゴリ、タグで絞り込めるほか、日本語と英語で検索できます。",
+      "og": "http://127.0.0.1:3100/og/site.png",
+      "noindex": true,
+      "schemas": []
+    },
+    {
+      "interaction": "404 status",
+      "pass": true
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "previewNoindex": true
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "previewNoindex": true
+    },
+    {
+      "path": "/feed.xml",
+      "status": 200,
+      "previewNoindex": true
+    },
+    {
+      "path": "/api/v1/items",
+      "status": 200,
+      "previewNoindex": true
+    }
+  ],
+  "errors": []
+}

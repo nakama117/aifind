@@ -1,13 +1,14 @@
 // The writing side of the analysis: the prefilter's and the content understanding's inputs, the
 // title/summary prompts for everything else, the output parsing and the deterministic guards. The
 // wording lives in the industry pack (industry/prompts/); a failed guard falls back without a repair call.
-import { IDENTITY_CONTEXT_ALIASES, IDENTITY_LEXICON, PUBLISHER_DOMAINS } from "@aihot/industry/taxonomy";
+import { ENTITY_TAGS, IDENTITY_CONTEXT_ALIASES, IDENTITY_LEXICON, PUBLISHER_DOMAINS } from "@aihot/industry/taxonomy";
 import { onlyXArticleLink } from "../sources/x.ts";
 import type { AnalyzeInputArticle } from "./input.ts";
 import { promptText } from "./prompts.ts";
+import { isJapaneseText, looksJapanese } from "@aihot/contracts/language";
 
 export const PREFILTER_SYSTEM = promptText("prefilter");
-export const UNDERSTAND_SYSTEM = promptText("understand");
+export const UNDERSTAND_SYSTEM = promptText("understand", { entityTags: ENTITY_TAGS.join("、") });
 
 /** A body longer than this is cut (whole bodies are sent; a few run past the context). */
 export const MAX_BODY_CHARS = 60_000;
@@ -20,17 +21,14 @@ export function clampText(s: string, maxChars: number): string {
   return codepoints.length <= maxChars ? s : codepoints.slice(0, maxChars).join("") + "…";
 }
 
-export function looksZh(s: string): boolean {
-  if (!/[一-鿿]/.test(s)) return false;
-  if (/[぀-ヿ]/.test(s)) return false; // Japanese kana
-  if (/[가-힯]/.test(s)) return false; // Hangul
-  return true;
+export function looksJapaneseCopy(s: string): boolean {
+  return looksJapanese(s);
 }
 
 /** Short tweet: under 100 characters of Chinese, under 500 of other text. */
 export function isShortTweet(text: string): boolean {
   if (!text) return false;
-  const cjk = (text.match(/[一-鿿]/g) || []).length;
+  const cjk = (text.match(/[一-鿿぀-ヿ]/g) || []).length;
   return text.length < (cjk > text.length * 0.3 ? 100 : 500);
 }
 
@@ -54,17 +52,17 @@ export function cleanArticleTextForLLM(s: string): string {
 }
 
 function chineseDensity(s: string): number {
-  const chinese = (s.match(/[一-鿿]/g) ?? []).length;
+  const chinese = (s.match(/[一-鿿぀-ヿ]/g) ?? []).length;
   const total = s.replace(/\s+/g, "").length;
   return total === 0 ? 0 : chinese / total;
 }
 
 const stripNoise = (s: string) => s.replace(/https?:\/\/\S+/g, " ").replace(/@[A-Za-z0-9_]+/g, " ").replace(/#[A-Za-z0-9_]+/g, " ");
 
-/** A short tweet in Chinese needs no translation; mixed or English ones do. */
-export function needsShortTweetTranslation(text: string): boolean {
+/** Verbatim publication requires Japanese evidence, not merely shared Han characters. */
+export function needsShortTweetTranslation(text: string, language?: string | null): boolean {
   const clean = stripNoise(text);
-  if (!looksZh(clean)) return true;
+  if (!isJapaneseText(clean, language)) return true;
   if (chineseDensity(clean) < 0.65) return true;
   const englishRuns = clean.match(/[A-Za-z][A-Za-z0-9+.#/-]*(?:\s+[A-Za-z][A-Za-z0-9+.#/-]*)+/g) ?? [];
   return englishRuns.some((run) => run.replace(/\s+/g, "").length >= 10);
@@ -220,7 +218,7 @@ export function enforceIdentity(input: TranslateInput, copy: { titleZh: string; 
   const unsupportedTitleEntityIds = matchEntityIds([copy.titleZh]).filter((id) => !allowed.has(id));
   const unsupportedSummaryEntityIds = matchEntityIds([copy.summaryZh]).filter((id) => !allowed.has(id));
   return {
-    titleZh: unsupportedTitleEntityIds.length ? (looksZh(input.title) ? input.title : "") : copy.titleZh,
+    titleZh: unsupportedTitleEntityIds.length ? (looksJapaneseCopy(input.title) ? input.title : "") : copy.titleZh,
     summaryZh: unsupportedSummaryEntityIds.length ? "" : copy.summaryZh,
     identityGuard: {
       outcome: unsupportedTitleEntityIds.length || unsupportedSummaryEntityIds.length ? "fallback" : "pass",
@@ -277,7 +275,7 @@ const sourceName = (name?: string) => name?.trim() || "（未注明）";
 
 function anchorDate(d: Date | undefined): string {
   if (!d || Number.isNaN(d.getTime())) return "未注明";
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
 }
 
 export function buildArticlePrompt(input: TranslateInput): string {

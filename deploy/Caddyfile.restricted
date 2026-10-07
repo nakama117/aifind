@@ -1,0 +1,9 @@
+# 72-hour restricted trial. Empty password hash fails configuration instead of opening access.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow"
+	basic_auth {
+		{$PREVIEW_USER} {$PREVIEW_PASSWORD_HASH}
+	}
+	reverse_proxy web:3000
+}

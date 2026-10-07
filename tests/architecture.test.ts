@@ -18,7 +18,7 @@ function sources(dir: string): Array<{ file: string; text: string }> {
   for (const entry of readdirSync(path.join(ROOT, dir), { withFileTypes: true, recursive: true })) {
     const full = path.join(entry.parentPath, entry.name);
     if (!entry.isFile() || !/\.tsx?$/.test(entry.name) || /[/\\](node_modules|build|\.react-router)[/\\]/.test(full)) continue;
-    out.push({ file: path.relative(ROOT, full), text: readFileSync(full, "utf8") });
+    out.push({ file: path.relative(ROOT, full).split(path.sep).join("/"), text: readFileSync(full, "utf8") });
   }
   return out;
 }
@@ -80,7 +80,7 @@ const OWNERS: Record<string, string> = {
 test("the tables that carry a rule are written only by the module that owns it", () => {
   const found: string[] = [];
   for (const { file, text } of [...sources("packages/backend/src"), ...sources("apps/api/src"), ...sources("apps/worker/src"), ...modules()]) {
-    const own = path.relative("packages/backend/src", file);
+    const own = path.relative("packages/backend/src", file).split(path.sep).join("/");
     for (const [, table] of text.matchAll(/\b(?:INSERT\s+INTO|DELETE\s+FROM|UPDATE)\s+([a-z_]+)\b/gi)) {
       const owner = OWNERS[table!.toLowerCase()];
       if (owner && !own.startsWith(owner)) found.push(`${file} writes ${table} (owner ${owner})`);
@@ -138,7 +138,7 @@ const NAMED = /["']([A-Z][A-Z0-9_]+)["']/g;
 const SUBSTITUTED = /\$\{([A-Z][A-Z0-9_]+)|\{\$([A-Z][A-Z0-9_]+)\}/g;
 const COMPOSE = "docker-compose.yml";
 const DEPLOYMENT = [COMPOSE, "deploy/Caddyfile"].filter((file) => existsSync(path.join(ROOT, file)));
-const tracked = (pattern: string) => execFileSync("git", ["ls-files", "--", pattern], { cwd: ROOT, encoding: "utf8" }).split("\n").filter(Boolean);
+const tracked = (pattern: string) => execFileSync("git", ["-c", `safe.directory=${ROOT.replaceAll("\\", "/")}`, "ls-files", "--", pattern], { cwd: ROOT, encoding: "utf8" }).split("\n").filter(Boolean);
 
 test("every environment variable the code reads is listed in a template, and every listed one is read", () => {
   const listed = new Set(tracked("*.env.example").flatMap((file) => assigned(file, /^#?\s*([A-Z][A-Z0-9_]+)=/gm)));

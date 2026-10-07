@@ -13,10 +13,15 @@ export interface ModelPreset {
   jsonMode: boolean;
   /** 能看图。 */
   vision?: boolean;
+  protocol?: "openai";
 }
 
 /** 具名的模型示例（每个要配自己的密钥）。用不上可以删掉。 */
 export const PRESETS: Record<string, ModelPreset> = {
+  "gpt-6-luna": {
+    service: "openai", model: "gpt-6-luna", baseUrlEnv: "OPENAI_BASE_URL", apiKeyEnv: "OPENAI_API_KEY",
+    protocol: "openai", extra: { reasoning_effort: "none" }, jsonMode: true, vision: true,
+  },
   // GLM 5.3 Flash always reasons; the lowest effort keeps short structured tasks fast.
   "glm-5.3-flash": {
     service: "zhipu", model: "glm-5.3-flash", baseUrlEnv: "ZHIPU_BASE_URL", apiKeyEnv: "ZHIPU_API_KEY",
@@ -57,4 +62,6 @@ export const PRESETS: Record<string, ModelPreset> = {
  * 每一步默认用的模型（步骤见后台“模型”页），值是上面的名字或 default。没写的步骤用 default。
  * 例：{ score: "glm-5.3-flash-selection", groupReview: "mimo-v2.6-flash" }
  */
-export const DEFAULTS: Record<string, string> = {};
+export const DEFAULTS: Record<string, string> = Object.fromEntries(
+  ["prefilter", "score", "understand", "summarize", "structure", "group", "groupReview", "digest", "report", "translate", "codexMonitor"].map((step) => [step, "gpt-6-luna"]),
+);

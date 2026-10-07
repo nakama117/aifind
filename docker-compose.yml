@@ -1,10 +1,10 @@
 # docker compose up -d --build     → http://localhost:3000   (the admin is at /admin)
 # docker compose --profile https up -d --build   → HTTPS for SITE_DOMAIN through Caddy
-name: aihot
+name: ai-signal-jp
 
 x-app: &app
   build: .
-  image: aihot-app
+  image: ai-signal-jp-app
   restart: unless-stopped
 
 x-backend: &backend
@@ -12,7 +12,7 @@ x-backend: &backend
   env_file: .env
   environment: &backend-env
     NODE_ENV: production
-    DATABASE_URL: postgres://aihot:${POSTGRES_PASSWORD:-aihot}@db:5432/aihot
+    DATABASE_URL: postgres://aihot:${POSTGRES_PASSWORD:?Run node scripts/init-env.ts first}@db:5432/aihot
     AIHOT_DATA_DIR: /data
     API_BASE_URL: http://api:3001
     LOCAL_ROUTER_URL: http://web:3000
@@ -30,12 +30,13 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: aihot
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aihot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run node scripts/init-env.ts first}
       POSTGRES_DB: aihot
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U aihot -d aihot"]
+      # The image's temporary init server only listens on a Unix socket; wait for the final TCP server.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U aihot -d aihot"]
       interval: 5s
       timeout: 5s
       retries: 30
@@ -77,10 +78,13 @@ services:
       SITE_URL: ${SITE_URL:-http://localhost:3000}
       TRUST_PROXY: ${TRUST_PROXY:-false}
       AIHOT_RELEASE: ${AIHOT_RELEASE:-}
+      SITE_PREVIEW: ${SITE_PREVIEW:-false}
+      GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
+      BING_SITE_VERIFICATION: ${BING_SITE_VERIFICATION:-}
       WEB_HOST: 0.0.0.0
       WEB_PORT: "3000"
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-127.0.0.1:3000}:3000"
     depends_on:
       api:
         condition: service_started
@@ -94,8 +98,10 @@ services:
       - "443:443"
     environment:
       SITE_DOMAIN: ${SITE_DOMAIN:-localhost}
+      PREVIEW_USER: ${PREVIEW_USER:-reviewer}
+      PREVIEW_PASSWORD_HASH: ${PREVIEW_PASSWORD_HASH:-}
     volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${CADDY_CONFIG:-./deploy/Caddyfile.restricted}:/etc/caddy/Caddyfile:ro
       - caddy:/data
     depends_on:
       - web

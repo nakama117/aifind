@@ -1,0 +1,244 @@
+{
+  "verifiedOn": "2026-10-04",
+  "method": "Schema validation with parseHistory and independent Node GET checks; content and date evidence are recorded in docs/topic-chronicle-jp.md. HTTP 403 and fetch failures are transport results, not conclusions that the source is missing.",
+  "schema": "PASS",
+  "topics": 12,
+  "events": 50,
+  "statuses": [
+    {
+      "url": "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
+      "status": 200,
+      "finalUrl": "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/"
+    },
+    {
+      "url": "https://ai.meta.com/blog/large-language-model-llama-meta-ai/",
+      "error": "fetch failed"
+    },
+    {
+      "url": "https://ai.meta.com/blog/llama-2/",
+      "error": "fetch failed"
+    },
+    {
+      "url": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
+      "error": "fetch failed"
+    },
+    {
+      "url": "https://ai.meta.com/blog/meta-llama-3/",
+      "error": "fetch failed"
+    },
+    {
+      "url": "https://aip.riken.jp/about-aip/?lang=ja",
+      "status": 200,
+      "finalUrl": "https://aip.riken.jp/about-aip/?lang=ja"
+    },
+    {
+      "url": "https://aip.riken.jp/pressrelease/raiden180420/?lang=ja",
+      "status": 200,
+      "finalUrl": "https://aip.riken.jp/pressrelease/raiden180420/?lang=ja"
+    },
+    {
+      "url": "https://api-docs.deepseek.com/news/news250120/",
+      "status": 200,
+      "finalUrl": "https://api-docs.deepseek.com/news/news250120/"
+    },
+    {
+      "url": "https://api-docs.deepseek.com/updates/",
+      "status": 200,
+      "finalUrl": "https://api-docs.deepseek.com/updates/"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.07563",
+      "status": 200,
+      "finalUrl": "https://arxiv.org/abs/2410.07563"
+    },
+    {
+      "url": "https://arxiv.org/abs/2509.04897",
+      "status": 200,
+      "finalUrl": "https://arxiv.org/abs/2509.04897"
+    },
+    {
+      "url": "https://arxiv.org/abs/2606.21228",
+      "error": "fetch failed"
+    },
+    {
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+      "status": 200,
+      "finalUrl": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
+    },
+    {
+      "url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/gemini-model-thinking-updates-march-2025/",
+      "status": 200,
+      "finalUrl": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/gemini-model-thinking-updates-march-2025/"
+    },
+    {
+      "url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/google-gemini-ai-update-december-2024/",
+      "status": 200,
+      "finalUrl": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/google-gemini-ai-update-december-2024/"
+    },
+    {
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
+      "status": 200,
+      "finalUrl": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/"
+    },
+    {
+      "url": "https://blogs.microsoft.com/blog/2023/02/07/reinventing-search-with-a-new-ai-powered-microsoft-bing-and-edge-your-copilot-for-the-web/",
+      "status": 200,
+      "finalUrl": "https://blogs.microsoft.com/blog/2023/02/07/reinventing-search-with-a-new-ai-powered-microsoft-bing-and-edge-your-copilot-for-the-web/"
+    },
+    {
+      "url": "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/",
+      "status": 200,
+      "finalUrl": "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/"
+    },
+    {
+      "url": "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/",
+      "status": 200,
+      "finalUrl": "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/"
+    },
+    {
+      "url": "https://geniac.meti.go.jp/geniac_magazine/resultsreport_2.html",
+      "status": 200,
+      "finalUrl": "https://geniac.meti.go.jp/geniac_magazine/resultsreport_2.html"
+    },
+    {
+      "url": "https://github.com/deepseek-ai/DeepSeek-V2",
+      "status": 200,
+      "finalUrl": "https://github.com/deepseek-ai/DeepSeek-V2"
+    },
+    {
+      "url": "https://github.com/QwenLM/Qwen",
+      "status": 200,
+      "finalUrl": "https://github.com/QwenLM/Qwen"
+    },
+    {
+      "url": "https://github.com/QwenLM/Qwen3.8",
+      "status": 200,
+      "finalUrl": "https://github.com/QwenLM/Qwen3.8"
+    },
+    {
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-hopper-architecture-the-next-generation-of-accelerated-computing",
+      "status": 200,
+      "finalUrl": "https://nvidianews.nvidia.com/news/nvidia-announces-hopper-architecture-the-next-generation-of-accelerated-computing"
+    },
+    {
+      "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-platform-arrives-to-power-a-new-era-of-computing",
+      "status": 200,
+      "finalUrl": "https://nvidianews.nvidia.com/news/nvidia-blackwell-platform-arrives-to-power-a-new-era-of-computing"
+    },
+    {
+      "url": "https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development",
+      "status": 200,
+      "finalUrl": "https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development"
+    },
+    {
+      "url": "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer",
+      "status": 200,
+      "finalUrl": "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"
+    },
+    {
+      "url": "https://openai.com/index/chatgpt/",
+      "status": 403,
+      "finalUrl": "https://openai.com/index/chatgpt/"
+    },
+    {
+      "url": "https://openai.com/index/gpt-4/",
+      "status": 403,
+      "finalUrl": "https://openai.com/index/gpt-4/"
+    },
+    {
+      "url": "https://openai.com/index/hello-gpt-4o/",
+      "status": 403,
+      "finalUrl": "https://openai.com/index/hello-gpt-4o/"
+    },
+    {
+      "url": "https://openai.com/index/introducing-gpt-5/",
+      "status": 403,
+      "finalUrl": "https://openai.com/index/introducing-gpt-5/"
+    },
+    {
+      "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
+      "status": 403,
+      "finalUrl": "https://openai.com/index/introducing-gpt-6-1-sol/"
+    },
+    {
+      "url": "https://qwenlm.github.io/blog/qwen2.5/",
+      "status": 200,
+      "finalUrl": "https://qwenlm.github.io/blog/qwen2.5/"
+    },
+    {
+      "url": "https://qwenlm.github.io/blog/qwen3/",
+      "status": 200,
+      "finalUrl": "https://qwenlm.github.io/blog/qwen3/"
+    },
+    {
+      "url": "https://sakana.ai/ai-scientist-first-publication/",
+      "status": 200,
+      "finalUrl": "https://sakana.ai/ai-scientist-first-publication/"
+    },
+    {
+      "url": "https://sakana.ai/ai-scientist/",
+      "status": 200,
+      "finalUrl": "https://sakana.ai/ai-scientist/"
+    },
+    {
+      "url": "https://sakana.ai/evolutionary-model-merge/",
+      "status": 200,
+      "finalUrl": "https://sakana.ai/evolutionary-model-merge/"
+    },
+    {
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "status": 200,
+      "finalUrl": "https://www.anthropic.com/claude-opus-5-5"
+    },
+    {
+      "url": "https://www.anthropic.com/news/claude-3-family",
+      "status": 200,
+      "finalUrl": "https://www.anthropic.com/news/claude-3-family"
+    },
+    {
+      "url": "https://www.anthropic.com/news/claude-4",
+      "status": 200,
+      "finalUrl": "https://www.anthropic.com/news/claude-4"
+    },
+    {
+      "url": "https://www.anthropic.com/news/introducing-claude",
+      "status": 200,
+      "finalUrl": "https://www.anthropic.com/news/introducing-claude"
+    },
+    {
+      "url": "https://www.meti.go.jp/press/2023/02/20240202003/20240202003.html",
+      "status": 403,
+      "finalUrl": "https://www.meti.go.jp/press/2023/02/20240202003/20240202003.html"
+    },
+    {
+      "url": "https://www.meti.go.jp/press/2026/06/20260604003/20260604003.html",
+      "status": 403,
+      "finalUrl": "https://www.meti.go.jp/press/2026/06/20260604003/20260604003.html"
+    },
+    {
+      "url": "https://www.meti.go.jp/press/2026/07/20260702001/20260702001.html",
+      "status": 403,
+      "finalUrl": "https://www.meti.go.jp/press/2026/07/20260702001/20260702001.html"
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/copilot/blog/2026/03/30/copilot-cowork-now-available-in-frontier/",
+      "status": 200,
+      "finalUrl": "https://www.microsoft.com/en-us/copilot/blog/2026/03/30/copilot-cowork-now-available-in-frontier/"
+    },
+    {
+      "url": "https://www.preferred.jp/ja/blog/tech/llm-plamo",
+      "status": 200,
+      "finalUrl": "https://www.preferred.jp/ja/blog/tech/llm-plamo"
+    },
+    {
+      "url": "https://www.preferred.jp/ja/blog/tech/plamo-3-0-prime-release",
+      "status": 200,
+      "finalUrl": "https://www.preferred.jp/ja/blog/tech/plamo-3-0-prime-release"
+    },
+    {
+      "url": "https://www.riken.jp/pr/news/2017/20170310_1/index.html",
+      "status": 200,
+      "finalUrl": "https://www.riken.jp/pr/news/2017/20170310_1/index.html"
+    }
+  ]
+}

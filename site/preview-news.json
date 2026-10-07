@@ -1,0 +1,83 @@
+{
+  "checkedAt": "2026-10-04",
+  "sources": [
+    { "id": "openai", "name": "OpenAI", "owner": "openai" },
+    { "id": "anthropic", "name": "Anthropic", "owner": "anthropic" },
+    { "id": "sakana-ai", "name": "Sakana AI", "owner": "sakana-ai" },
+    { "id": "preferred-networks", "name": "Preferred Networks", "owner": "preferred-networks" }
+  ],
+  "articles": [
+    {
+      "source": "anthropic", "url": "https://www.anthropic.com/news/claude-frontier-academy",
+      "sourceTitle": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap", "language": "en",
+      "publishedAt": "2026-10-02T23:01:00.000Z", "dateEvidence": "Article metadata: article:published_time and NewsArticle.datePublished",
+      "title": "Anthropic、企業向けAIエンジニア育成に1億ドルを投資へ",
+      "summary": "AnthropicはClaude Frontier Academyを発表した。1億ドルを投じ、2027年末までに企業でAIを実装するエンジニア1万人の育成を目指す。受講者は導入演習と実技評価を経て、所属組織のプロジェクトに取り組む。",
+      "reason": "企業のAI導入を支える人材育成の取り組み。人数は育成済みの実績ではなく目標。",
+      "category": "industry", "tags": ["業界動向", "Anthropic", "Agent"]
+    },
+    {
+      "source": "openai", "url": "https://openai.com/index/practical-guide-building-gpt-6/",
+      "sourceTitle": "A model guide for the GPT-6 family", "language": "en",
+      "publishedAt": "2026-10-02T16:15:00.000Z", "dateEvidence": "https://openai.com/news/rss.xml — item pubDate",
+      "title": "OpenAI、GPT-6のモデル選びとコスト管理の実践ガイドを公開",
+      "summary": "OpenAIがGPT-6系列を使う開発者向けに、モデルの選び方や指示の書き方をまとめた。キャッシュの利用、長時間の作業の進め方、本番導入前の評価など、品質・速度・費用を調整する際の確認点を紹介している。",
+      "reason": "AIを業務に組み込む開発者が、品質と運用費用を検討するための公式資料。",
+      "category": "tip", "tags": ["活用・実践", "OpenAI", "運用・エンジニアリング"]
+    },
+    {
+      "source": "openai", "url": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign/",
+      "sourceTitle": "Disrupting a coordinated model-distillation campaign", "language": "en",
+      "publishedAt": "2026-09-30T10:30:00.000Z", "dateEvidence": "https://openai.com/news/rss.xml — item pubDate",
+      "title": "OpenAI、モデルの内部推論を狙った不正な抽出活動への対応を公表",
+      "summary": "OpenAIは、保護された内部推論を取り出そうとする組織的な活動を検知し、アカウントの制限や技術的な対策を行ったと報告した。同社は、保存された利用者の会話データベースへの直接アクセスが起きた事案ではないと説明している。",
+      "reason": "モデル提供者によるセキュリティ報告。事実関係は同社の調査説明に基づく。",
+      "category": "industry", "tags": ["安全性・アラインメント", "OpenAI"]
+    },
+    {
+      "source": "openai", "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
+      "sourceTitle": "Introducing GPT-6.1 Sol", "language": "en",
+      "publishedAt": "2026-09-29T10:00:00.000Z", "dateEvidence": "https://openai.com/news/rss.xml — item pubDate",
+      "title": "OpenAI、コーディングや業務作業を強化したGPT-6.1 Solを発表",
+      "summary": "OpenAIはGPT-6 Solの更新版となるGPT-6.1 Solを発表した。同社の評価では、コードの修正、複雑な文書の理解、コンピューター操作などで改善が見られたとしている。性能比較は提供元の検証条件に基づく。",
+      "reason": "開発や文書業務で利用するモデルの更新。日本語での品質は別途確認が必要。",
+      "category": "ai-models", "tags": ["モデル公開", "OpenAI", "コーディング"]
+    },
+    {
+      "source": "sakana-ai", "url": "https://sakana.ai/sail/",
+      "sourceTitle": "SAIL: Scaling In-Context Imitation Learning", "language": "en",
+      "publishedAt": "2026-09-28T00:00:00+09:00", "dateEvidence": "Article time[datetime]; page displays a calendar date only",
+      "title": "Sakana AIと東京大学、試行結果からロボットの動作を改善するSAILを発表",
+      "summary": "Sakana AIと東京大学の研究チームがSAILを紹介した。少数の成功例から動作候補を作り、シミュレーターでの実行動画を評価して候補を改善する。視覚言語モデルと探索を組み合わせ、シミュレーションと実機で検証した。",
+      "reason": "日本の研究チームによるロボット学習の成果。実験結果を一般的な実用性能とは区別して読む。",
+      "category": "paper", "tags": ["論文・研究", "Sakana AI", "エンボディドAI"]
+    },
+    {
+      "source": "preferred-networks", "url": "https://www.preferred.jp/ja/news/pr20260918",
+      "sourceTitle": "PFNとPFCI、独自開発AI半導体MN-Core 2による高速な計算資源を材料探索用シミュレーターMatlantis向けに年内に提供開始", "language": "ja",
+      "publishedAt": "2026-09-18T14:00:00+09:00", "dateEvidence": "Article metadata: article:published_time and NewsArticle.datePublished",
+      "title": "PFN、MN-Core 2の計算資源をMatlantisに提供する計画を発表",
+      "summary": "Preferred NetworksとPFCIは、材料探索サービスMatlantisの一部の計算に自社開発のAI半導体MN-Core 2を使う計画を発表した。2026年内の提供開始を目指しており、対象となる計算での高速化を狙う。",
+      "reason": "国産AI半導体を材料研究に活用する計画。発表時点では提供開始前。",
+      "category": "industry", "tags": ["業界動向", "Preferred Networks", "運用・エンジニアリング"]
+    },
+    {
+      "source": "sakana-ai", "url": "https://sakana.ai/chat-fugumax/",
+      "sourceTitle": "Sakana Chatをアップデート：最新モデルに刷新、メモリー機能を追加", "language": "ja",
+      "publishedAt": "2026-09-17T00:00:00+09:00", "dateEvidence": "Article time[datetime]; page displays a calendar date only",
+      "title": "Sakana Chat、Fugu Maxと会話メモリーを提供",
+      "summary": "Sakana AIはSakana Chatを更新し、Fugu Maxを全利用者に提供すると発表した。会話から好みなどを覚えるメモリーも加わる。保存内容は確認でき、機能を使いたくない場合は設定から無効にできる。",
+      "reason": "国内のAIチャット製品の更新。継続利用時の使い勝手とメモリー設定を確認できる。",
+      "category": "ai-products", "tags": ["プロダクト更新", "Sakana AI"]
+    },
+    {
+      "source": "sakana-ai", "url": "https://sakana.ai/marlin-update/",
+      "sourceTitle": "Sakana Marlinアップデート：レポートと対話する「Interactive Reading」と、出力スライドのPowerPoint対応", "language": "ja",
+      "publishedAt": "2026-09-16T00:00:00+09:00", "dateEvidence": "Article time[datetime]; page displays a calendar date only",
+      "title": "Sakana Marlin、レポートへの質問機能とPowerPoint出力を追加",
+      "summary": "Sakana AIは調査支援ツールMarlinに、生成レポートへ質問しながら根拠を確認する機能を加えた。引用元の該当箇所をたどれるほか、スライドを文字や図表の編集が可能なPowerPoint形式で出力できる。",
+      "reason": "調査結果を確認し、社内資料として編集する作業につながる製品更新。",
+      "category": "ai-products", "tags": ["プロダクト更新", "Sakana AI", "Agent"]
+    }
+  ]
+}

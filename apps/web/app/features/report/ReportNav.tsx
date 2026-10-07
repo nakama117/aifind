@@ -14,7 +14,7 @@ export function KindSwitch({ kind, phone = false }: { kind: ReportKind; phone?: 
       fill={!phone}
       size={phone ? "sm" : "md"}
       layoutId={phone ? "report-kind-phone" : "report-kind"}
-      label="切换日报、周报、月报"
+      label="日報・週報・月報を切り替え"
       active={kind}
       items={KINDS.map((k) => ({ key: k, label: KIND_LABEL[k], to: KIND_PATH[k], resetScroll: phone }))}
     />
@@ -30,15 +30,15 @@ export function ReportArchive({ kind, index, current }: { kind: ReportKind; inde
       <div className="pb-4 pt-8">
         <KindSwitch kind={kind} />
       </div>
-      <div className="border-b border-line-strong pb-2 pl-1 text-[11.5px] font-semibold tracking-[0.3em] text-ink">往期</div>
-      <nav aria-label={`${KIND_LABEL[kind]}历史`} className="scrollbar-thin -mr-3 flex-1 overflow-y-auto pb-6 pr-3">
+      <div className="border-b border-line-strong pb-2 pl-1 text-[11.5px] font-semibold tracking-[0.3em] text-ink">バックナンバー</div>
+      <nav aria-label={`${KIND_LABEL[kind]}の履歴`} className="scrollbar-thin -mr-3 flex-1 overflow-y-auto pb-6 pr-3">
         {groups.map((g) => (
           <ArchiveGroup key={g.id} g={g} kind={kind} current={current} initiallyOpen={g.id === openId} />
         ))}
       </nav>
       {kind === "daily" && (
         <Link to="/daily/archive" className="flex h-12 shrink-0 items-center justify-between border-t border-line pl-1 pr-1.5 text-[12.5px] font-medium text-ink-2 transition-colors hover:text-accent">
-          日报合订本 <IconChevronRight size={14} />
+          日報合本 <IconChevronRight size={14} />
         </Link>
       )}
     </aside>
@@ -92,7 +92,7 @@ function ArchiveGroup({ g, kind, current, initiallyOpen }: {
           );
         })}
       </ul>}
-      {kind === "daily" && !open && <noscript><a href="/daily/archive">查看完整日报归档</a></noscript>}
+      {kind === "daily" && !open && <noscript><a href="/daily/archive">日報の全アーカイブを見る</a></noscript>}
     </details>
   );
 }
@@ -104,7 +104,7 @@ export function ReportPhoneNav({ kind, index, current, today }: { kind: ReportKi
   const chip = "inline-flex h-11 shrink-0 items-center rounded-full border px-4 text-[13px] transition-colors";
   if (recent.length === 0) return null;
   return (
-    <nav aria-label={`最近的${KIND_LABEL[kind]}`} className="scrollbar-none bleed flex gap-2 overflow-x-auto pb-1 pt-1.5 lg:hidden">
+    <nav aria-label={`最近の${KIND_LABEL[kind]}`} className="scrollbar-none bleed flex gap-2 overflow-x-auto pb-1 pt-1.5 lg:hidden">
       {recent.map((e) => {
         const on = e.key === current;
         return (
@@ -115,7 +115,7 @@ export function ReportPhoneNav({ kind, index, current, today }: { kind: ReportKi
       })}
       {index.length > 3 && (
         <Link to={earlier} viewTransition={kind === "daily"} className={`${chip} border-line-strong bg-surface text-ink-2 active:bg-bg-sunk`}>
-          更早
+          それ以前
         </Link>
       )}
     </nav>

@@ -6,17 +6,19 @@
 // file's process it copies the template and gives the file its own data and temporary folders.
 import "./setup.ts";
 import { execFileSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import { mkdirSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
 import postgres from "postgres";
+import { createTestDatabase, dropTestDatabase } from "./database-cleanup.ts";
 
 const template = new URL(process.env.DATABASE_URL!);
 const name = decodeURIComponent(template.pathname.slice(1));
 const suffix = name.slice(name.lastIndexOf("_") + 1);
-const copyPattern = `^${name.replace(/\W/g, "\\$&")}_f[0-9]+_${suffix}$`;
+const copyPattern = `^${name.replace(/\W/g, "\\$&")}_f[0-9a-f]+_${suffix}$`;
 
 function urlOf(database: string) {
   const url = new URL(template);
@@ -36,13 +38,13 @@ async function onServer(fn: (db: postgres.Sql) => Promise<unknown>) {
 const dropCopies = () =>
   onServer(async (db) => {
     for (const { datname } of await db<{ datname: string }[]>`SELECT datname FROM pg_database WHERE datname ~ ${copyPattern}`) {
-      await db`DROP DATABASE IF EXISTS ${db(datname)} WITH (FORCE)`;
+      await dropTestDatabase(template.href, datname);
     }
   });
 
 export async function globalSetup() {
   await onServer(async (db) => {
-    if ((await db`SELECT 1 FROM pg_database WHERE datname = ${name}`).length === 0) await db`CREATE DATABASE ${db(name)}`;
+    if ((await db`SELECT 1 FROM pg_database WHERE datname = ${name}`).length === 0) await createTestDatabase(template.href, name);
   });
   execFileSync(process.execPath, [fileURLToPath(new URL("../scripts/migrate.ts", import.meta.url))], { stdio: ["ignore", "ignore", "inherit"] });
   await dropCopies(); // left by an interrupted run
@@ -60,8 +62,9 @@ export async function globalTeardown() {
 
 // Worker threads a file starts inherit the preload and its copy.
 if (process.env.NODE_TEST_CONTEXT && isMainThread) {
-  const copy = `${name}_f${process.pid}_${suffix}`;
-  await onServer((db) => db`CREATE DATABASE ${db(copy)} TEMPLATE ${db(name)}`);
+  // Windows can reuse a completed file's PID before the suite ends and its DB is removed.
+  const copy = `${name}_f${process.pid}${randomBytes(4).toString("hex")}_${suffix}`;
+  await createTestDatabase(template.href, copy, name);
   process.env.DATABASE_URL = urlOf(copy);
   const scratch = mkdtempSync(path.join(tmpdir(), scratchPrefix(process.ppid)));
   for (const dir of ["data", "tmp"]) mkdirSync(path.join(scratch, dir));

@@ -72,7 +72,7 @@ export async function unavailableIds(ids: string[]): Promise<Set<string>> {
 export async function reportIndexRows(kind: ReportKind, limit: number) {
   return sql<{ key: string; issue_number: number; content: Record<string, any>; generated_at: Date }[]>`
     SELECT key, generated_at, (row_number() OVER (ORDER BY key))::int AS issue_number, jsonb_build_object(
-      'lead', content->'lead', 'headline', content->'headline', 'title', content->'title',
+      'lead', content->'lead', 'headline', content->'headline', 'title', content->'title', 'retrospective', content->'retrospective',
       'leadItemId', content->'leadItemId', 'highlights', content->'highlights',
       CASE WHEN kind = 'daily' THEN 'sections' ELSE 'themes' END,
       jsonb_build_array(jsonb_build_object(CASE WHEN kind = 'daily' THEN 'items' ELSE 'storyRefs' END,
@@ -131,10 +131,10 @@ export function issueLead(content: Record<string, any>, kind: "daily" | "periodi
  * of its lead, highlights and entries still public. `gone` must cover every entry.
  */
 function periodOverview(content: Record<string, any>, kind: "weekly" | "monthly", gone: Set<string>): string | null {
-  if (typeof content.overview === "string" && content.overview) return content.overview;
+  if (!entriesOf(content, "periodic").some((entry) => gone.has(String(entry.itemId))) && typeof content.overview === "string" && content.overview) return content.overview;
   const shown = leadCandidates(content, "periodic").filter((e) => !e.itemId || !gone.has(String(e.itemId)));
   if (!shown.length) return null;
-  return `${kind === "weekly" ? "本周" : "本月"} ${shown.length} 件大事，最受关注的是：${shown.slice(0, 3).map((e) => e.title).join("；")}。`;
+  return `${kind === "weekly" ? "今週" : "今月"}の大きなニュースは${shown.length}件です。最も注目を集めたのは：${shown.slice(0, 3).map((e) => e.title).join("；")}。`;
 }
 
 /** A weekly or monthly's own headline; the composer's "<site name> 周报 · 2026-W38" names the issue, not its news. */
@@ -168,9 +168,9 @@ function citationFrom(raw: Record<string, any>, avail: Map<string, Availability>
   const id = raw.itemId ?? null;
   const a = id ? avail.get(id) : undefined;
   if (!stillPublic(raw, avail)) {
-    // Withdrawn since: the reader sees a marked title; the summary and links are not sent at all.
+    // Keep a withdrawal marker without sending the old headline, summary or links.
     return {
-      itemId: id, title: String(raw.title ?? ""), summary: null, sourceName: "", sourceUrl: "", sourceIconUrl: null,
+      itemId: id, title: "公開終了", summary: null, sourceName: "", sourceUrl: "", sourceIconUrl: null,
       firstParty: false, publishedAt: null, available: false,
     };
   }
@@ -291,7 +291,7 @@ export async function loadReport(kind: ReportKind, key: string): Promise<ReportD
 
   const sections: ReportDetail["sections"] = kind === "daily"
     ? (c.sections ?? []).map((s: any) => ({ label: String(s.label), summary: null, items: (s.items ?? []).map(cite) }))
-    : (c.themes ?? []).map((t: any) => ({ label: String(t.heading), summary: t.summary ?? null, items: (t.storyRefs ?? []).map(cite) }));
+    : (c.themes ?? []).map((t: any) => ({ label: String(t.heading), summary: (t.storyRefs ?? []).every((entry: any) => stillPublic(entry, avail)) ? t.summary ?? null : null, items: (t.storyRefs ?? []).map(cite) }));
   const all = sections.flatMap((s) => s.items);
   const highlightIds: string[] = c.highlights ?? [];
   const highlights = highlightIds.length
@@ -310,16 +310,17 @@ export async function loadReport(kind: ReportKind, key: string): Promise<ReportD
   const [{ prev, next }, picture] = await Promise.all([neighbors(kind, key), leadItem?.itemId && leadItem.available ? leadCover(leadItem.itemId) : null]);
   const cover = picture && leadItem ? { ...picture, caption: kind === "daily" || c.leadItemId ? null : leadItem.title } : null;
   const headline = kind === "daily" ? null : periodicHeadline(c);
-  const title = kind === "daily" ? `${withSubject("日报")} · ${key}` : String(c.title ?? (kind === "weekly" ? `${SITE.name} 周报 · ${key}` : `${SITE.name} 月报 · ${key}`));
+  const title = kind === "daily" ? `${withSubject("日報")} · ${key}` : String(c.title ?? (kind === "weekly" ? `${SITE.name} 週報 · ${key}` : `${SITE.name} 月報 · ${key}`));
   return {
     kind,
     key,
     issueNumber: r.issue_number,
-    title,
+    title: c.retrospective === true ? `【補編】${title}` : title,
     generatedAt: r.generated_at.toISOString(),
+    ...(c.retrospective === true ? { retrospective: true } : {}),
     lead: c.leadItemId
       ? (named ? { title: named.title, leadParagraph: (kind === "daily" ? named.leadParagraph : overview) ?? "" } : null)
-      : c.lead ?? (headline ? { title: headline, leadParagraph: String(c.overview ?? "") } : null),
+      : c.lead ?? (headline ? { title: issueLead(c, "periodic", gone)?.title ?? "公開終了", leadParagraph: overview ?? "" } : null),
     leadItemId: (kind === "daily" || c.leadItemId) && leadItem?.available ? leadItem.itemId : null,
     overview,
     highlights,
@@ -364,7 +365,7 @@ export async function listReports(kind: ReportKind, limit = INDEX_LIMIT): Promis
   return rows.map((r) => ({
     key: r.key,
     issueNumber: r.issue_number,
-    title: issueLead(r.content, shape, gone)?.title ?? null,
+    title: (r.content.retrospective === true ? "【補編】" : "") + (issueLead(r.content, shape, gone)?.title ?? "" ) || null,
     count: entriesOf(r.content, shape).length,
   }));
 }
@@ -382,6 +383,7 @@ export async function v1Dailies(limit: number) {
     const lead = issueLead(r.content, "daily", gone);
     return {
       date: r.key,
+      ...(r.content.retrospective === true ? { retrospective: true } : {}),
       generatedAt: r.generated_at.toISOString(),
       leadTitle: lead?.title ?? null,
       leadParagraph: lead?.leadParagraph ?? null,
@@ -425,6 +427,7 @@ export async function dailyWithNotes(date: string | "latest") {
     schemaVersion: 1 as const,
     report: {
       date: r.key,
+      ...(c.retrospective === true ? { retrospective: true } : {}),
       generatedAt: r.generated_at.toISOString(),
       windowStart: r.window_start.toISOString(),
       windowEnd: r.window_end.toISOString(),
@@ -459,6 +462,7 @@ export async function v1Daily(date: string | "latest") {
 
 export interface FeedIssue {
   key: string;
+  retrospective?: boolean;
   generatedAt: Date;
   headline: string | null;
   /** A daily's lead paragraph; a weekly's or monthly's overview. */
@@ -474,7 +478,7 @@ export async function feedIssues(kind: ReportKind, limit: number): Promise<FeedI
   const rows = kind === "daily"
     ? await sql<{ key: string; generated_at: Date; content: Record<string, any> }[]>`
       SELECT key, generated_at, jsonb_build_object(
-        'lead', content->'lead', 'leadItemId', content->'leadItemId', 'highlights', content->'highlights',
+        'lead', content->'lead', 'leadItemId', content->'leadItemId', 'highlights', content->'highlights', 'retrospective', content->'retrospective',
         'sections', (SELECT coalesce(jsonb_agg(jsonb_build_object('label', s->'label', 'items',
           (SELECT coalesce(jsonb_agg(jsonb_build_object('itemId', i->'itemId', 'title', i->'title') ORDER BY ord), '[]'::jsonb)
            FROM jsonb_array_elements(coalesce(s->'items', '[]'::jsonb)) WITH ORDINALITY AS e(i, ord))) ORDER BY sord), '[]'::jsonb)
@@ -482,7 +486,7 @@ export async function feedIssues(kind: ReportKind, limit: number): Promise<FeedI
       FROM reports WHERE kind = 'daily' ORDER BY key DESC LIMIT ${limit}`
     : await sql<{ key: string; generated_at: Date; content: Record<string, any> }[]>`
       SELECT key, generated_at, jsonb_build_object(
-        'headline', content->'headline', 'title', content->'title', 'overview', content->'overview',
+        'headline', content->'headline', 'title', content->'title', 'overview', content->'overview', 'retrospective', content->'retrospective',
         'leadItemId', content->'leadItemId', 'highlights', content->'highlights',
         'themes', (SELECT coalesce(jsonb_agg(jsonb_build_object('heading', t->'heading', 'storyRefs',
           (SELECT coalesce(jsonb_agg(jsonb_build_object('itemId', i->'itemId', 'title', i->'title') ORDER BY ord), '[]'::jsonb)
@@ -498,6 +502,7 @@ export async function feedIssues(kind: ReportKind, limit: number): Promise<FeedI
       : (r.content.themes ?? []).map((t: any) => ({ label: t.heading, items: t.storyRefs }));
     return {
       key: r.key,
+      ...(r.content.retrospective === true ? { retrospective: true } : {}),
       generatedAt: r.generated_at,
       headline: lead?.title ?? null,
       leadParagraph: kind === "daily" ? lead?.leadParagraph ?? null : periodOverview(r.content, kind, gone),
@@ -531,6 +536,7 @@ export async function v1Periods(kind: PeriodKind, limit: number) {
     const url = periodUrl(kind, r.key);
     return {
       ...periodOf(kind, r.key),
+      ...(r.content.retrospective === true ? { retrospective: true } : {}),
       generatedAt: r.generated_at.toISOString(),
       headline: issueLead(r.content, "periodic", index.gone)?.title ?? null,
       links: { aihot: url },
@@ -559,6 +565,7 @@ export async function v1Period(kind: PeriodKind, key: string | "latest") {
     schemaVersion: 1 as const,
     report: {
       ...periodOf(kind, r.key),
+      ...(c.retrospective === true ? { retrospective: true } : {}),
       generatedAt: r.generated_at.toISOString(),
       windowStart: r.window_start.toISOString(),
       windowEnd: r.window_end.toISOString(),
@@ -568,7 +575,7 @@ export async function v1Period(kind: PeriodKind, key: string | "latest") {
       overview: periodOverview(c, kind, gone),
       sections: (c.themes ?? []).map((t: any) => ({
         label: String(t.heading),
-        summary: typeof t.summary === "string" && t.summary ? t.summary : null,
+        summary: (t.storyRefs ?? []).every(ok) && typeof t.summary === "string" && t.summary ? t.summary : null,
         items: (t.storyRefs ?? []).filter(ok).map((i: any) => {
           const a = i.itemId ? avail.get(i.itemId) : undefined;
           return {

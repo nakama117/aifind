@@ -1,0 +1,93 @@
+{
+  "at": "2026-10-04T12:03:14.717Z",
+  "before": {
+    "spent": 0.259005,
+    "limit": 8
+  },
+  "after": {
+    "spent": 0.259005,
+    "limit": 8
+  },
+  "periodMetricsCorrected": 17,
+  "scheduledCatchup": {
+    "generated": [],
+    "failed": []
+  },
+  "pendingPaid": [
+    {
+      "count": 0
+    }
+  ],
+  "pendingJobs": [],
+  "settingsKeys": [
+    {
+      "key": "alerts.state"
+    },
+    {
+      "key": "heartbeat.api:3101"
+    },
+    {
+      "key": "heartbeat.worker"
+    },
+    {
+      "key": "leaderboard.fetch"
+    },
+    {
+      "key": "selected_ledger_epoch"
+    },
+    {
+      "key": "watchdog.worker"
+    }
+  ],
+  "grouping": [
+    {
+      "grouping_status": "complete",
+      "count": 146
+    }
+  ],
+  "budget": [
+    {
+      "service": "openai",
+      "per_minute": 60,
+      "per_hour": 600,
+      "per_day": 2500
+    }
+  ],
+  "reports": [
+    {
+      "kind": "monthly",
+      "count": 4,
+      "min": "2026-06",
+      "max": "2026-09",
+      "retrospective": 4
+    },
+    {
+      "kind": "weekly",
+      "count": 13,
+      "min": "2026-W26",
+      "max": "2026-W39",
+      "retrospective": 13
+    },
+    {
+      "kind": "daily",
+      "count": 43,
+      "min": "2026-06-25",
+      "max": "2026-10-04",
+      "retrospective": 43
+    }
+  ],
+  "articles": [
+    {
+      "total": 146,
+      "selected": 86,
+      "missing_date": 0
+    }
+  ],
+  "sources": [
+    {
+      "total": 12,
+      "enabled": 0,
+      "fulltext_enabled": 0
+    }
+  ]
+}

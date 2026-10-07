@@ -4,7 +4,7 @@
 // Everything outward is off unless explicitly enabled (development and tests stay silent).
 import { readFile, unlink } from "node:fs/promises";
 import path from "node:path";
-import { beijingDate, beijingTime } from "@aihot/contracts/time";
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
 import { config, credential } from "../config.ts";
 import { sql } from "../db.ts";
 
@@ -84,14 +84,14 @@ export interface Finding {
 
 const MARK: Record<Exclude<Level, "digest">, string> = { now: "🔴", today: "🟠" };
 
-/** "9月29日" in Beijing time. */
-export function beijingDay(at: Date | string | number): string {
-  const [, m, d] = beijingDate(at).split("-").map(Number);
+/** "9月29日" in Tokyo time. */
+export function tokyoDay(at: Date | string | number): string {
+  const [, m, d] = tokyoDate(at).split("-").map(Number);
   return `${m}月${d}日`;
 }
 
-/** "9月29日 13:40" in Beijing time. */
-export const beijingStamp = (at: Date | string | number) => `${beijingDay(at)} ${beijingTime(at)}`;
+/** "9月29日 13:40" in Tokyo time. */
+export const tokyoStamp = (at: Date | string | number) => `${tokyoDay(at)} ${tokyoTime(at)}`;
 
 export function duration(ms: number): string {
   const min = Math.max(1, Math.round(ms / 60_000));
@@ -109,7 +109,7 @@ export function formatAlert(f: Finding, since: Date, now: number, repeat = false
 }
 
 export function formatRecovery(title: string, since: Date, now: number): { title: string; lines: string[] } {
-  return { title: `✅ 已恢复：${title}`, lines: [`持续 ${duration(now - since.getTime())}（${beijingStamp(since)} 起）`] };
+  return { title: `✅ 已恢复：${title}`, lines: [`持续 ${duration(now - since.getTime())}（${tokyoStamp(since)} 起）`] };
 }
 
 /** Operations alert: the alert chat, falling back to the internal feedback chat — never a content group. */

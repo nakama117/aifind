@@ -113,6 +113,11 @@ export interface TopicPagePart {
   news: (data: unknown) => string[];
 }
 
+export interface HomePagePart {
+  /** Internal site API only; SSR reads over HTTP, never from a module database import. */
+  apiPath: string;
+  Block: ComponentType<{ data: unknown }>;
+}
 export interface WebModule {
   /** Its folder under modules/. */
   name: string;
@@ -149,6 +154,7 @@ export interface WebModule {
   };
   agent?: Part<AgentPart>;
   topicPage?: Part<TopicPagePart>;
+  home?: Part<HomePagePart>;
   /** Paths of the marks it serves that are drawn in white, for a dark tile (components/BrandMark.tsx). */
   darkMarks?: string[];
   /** The starred page (routes/starred.tsx): buttons ahead of 导入文件 that bring stars in from elsewhere, each resolving to the line it reports. */

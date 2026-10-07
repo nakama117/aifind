@@ -4,7 +4,7 @@
 // snapshots answer conditional requests.
 import { CATEGORY_LABELS } from "@aihot/contracts/taxonomy";
 import { withSubject } from "@aihot/site";
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { ogEtag } from "../apps/api/src/og/render.ts";
 import { posterEtag } from "../apps/api/src/og/poster.ts";
 import { tag } from "./setup.ts";
@@ -438,7 +438,7 @@ test("share images keep detail metadata and access rules while conditional reads
   const d = JSON.parse((await get(`/api/site/items/${id}`)).body);
   const kicker = d.category ? CATEGORY_LABELS[d.category as keyof typeof CATEGORY_LABELS] : withSubject("动态");
   const source = d.source.name;
-  const date = beijingDate(d.timelineAt);
+  const date = tokyoDate(d.timelineAt);
   const card = { kicker, title: d.title, subtitle: d.summary, meta: `${source} · ${date}`,
     badge: d.selected && d.score !== null ? { value: String(Math.round(d.score)), label: "精选评分" } : null };
   const poster = { url: `${config.siteUrl}/items/${id}`, kicker, title: d.title, summary: d.summary, source, date, score: d.selected ? d.score : null };

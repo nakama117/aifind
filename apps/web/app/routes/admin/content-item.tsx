@@ -330,7 +330,7 @@ export default function ContentItem({ loaderData }: Route.ComponentProps) {
       <ReasonDialog
         open={dialog === "override"}
         title="人工修正"
-        description="人工值优先于模型输出，之后的重处理不会覆盖；留空表示不修正该字段（清除已有修正请选“清除”）。"
+        description="人工值优先于模型输出，之后的重处理不会覆盖。新字段留空沿用模型；清空已有人工值，或将选项改回“按模型 / 不修正”，会撤销该字段的人工修正。"
         confirmLabel="保存修正"
         busy={pending === "override"}
         onClose={() => setDialog(null)}

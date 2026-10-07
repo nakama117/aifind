@@ -1,0 +1,52 @@
+import '../../../tests/setup.ts';
+import {createTestDatabase,dropTestDatabase} from '../../../tests/database-cleanup.ts';
+import { after, test } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { randomBytes, createHash } from 'node:crypto';
+import postgres from 'postgres';
+import sharp from 'sharp';
+import { config } from '@aihot/backend/config';
+import { sql, closeDb } from '@aihot/backend/db';
+import { runBackup } from '@aihot/backend/operations/backup';
+import { uploadEditorialAsset, reviewEditorialAsset, checkedAssetBytes } from '../editorial/assets.ts';
+import { guideFixture, createGuide, publishGuide, guideActor, guideReason } from './guide-fixtures.ts';
+const run=promisify(execFile),stem=sql.options.database.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+after(closeDb);
+test('B01/B02/B03/B04 database dump plus uploads archive restores Guide relations and sanitized bytes; DB-only is incomplete',async()=>{
+  for(const k of Object.keys(process.env))if(k.startsWith('DB_BACKUP_STORE_'))delete process.env[k];
+  const a=await uploadEditorialAsset({bytes:await sharp({create:{width:48,height:24,channels:3,background:'#b06438'}}).png().toBuffer(),fileName:'backup.png',mime:'image/png',reason:guideReason},guideActor);
+  await reviewEditorialAsset(a.id,{rightsBasis:'self_captured',rightsNote:'Synthetic fixture',sourceUrl:null,rightsReviewed:true,privacyReviewed:true,reason:guideReason},guideActor);
+  const f=await guideFixture();f.content.guide.assets=[{assetId:a.id,role:'result',position:1,captionJa:'結果の合成図',altJa:'結果の合成図'}];const d=await publishGuide(await createGuide(f.content));
+  const before=await checkedAssetBytes(a);assert.ok(before);
+  await assert.rejects(runBackup(new Date('2026-10-07T03:01:00Z')),/backup made locally but not uploaded/);
+  const [row]=await sql`SELECT value FROM settings WHERE key='backup.last'`;assert.equal(row.value.uploaded,false);assert.equal(row.value.objects.length,2);assert.equal(row.value.filesError,undefined);
+  const directory=path.join(config.dataDir,'backups'),dump=path.join(directory,stem+'-202610070301.dump'),archive=path.join(directory,stem+'-files-202610070301.tar.gz');
+  const entries=(await run('tar',['-tzf',archive])).stdout.trim().split(/\r?\n/);assert.ok(entries.includes(a.storageKey));
+  const root=path.join(config.dataDir,'guide-restored-files');await fs.mkdir(root);await run('tar',['-xzf',archive,'-C',root]);
+  const restoredBytes=await fs.readFile(path.join(root,a.storageKey));assert.deepEqual(restoredBytes,before);
+  assert.equal(createHash('sha256').update(restoredBytes).digest('hex'),a.processedSha256);
+  const restoreName='aifind_guide_restore_'+randomBytes(6).toString('hex')+'_test',u=new URL(config.databaseUrl);
+  assert.ok(['127.0.0.1','localhost','[::1]'].includes(u.hostname));assert.match(u.pathname,/_(test|ci)$/);assert.equal(u.search,'');assert.match(restoreName,/^aifind_guide_restore_[a-f0-9]{12}_test$/);
+  u.pathname='/postgres';const admin=postgres(u.href,{max:1,onnotice:()=>{}});let restored:postgres.Sql|undefined;
+  try{
+    await createTestDatabase(config.databaseUrl,restoreName);u.pathname='/'+restoreName;
+    await run('pg_restore',['--exit-on-error','--no-owner','--dbname',u.href,dump],{maxBuffer:16*1024*1024});
+    restored=postgres(u.href,{max:1,onnotice:()=>{}});
+    const [rel]=await restored`SELECT r.asset_id,a.storage_key,a.processed_sha256 FROM af_editorial_revision_assets r JOIN af_editorial_assets a ON a.id=r.asset_id WHERE r.revision_id=${d.published!.id}`;
+    assert.equal(rel.asset_id,a.id);assert.equal(rel.storage_key,a.storageKey);assert.equal(rel.processed_sha256,a.processedSha256);
+    const [identity]=await restored`SELECT state,published_revision_id FROM af_editorial_documents WHERE id=${d.id}`;assert.equal(identity.state,'published');assert.equal(identity.published_revision_id,d.published!.id);
+    const dbOnly=path.join(config.dataDir,'guide-db-only-restore');await fs.mkdir(dbOnly);
+    await assert.rejects(fs.readFile(path.join(dbOnly,rel.storage_key)),{code:'ENOENT'});
+  }finally{await restored?.end();await dropTestDatabase(config.databaseUrl,restoreName);await admin.end();}
+});
+test('B05 a failed Guide file archive is recorded as incomplete, never a complete backup',async()=>{
+  const archive=path.join(config.dataDir,'backups',stem+'-files-202610070302.tar.gz');await fs.mkdir(archive,{recursive:true});
+  await assert.rejects(runBackup(new Date('2026-10-07T03:02:00Z')));
+  const [row]=await sql`SELECT value FROM settings WHERE key='backup.last'`;assert.equal(row.value.uploaded,false);assert.match(row.value.filesError,/tar/);
+  assert.equal(row.value.objects.some((o:{key:string})=>o.key.endsWith('.tar.gz')),false);
+  assert.equal(row.value.objects.some((o:{key:string})=>o.key.endsWith('.dump')),true);
+});

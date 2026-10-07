@@ -1,4 +1,4 @@
-// 1200×630 share images. satori lays out text with Noto Sans SC (assets/og-fonts) and emits glyphs
+// 1200×630 share images. satori lays out text with Noto Sans JP (assets/og-fonts) and emits glyphs
 // as paths, so rasterising with sharp needs no system fonts. Output is cached on disk by content.
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -8,7 +8,7 @@ import sharp from "sharp";
 import { config, REPO_ROOT } from "@aihot/backend/config";
 import { SITE } from "@aihot/site";
 
-export const OG_TEMPLATE_VERSION = "og-2026-09-29.1";
+export const OG_TEMPLATE_VERSION = "og-jp-2026-10-04.1";
 const WIDTH = 1200;
 const HEIGHT = 630;
 const CACHE_DIR = path.join(config.dataDir, "ogcache");
@@ -27,11 +27,11 @@ let fontsPromise: Promise<Array<{ name: string; data: Buffer; weight: 400 | 700;
 
 function fonts() {
   fontsPromise ??= Promise.all([
-    readFile(path.join(REPO_ROOT, "assets/og-fonts/noto-sans-sc-400.ttf")),
-    readFile(path.join(REPO_ROOT, "assets/og-fonts/noto-sans-sc-700.ttf")),
+    readFile(path.join(REPO_ROOT, "assets/og-fonts/noto-sans-jp-400.ttf")),
+    readFile(path.join(REPO_ROOT, "assets/og-fonts/noto-sans-jp-700.ttf")),
   ]).then(([regular, bold]) => [
-    { name: "Noto Sans SC", data: regular, weight: 400, style: "normal" },
-    { name: "Noto Sans SC", data: bold, weight: 700, style: "normal" },
+    { name: "Noto Sans JP", data: regular, weight: 400, style: "normal" },
+    { name: "Noto Sans JP", data: bold, weight: 700, style: "normal" },
   ]);
   return fontsPromise;
 }
@@ -97,7 +97,7 @@ async function tree(card: OgCard): Promise<Node> {
       display: "flex",
       flexDirection: "column",
       padding: "64px 72px",
-      fontFamily: "Noto Sans SC",
+      fontFamily: "Noto Sans JP",
       color: "#e6eded",
       backgroundColor: "#0a1012",
       backgroundImage: "radial-gradient(circle at 88% 8%, rgba(44,226,232,0.28), rgba(10,16,18,0) 46%), radial-gradient(circle at 0% 100%, rgba(23,107,117,0.35), rgba(10,16,18,0) 50%)",

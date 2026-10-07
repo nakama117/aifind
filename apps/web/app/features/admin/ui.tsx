@@ -272,6 +272,7 @@ export function ReasonDialog({
   confirmLabel = "确认",
   danger,
   requireReason = true,
+  copy,
   children,
   onClose,
   onSubmit,
@@ -283,6 +284,7 @@ export function ReasonDialog({
   confirmLabel?: string;
   danger?: boolean;
   requireReason?: boolean;
+  copy?: { reasonLabel: string; optionalLabel: string; placeholder: string; cancelLabel: string };
   children?: ReactNode;
   onClose: () => void;
   onSubmit: (reason: string) => Promise<boolean | void> | boolean | void;
@@ -326,12 +328,12 @@ export function ReasonDialog({
             {description && <div className="mt-1.5 text-[13px] leading-relaxed text-ink-3">{description}</div>}
             {children && <div className="mt-4 space-y-3">{children}</div>}
             <div className="mt-4">
-              <Field label={requireReason ? "原因（写进审计记录）" : "备注（可选）"}>
-                <Textarea ref={ref} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={requireReason ? "为什么做这个改动" : ""} rows={2} />
+              <Field label={requireReason ? copy?.reasonLabel ?? "原因（写进审计记录）" : copy?.optionalLabel ?? "备注（可选）"}>
+                <Textarea ref={ref} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={requireReason ? copy?.placeholder ?? "为什么做这个改动" : ""} rows={2} />
               </Field>
             </div>
             <div className="mt-5 flex justify-end gap-2">
-              <Button tone="ghost" onClick={onClose}>取消</Button>
+              <Button tone="ghost" onClick={onClose}>{copy?.cancelLabel ?? "取消"}</Button>
               <Button type="submit" tone={danger ? "danger" : "primary"} busy={busy} disabled={requireReason && !reason.trim()}>
                 {confirmLabel}
               </Button>

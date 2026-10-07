@@ -6,25 +6,31 @@ import { sql } from "../db.ts";
 import { sha256 } from "../lib/ids.ts";
 import { z } from "zod";
 import { ModelOutputError } from "./llm.ts";
-import { completeReceipt, paidRequest, ProviderRejectedError, rejectReceivedResponse } from "./receipts.ts";
+import { assertAccepted, completeReceipt, paidRequest, ProviderRejectedError, rejectReceivedResponse } from "./receipts.ts";
+import { openaiCost } from "./openai-cost.ts";
 
-const own = !!credential("models", "EMBEDDING_API_KEY");
+const useOpenaiKey = !credential("models", "EMBEDDING_API_KEY") && !!credential("models", "OPENAI_API_KEY");
+const own = useOpenaiKey || !!credential("models", "EMBEDDING_API_KEY");
+const explicitBase = (credential("models", "EMBEDDING_BASE_URL") ?? "https://api.openai.com/v1").replace(/\/+$/, "");
+const openaiBase = (credential("models", "OPENAI_BASE_URL") ?? "https://api.openai.com/v1").replace(/\/+$/, "");
+// An explicit embedding key does not make the same OpenAI endpoint a different billing service.
+const openai = useOpenaiKey || (own && (explicitBase === openaiBase || new URL(explicitBase).origin === "https://api.openai.com"));
 export const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || (own ? "text-embedding-3-small" : "text-embedding-v4");
 /** Requested dimensions, when the provider takes the parameter (0 leaves it to the model). */
 export const EMBEDDING_DIMS = Number(process.env.EMBEDDING_DIMS ?? (own ? 0 : 1024));
-const SERVICE = own ? "embedding" : "dashscope";
+const SERVICE = openai ? "openai" : own ? "embedding" : "dashscope";
 /** A vector of the configured size; a stored one of another size (EMBEDDING_DIMS changed) is computed again. */
 const VECTOR = EMBEDDING_DIMS > 0 ? z.array(z.number()).length(EMBEDDING_DIMS) : z.array(z.number()).min(1);
 
 /** Embeddings are paid model calls: MODEL_CALLS_ENABLED=false switches them off like every other call. */
 export function embeddingsAvailable(): boolean {
-  return config.modelCallsEnabled && !!(credential("models", "EMBEDDING_API_KEY") ?? credential("models", "DASHSCOPE_API_KEY"));
+  return config.modelCallsEnabled && !!(credential("models", "EMBEDDING_API_KEY") ?? credential("models", "OPENAI_API_KEY") ?? credential("models", "DASHSCOPE_API_KEY"));
 }
 
 async function embedBatch(texts: string[], subject: string): Promise<{ vectors: number[][]; receiptId: number }> {
   if (!config.modelCallsEnabled) throw new Error("Model calls are disabled (MODEL_CALLS_ENABLED=false)");
-  const base = own ? credential("models", "EMBEDDING_BASE_URL") ?? "https://api.openai.com/v1" : credential("models", "DASHSCOPE_BASE_URL") ?? "https://dashscope.aliyuncs.com/compatible-mode/v1";
-  const key = own ? credential("models", "EMBEDDING_API_KEY") : credential("models", "DASHSCOPE_API_KEY");
+  const base = useOpenaiKey ? credential("models", "OPENAI_BASE_URL") ?? "https://api.openai.com/v1" : own ? credential("models", "EMBEDDING_BASE_URL") ?? "https://api.openai.com/v1" : credential("models", "DASHSCOPE_BASE_URL") ?? "https://dashscope.aliyuncs.com/compatible-mode/v1";
+  const key = useOpenaiKey ? credential("models", "OPENAI_API_KEY") : own ? credential("models", "EMBEDDING_API_KEY") : credential("models", "DASHSCOPE_API_KEY");
   if (!key) throw new Error("EMBEDDING_API_KEY (or DASHSCOPE_API_KEY) missing");
   const receipt = await paidRequest(
     { service: SERVICE, model: EMBEDDING_MODEL, purpose: "embedding", subject, identity: { model: EMBEDDING_MODEL, dims: EMBEDDING_DIMS, texts: texts.map((t) => sha256(t)) }, requestSummary: { count: texts.length } },
@@ -36,13 +42,13 @@ async function embedBatch(texts: string[], subject: string): Promise<{ vectors: 
         signal: AbortSignal.timeout(60_000),
       });
       const text = await res.text();
-      if (!res.ok) throw new ProviderRejectedError(`embeddings HTTP ${res.status}: ${text.slice(0, 200)}`, res.status, res.status === 429 || res.status >= 500);
+      assertAccepted(SERVICE, res.status, text);
       let response: unknown;
       try { response = JSON.parse(text); }
       catch { response = { unparsable: text.slice(0, 20000) }; }
       const usage = response && typeof response === "object" && "usage" in response
         ? response.usage as Record<string, unknown> : null;
-      return { response, usage, cost: null };
+      return { response, usage, cost: openai ? openaiCost(EMBEDDING_MODEL, usage) : null };
     },
   );
   try {

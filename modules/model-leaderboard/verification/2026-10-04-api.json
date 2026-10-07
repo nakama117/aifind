@@ -1,0 +1,462 @@
+{
+  "at": "2026-10-04T11:10:49.626Z",
+  "expectedRun": "bs64mal4z663ryufonwtn1etg",
+  "boards": [
+    {
+      "key": "overall",
+      "status": 200,
+      "run": {
+        "id": "bs64mal4z663ryufonwtn1etg",
+        "methodologyVersion": "2026.10-observed-evidence-v17",
+        "generatedAt": "2026-10-04T11:04:04.794Z",
+        "fx": null
+      },
+      "displayed": 30,
+      "sources": 14,
+      "operators": 6,
+      "top": "Claude Opus 5.5",
+      "siteEqualsPublic": true,
+      "etagStatus": 304,
+      "modelScoreMatches": true
+    },
+    {
+      "key": "coding",
+      "status": 200,
+      "run": {
+        "id": "bs64mal4z663ryufonwtn1etg",
+        "methodologyVersion": "2026.10-observed-evidence-v17",
+        "generatedAt": "2026-10-04T11:04:04.794Z",
+        "fx": null
+      },
+      "displayed": 28,
+      "sources": 2,
+      "operators": 2,
+      "top": "Claude Fable 5",
+      "siteEqualsPublic": true,
+      "etagStatus": 304,
+      "modelScoreMatches": true
+    },
+    {
+      "key": "reasoning",
+      "status": 200,
+      "run": {
+        "id": "bs64mal4z663ryufonwtn1etg",
+        "methodologyVersion": "2026.10-observed-evidence-v17",
+        "generatedAt": "2026-10-04T11:04:04.794Z",
+        "fx": null
+      },
+      "displayed": 30,
+      "sources": 5,
+      "operators": 2,
+      "top": "GPT-6 Astra",
+      "siteEqualsPublic": true,
+      "etagStatus": 304,
+      "modelScoreMatches": true
+    },
+    {
+      "key": "knowledge",
+      "status": 200,
+      "run": {
+        "id": "bs64mal4z663ryufonwtn1etg",
+        "methodologyVersion": "2026.10-observed-evidence-v17",
+        "generatedAt": "2026-10-04T11:04:04.794Z",
+        "fx": null
+      },
+      "displayed": 30,
+      "sources": 2,
+      "operators": 1,
+      "top": "GPT-6 Astra",
+      "siteEqualsPublic": true,
+      "etagStatus": 304,
+      "modelScoreMatches": true
+    },
+    {
+      "key": "professional",
+      "status": 200,
+      "run": {
+        "id": "bs64mal4z663ryufonwtn1etg",
+        "methodologyVersion": "2026.10-observed-evidence-v17",
+        "generatedAt": "2026-10-04T11:04:04.794Z",
+        "fx": null
+      },
+      "displayed": 30,
+      "sources": 2,
+      "operators": 2,
+      "top": "Gemini 4 Argon",
+      "siteEqualsPublic": true,
+      "etagStatus": 304,
+      "modelScoreMatches": true
+    }
+  ],
+  "sources": [
+    {
+      "key": "arena-creative-writing",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-10-02T00:00:00.000Z",
+      "syncedAt": "2026-10-04T11:02:00.821Z",
+      "officialUrl": "https://arena.ai/leaderboard/text/creative-writing",
+      "licenseRecord": "CC BY 4.0 · LMArena の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "arena-vision",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-10-02T00:00:00.000Z",
+      "syncedAt": "2026-10-04T11:02:01.085Z",
+      "officialUrl": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
+      "licenseRecord": "CC BY 4.0"
+    },
+    {
+      "key": "deepswe-v1-1",
+      "status": 200,
+      "rows": 28,
+      "upstreamAt": "2026-09-22T06:27:15.860Z",
+      "syncedAt": "2026-10-04T11:02:05.708Z",
+      "officialUrl": "https://deepswe.datacurve.ai/",
+      "licenseRecord": "公式公開データ。従来記録は管理者の私的観察用で、公開前に許諾を再確認します。"
+    },
+    {
+      "key": "epoch-chess",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:02:05.469Z",
+      "officialUrl": "https://epoch.ai/benchmarks/chess-puzzles",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "epoch-frontiermath",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:02:05.331Z",
+      "officialUrl": "https://epoch.ai/benchmarks/frontiermath-tiers-1-3-v2",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "epoch-frontiermath-tier4",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:02:05.414Z",
+      "officialUrl": "https://epoch.ai/benchmarks/frontiermath-tier-4-v2",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "epoch-gpqa",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:00:47.277Z",
+      "officialUrl": "https://epoch.ai/benchmarks/gpqa-diamond",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "epoch-mystery",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:02:05.602Z",
+      "officialUrl": "https://epoch.ai/benchmarks/mystery-game-puzzles",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "epoch-simpleqa",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T22:00:34.000Z",
+      "syncedAt": "2026-10-04T11:00:47.221Z",
+      "officialUrl": "https://epoch.ai/benchmarks/simple-qa-verified",
+      "licenseRecord": "CC BY 4.0 · Epoch AI の公式評価データ。帰属と出典リンク、集約による変更を表示します。"
+    },
+    {
+      "key": "livebench-coding",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T19:01:46.000Z",
+      "syncedAt": "2026-10-04T11:00:47.153Z",
+      "officialUrl": "https://livebench.ai/#/?cats=Coding%2CAgentic+Coding&ft=1",
+      "licenseRecord": "Apache 2.0"
+    },
+    {
+      "key": "livebench-reasoning",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T19:01:46.000Z",
+      "syncedAt": "2026-10-04T11:00:47.189Z",
+      "officialUrl": "https://livebench.ai/#/?cats=Reasoning%2CMathematics&ft=1",
+      "licenseRecord": "Apache 2.0"
+    },
+    {
+      "key": "livebench-writing",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-29T19:01:46.000Z",
+      "syncedAt": "2026-10-04T11:00:47.109Z",
+      "officialUrl": "https://livebench.ai/#/?cats=Language%2CIF&ft=1",
+      "licenseRecord": "Apache 2.0"
+    },
+    {
+      "key": "mercor-apex-agents",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-09-08T00:00:00.000Z",
+      "syncedAt": "2026-10-04T11:02:07.786Z",
+      "officialUrl": "https://www.mercor.com/apex/apex-agents-leaderboard/",
+      "licenseRecord": "評価結果の再表示・再配布条件は未確認です。コードや問題集のライセンスを結果の許諾に置き換えません。"
+    },
+    {
+      "key": "vals-finance-agent",
+      "status": 200,
+      "rows": 30,
+      "upstreamAt": "2026-10-01T00:00:00.000Z",
+      "syncedAt": "2026-10-04T11:02:07.822Z",
+      "officialUrl": "https://www.vals.ai/benchmarks/fabv2",
+      "licenseRecord": "公式公開結果。帰属を保持し、再配布の許諾は提供者の利用条件に従います。"
+    }
+  ],
+  "pages": [
+    {
+      "path": "/leaderboard",
+      "status": 200,
+      "title": "総合モデルランキング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/boards/coding",
+      "status": 200,
+      "title": "コーディングモデルランキング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/boards/reasoning",
+      "status": 200,
+      "title": "推論モデルランキング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/boards/knowledge",
+      "status": 200,
+      "title": "知識モデルランキング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/boards/professional",
+      "status": 200,
+      "title": "専門業務モデルランキング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources",
+      "status": 200,
+      "title": "評価データの出典 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": false
+    },
+    {
+      "path": "/leaderboard/rules",
+      "status": 200,
+      "title": "評価方法と読み方 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/claude-opus-5-5",
+      "status": 200,
+      "title": "Claude Opus 5.5 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/claude-fable-5",
+      "status": 200,
+      "title": "Claude Fable 5 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/gpt-6-astra",
+      "status": 200,
+      "title": "GPT-6 Astra · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/gemini-4-argon",
+      "status": 200,
+      "title": "Gemini 4 Argon · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/arena-creative-writing",
+      "status": 200,
+      "title": "Arena · 創作 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/arena-vision",
+      "status": 200,
+      "title": "Arena Vision · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/deepswe-v1-1",
+      "status": 200,
+      "title": "DeepSWE v1.1 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-chess",
+      "status": 200,
+      "title": "Chess Puzzles · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-frontiermath",
+      "status": 200,
+      "title": "FrontierMath v2 · Tiers 1–3 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-frontiermath-tier4",
+      "status": 200,
+      "title": "FrontierMath v2 · Tier 4 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-gpqa",
+      "status": 200,
+      "title": "GPQA Diamond · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-mystery",
+      "status": 200,
+      "title": "Mystery Game Puzzles · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/epoch-simpleqa",
+      "status": 200,
+      "title": "SimpleQA Verified · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/livebench-coding",
+      "status": 200,
+      "title": "LiveBench · コーディング · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/livebench-reasoning",
+      "status": 200,
+      "title": "LiveBench · 推論と数学 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/livebench-writing",
+      "status": 200,
+      "title": "LiveBench · 言語と指示 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/mercor-apex-agents",
+      "status": 200,
+      "title": "APEX-Agents 1.1 · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    },
+    {
+      "path": "/leaderboard/sources/vals-finance-agent",
+      "status": 200,
+      "title": "Vals Finance Agent · AI Signal JP",
+      "language": "ja-JP",
+      "jst": true
+    }
+  ],
+  "links": [
+    {
+      "url": "https://arena.ai/leaderboard/text/creative-writing",
+      "status": 200,
+      "resolvedUrl": "https://arena.ai/leaderboard/text/creative-writing"
+    },
+    {
+      "url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
+      "status": 200,
+      "resolvedUrl": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset"
+    },
+    {
+      "url": "https://deepswe.datacurve.ai/",
+      "status": 200,
+      "resolvedUrl": "https://deepswe.datacurve.ai/"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/chess-puzzles",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/chess-puzzles"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/frontiermath-tiers-1-3-v2",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/frontiermath-tiers-1-3-v2"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/frontiermath-tier-4-v2",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/frontiermath-tier-4-v2"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/gpqa-diamond",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/gpqa-diamond"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/mystery-game-puzzles",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/mystery-game-puzzles"
+    },
+    {
+      "url": "https://epoch.ai/benchmarks/simple-qa-verified",
+      "status": 200,
+      "resolvedUrl": "https://epoch.ai/benchmarks/simple-qa-verified"
+    },
+    {
+      "url": "https://livebench.ai/",
+      "status": 200,
+      "resolvedUrl": "https://livebench.ai/"
+    },
+    {
+      "url": "https://www.mercor.com/apex/apex-agents-leaderboard/",
+      "status": 200,
+      "resolvedUrl": "https://www.mercor.com/apex/apex-agents-leaderboard/"
+    },
+    {
+      "url": "https://www.vals.ai/benchmarks/fabv2",
+      "status": 200,
+      "resolvedUrl": "https://www.vals.ai/benchmarks/fabv2"
+    }
+  ],
+  "internalLinks": {
+    "checked": 150,
+    "failures": 0
+  }
+}

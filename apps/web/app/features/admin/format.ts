@@ -1,10 +1,10 @@
-// Admin display helpers: Beijing wall-clock times, relative ages, compact numbers.
-import { beijingDate, beijingTime } from "@aihot/contracts/time";
+// Admin display helpers: Tokyo wall-clock times, relative ages, compact numbers.
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
 
 export function bj(iso: string | Date | null | undefined, withYear = false): string {
   if (!iso || Number.isNaN(new Date(iso).getTime())) return "—";
-  const date = beijingDate(iso);
-  return `${withYear ? date : date.slice(5)} ${beijingTime(iso)}`;
+  const date = tokyoDate(iso);
+  return `${withYear ? date : date.slice(5)} ${tokyoTime(iso)}`;
 }
 
 export function ago(iso: string | Date | null | undefined, now = Date.now()): string {

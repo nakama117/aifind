@@ -1,3 +1,4 @@
+import { isJapaneseText } from "@aihot/contracts/language";
 // Public read layer, item level. Every exit (site API, v1, RSS, MCP, sitemap) reads
 // items through these columns and views; which rows are public is decided by scope.ts.
 import type { CategoryKey, ChannelKey } from "@aihot/contracts/taxonomy";
@@ -65,7 +66,7 @@ export const ITEM_FROM = sql`
   JOIN sources s ON s.id = p.source_id
   JOIN articles a ON a.id = p.article_id
   LEFT JOIN stories st ON st.id = p.story_id AND st.merged_into IS NULL
-  LEFT JOIN translations tr ON tr.article_id = p.article_id AND tr.lang = 'zh' AND tr.revision >= a.revision
+  LEFT JOIN translations tr ON tr.article_id = p.article_id AND tr.lang = 'ja' AND tr.revision >= a.revision
   LEFT JOIN quote_translations qt ON p.channel = 'x' AND qt.tweet_id = substring(a.x_post->'quoted'->>'url' from '/status/([0-9]+)')`;
 
 export function channelCondition(channel: ChannelKey | null | undefined) {
@@ -179,13 +180,13 @@ export function toFeedItemSummary(row: ItemRow): FeedItemSummary {
  * An article written in Chinese: its language says so, or its text opens in Chinese and it is not marked
  * English (the translator's rule, editorial/translate.ts). Every exit shows such a body as it is.
  */
-export function isChineseBody(a: { language?: string | null; body_text?: string | null }): boolean {
-  return a.language === "zh" || (/[一-鿿]/.test(a.body_text?.slice(0, 400) ?? "") && a.language !== "en");
+export function isJapaneseBody(a: { language?: string | null; body_text?: string | null }): boolean {
+  return isJapaneseText(a.body_text?.slice(0, 400) ?? "", a.language);
 }
 
 /** The complete Chinese translation an export (Markdown, full RSS) carries; a page also shows a partial one. */
 export function exportTranslation(a: { language?: string | null; body_text?: string | null; tr_html?: string | null; tr_complete?: boolean | null }): string | null {
-  return !isChineseBody(a) && a.tr_html && a.tr_complete ? a.tr_html : null;
+  return !isJapaneseBody(a) && a.tr_html && a.tr_complete ? a.tr_html : null;
 }
 
 /**

@@ -4,14 +4,15 @@
 //   today  — money at risk or only the owner can act: sent at once, repeated at most daily, recovery reported.
 //   digest — other follow-ups: one 09:00 message a day, meant to be handed to the AI.
 // Delivery goes through sendAlert (ops chat, internal-chat fallback; off unless FEISHU_INTERNAL_ENABLED).
-import { beijingDate, beijingTime } from "@aihot/contracts/time";
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
 import { ALERTS } from "@aihot/site";
 import { sql } from "../db.ts";
-import { beijingDay, beijingStamp, duration, formatAlert, formatRecovery, sendAlert, type Finding, type Level } from "../notify/feishu.ts";
+import { tokyoDay, tokyoStamp, duration, formatAlert, formatRecovery, sendAlert, type Finding, type Level } from "../notify/feishu.ts";
 import { backupConfigured } from "./backup.ts";
 import { GROUPING_WARN_AFTER_MS, waitingSelectedNews } from "./grouping.ts";
 import { upstreamFindings } from "../media/upstream.ts";
 import { serverModules } from "../modules.ts";
+import { openaiMonthUsage } from "../providers/openai-cost.ts";
 
 const REPEAT_MS: Record<Exclude<Level, "digest">, number> = { now: 3600_000, today: 24 * 3600_000 };
 
@@ -46,7 +47,7 @@ export async function collectFindings(now = Date.now()): Promise<Finding[]> {
           key: "content.collect",
           level: "now",
           title: "网站停止收录新内容",
-          impact: last?.at ? `最后一篇新文章收录于 ${beijingStamp(last.at)}，之后网站不会出现新内容` : "一天内没有收录任何新文章",
+          impact: last?.at ? `最后一篇新文章收录于 ${tokyoStamp(last.at)}，之后网站不会出现新内容` : "一天内没有收录任何新文章",
           heals: ALERTS.usualFlow ? `没有，${ALERTS.usualFlow}` : "没有",
           action: "转给 AI 立即处理",
           detail: `articles.discovered_at 超过 ${QUIET_MINUTES} 分钟没有新值；查 sources.schedule、出网代理与采集失败`,
@@ -96,8 +97,8 @@ export async function collectFindings(now = Date.now()): Promise<Finding[]> {
       });
     }
     // The daily report is composed at 08:00, and tried again every half hour until it exists.
-    if (Number(beijingTime(now).slice(0, 2)) >= 10) {
-      const [r] = await sql`SELECT 1 FROM reports WHERE kind = 'daily' AND key = ${beijingDate(now)}`;
+    if (Number(tokyoTime(now).slice(0, 2)) >= 10) {
+      const [r] = await sql`SELECT 1 FROM reports WHERE kind = 'daily' AND key = ${tokyoDate(now)}`;
       if (!r) {
         out.push({
           key: "report.daily",
@@ -106,7 +107,7 @@ export async function collectFindings(now = Date.now()): Promise<Finding[]> {
           impact: "读者看不到今天的日报",
           heals: "系统每半小时补做一次，到现在还没成功",
           action: "转给 AI 处理",
-          detail: `reports daily ${beijingDate(now)} 不存在；看 reports.compose 的运行记录`,
+          detail: `reports daily ${tokyoDate(now)} 不存在；看 reports.compose 的运行记录`,
         });
       }
     }
@@ -150,11 +151,11 @@ export async function collectFindings(now = Date.now()): Promise<Finding[]> {
         impact: lastOk ? `万一服务器出事，最近 ${duration(age)} 的数据可能无法完整恢复` : "还没有成功的完整备份，服务器出事时可能无法恢复数据",
         heals: "不会",
         action: "转给 AI 处理",
-        detail: `${lastOk ? "最近一次成功" : "首次备份尝试"} ${beijingStamp(since)}${state ? `；${state}` : ""}；看 ops.backup 的运行记录`,
+        detail: `${lastOk ? "最近一次成功" : "首次备份尝试"} ${tokyoStamp(since)}${state ? `；${state}` : ""}；看 ops.backup 的运行记录`,
         since: new Date(since),
       });
     } else if (!b || !b.value.uploaded || age > 30 * 3600_000) {
-      out.push({ key: "backup.stale", level: "digest", title: "数据库备份超过一天没成功", detail: b ? `最近一次 ${beijingStamp(b.value.at)}${state ? `（${state}）` : ""}；看 ops.backup` : "还没有成功的备份记录" });
+      out.push({ key: "backup.stale", level: "digest", title: "数据库备份超过一天没成功", detail: b ? `最近一次 ${tokyoStamp(b.value.at)}${state ? `（${state}）` : ""}；看 ops.backup` : "还没有成功的备份记录" });
     }
   }
 
@@ -207,6 +208,20 @@ export const providerConsole = (service: string) => PROVIDERS[service]?.where ??
 /** Paid services that refuse us (no balance, a dead key), and daily budgets used up. */
 async function providerFindings(): Promise<Finding[]> {
   const out: Finding[] = [];
+  const pauses = await sql<{ service: string; reason: string; paused_at: Date }[]>`SELECT service, reason, paused_at FROM provider_pauses`;
+  for (const p of pauses) out.push({
+    key: `provider.paused.${p.service}`, level: "today", title: `${providerName(p.service)} 因费用问题暂停`,
+    impact: "停止新的付费生成，已发布内容继续提供，已付款回执仍可恢复", heals: "不会自动恢复",
+    action: "先在平台确认项目额度与余额已恢复，再手动清除本站对应的 provider_pauses 记录；不要提高额度来掩盖异常调用",
+    detail: `${tokyoDate(p.paused_at)} ${tokyoTime(p.paused_at)} 日本时间：${p.reason}`,
+  });
+  const { spent, limit } = await openaiMonthUsage(sql);
+  if (Number.isFinite(limit) && limit > 0 && spent >= limit * 0.8) out.push({
+    key: "budget.month.openai", level: "today", title: "OpenAI 本月估算费用已达到提醒线",
+    impact: spent >= limit ? "本站暂停新的生成，已发布内容继续提供" : "接近预算；包括重试、评测和向量调用", heals: "下个 UTC 账月重新累计",
+    action: "检查 OpenAI 项目的实际账单与 $8 硬额度；本站估算有延迟，不能替代平台硬额度",
+    detail: `本月估算 $${spent.toFixed(4)} / $${limit.toFixed(2)}（80% 提醒，USD）`,
+  });
   const refused = await sql<{ service: string; n: number; last: string }[]>`
     SELECT service, count(*)::int AS n, (array_agg(left(error, 200) ORDER BY started_at DESC))[1] AS last FROM receipt_attempts
     WHERE status = 'failed' AND started_at > now() - interval '1 hour'
@@ -277,6 +292,6 @@ export async function sendDigest(now = Date.now()) {
   const items = (await collectFindings(now)).filter((f) => f.level === "digest");
   const lines = items.map((f, i) => `${i + 1}. ${f.title}${f.detail ? `\n   ${f.detail}` : ""}`);
   if (!lines.length) return { items: 0 };
-  await sendAlert(`📋 系统日报 · ${beijingDay(now)}`, ["以下事项需要跟进，具体影响见各条说明；可把整条转给 AI 处理。", ...lines]);
+  await sendAlert(`📋 系统日报 · ${tokyoDay(now)}`, ["以下事项需要跟进，具体影响见各条说明；可把整条转给 AI 处理。", ...lines]);
   return { items: lines.length };
 }

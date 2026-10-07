@@ -1,7 +1,16 @@
 import * as cheerio from "cheerio";
-import { marked } from "marked";
+import { marked, Renderer } from "marked";
 import TurndownService from "turndown";
 import { sanitizeBody, trimTrailingChrome } from "./sanitize.ts";
+import { escapeXml } from "../lib/text.ts";
+
+/** Authored copy uses the same parser/sanitizer, but raw HTML and media are plain text. */
+export function authoredMarkdownBody(markdown: string, url: string): string {
+  const renderer = new Renderer();
+  renderer.html = ({ text }) => escapeXml(text);
+  renderer.image = ({ text }) => escapeXml(text);
+  return sanitizeBody(marked.parse(markdown, { async: false, gfm: true, renderer }), url);
+}
 
 const turndown = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced", bulletListMarker: "-" });
 // Markdown has no equivalent for these structures; the HTML has already been sanitised.

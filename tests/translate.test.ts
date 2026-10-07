@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import { closeDb, sql } from "@aihot/backend/db";
 import { upsertMaterial } from "@aihot/backend/content/materials";
-import { translatePending } from "@aihot/backend/editorial/translate";
+import { translatePending, translateQuotes } from "@aihot/backend/editorial/translate";
 import { stopBoss } from "@aihot/backend/jobs/queue";
 import { publishArticle } from "@aihot/backend/publication/publish";
 import { buildApp } from "../apps/api/src/app.ts";
@@ -141,4 +141,17 @@ test("the post a selected X post quotes is translated once and shown with the it
   await translatePending({ limit: 1 });
   const receipts = await sql`SELECT 1 FROM receipts WHERE purpose = 'translate_quoted' AND subject = ${`quote:${tweetId}`}`;
   assert.equal(receipts.length, 1, "translated once");
+});
+
+test("Chinese quoted posts are translated while kana Japanese quoted posts are not billed", async () => {
+  for (const [index, text, translated] of [[1,"我们今天发布了全新的人工智能开发工具。",true],[2,"あたらしいツールをきょうリリースしました。",false]] as const) {
+    const tweetId = `6${Date.now()}${index}`;
+    const mainId = `5${tweetId}`;
+    const { articleId } = await upsertMaterial({sourceId:SOURCE,url:`https://x.com/bcherny/status/${mainId}`,title:"新しいツールの引用",language:"ja",bodyText:"新しいツールです。",bodyStatus:"ok",via:"fetch",publishedAt:new Date(),xPost:{tweetId:mainId,authorName:"Boris",handle:"bcherny",text:"新しいツールです。",quoted:{authorName:"Author",handle:"author",text,url:`https://x.com/author/status/${tweetId}`}}});
+    await sql`INSERT INTO analyses(article_id,input_revision,origin,relevance,category,title_zh,summary_zh,score,selected) VALUES (${articleId},1,'rule','pass','ai-models','新しいツールの引用','新しいツールです。',90,true)`;
+    await publishArticle(articleId,{releasedAt:new Date(Date.now()-60_000)});
+    await translateQuotes();
+    const receipts = await sql`SELECT id FROM receipts WHERE purpose='translate_quoted' AND subject=${`quote:${tweetId}`}`;
+    assert.equal(receipts.length,translated ? 1 : 0,text);
+  }
 });

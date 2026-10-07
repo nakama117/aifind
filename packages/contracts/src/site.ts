@@ -283,6 +283,8 @@ export interface ReportCitation {
 
 export interface ReportDetail {
   kind: ReportKind;
+  /** Compiled later from original source dates, not a contemporaneous issue. */
+  retrospective?: boolean;
   key: string;
   /** The issue's place among the existing issues of its kind, oldest first ("第 N 期"). */
   issueNumber: number;

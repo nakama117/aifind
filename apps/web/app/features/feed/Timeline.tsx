@@ -9,8 +9,8 @@ import { FeedItem } from "./FeedItem";
 import { IconChevronDown } from "../../components/icons";
 import { RingMark } from "@aihot/site/brand/Logo.tsx";
 import { EmptyState } from "../../components/ui/Page";
-import { beijingDate, beijingTime, beijingWeekday } from "@aihot/contracts/time";
-import { monthDay, weekdayShort } from "../../lib/format";
+import { tokyoDate, tokyoTime, tokyoWeekday } from "@aihot/contracts/time";
+import { approximateTimeline, monthDay, weekdayShort } from "../../lib/format";
 import { isHydrated } from "../../lib/hydration";
 import { markRead, useReadSet } from "../../lib/local-state";
 import { filterParams, listPath } from "../../lib/seo";
@@ -34,18 +34,18 @@ function fromResponse(r: TimelineResponse): ListState {
 /** Sticky day header under the phone bar: a quiet row on desktop, a grey full-width bar on phones. */
 export function DayHeader({ day, today, count, collapsed, onToggle, aside }: { day: string; today: string; count: number | null; collapsed?: boolean; onToggle?: () => void; aside?: React.ReactNode }) {
   const date = monthDay(day);
-  const weekday = beijingWeekday(day);
+  const weekday = tokyoWeekday(day);
   const short = weekdayShort(day);
   const phoneRow = (
     <>
-      <span className="text-[14px] font-bold text-ink">{day === today ? "今天" : date}</span>
+      <span className="text-[14px] font-bold text-ink">{day === today ? "今日" : date}</span>
       {day === today && <span className="text-[12.5px] text-ink-4">{date}</span>}
       <span className="text-[12.5px] text-ink-4">{short}</span>
       <span className="ml-auto flex items-center gap-1 text-[12.5px] text-ink-4">
         {aside}
         {count !== null && (
           <span>
-            <span className="num">{count}</span> 条
+            <span className="num">{count}</span> 件
           </span>
         )}
         {onToggle && <IconChevronDown size={15} className={`transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`} />}
@@ -56,7 +56,7 @@ export function DayHeader({ day, today, count, collapsed, onToggle, aside }: { d
     <div className="bleed sticky top-[var(--bar-h)] z-20 bg-daybar lg:mx-0 lg:bg-bg lg:px-0">
       {/* Phones: a full-width day bar; on the timeline the whole bar folds the day. */}
       {onToggle ? (
-        <button type="button" onClick={onToggle} aria-expanded={!collapsed} aria-label={`${collapsed ? "展开" : "收起"}${date}`} className="flex h-11 w-full items-center gap-2 text-left lg:hidden">
+        <button type="button" onClick={onToggle} aria-expanded={!collapsed} aria-label={`${collapsed ? "展開" : "折りたたむ"}${date}`} className="flex h-11 w-full items-center gap-2 text-left lg:hidden">
           {phoneRow}
         </button>
       ) : (
@@ -76,7 +76,7 @@ export function DayHeader({ day, today, count, collapsed, onToggle, aside }: { d
             type="button"
             onClick={onToggle}
             aria-expanded={!collapsed}
-            aria-label={collapsed ? `展开${date}` : `收起${date}`}
+            aria-label={collapsed ? `${date}を展開` : `${date}を折りたたむ`}
             className="grid size-6 place-items-center justify-self-center rounded-full text-ink-4 transition-colors hover:bg-bg-sunk hover:text-ink"
           >
             <IconChevronDown size={14} className={`transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`} />
@@ -87,7 +87,7 @@ export function DayHeader({ day, today, count, collapsed, onToggle, aside }: { d
           {count !== null && (
             <>
               {" · "}
-              <span className="num">{count}</span> 条
+              <span className="num">{count}</span> 件
             </>
           )}
         </span>
@@ -101,7 +101,7 @@ export function DayHeader({ day, today, count, collapsed, onToggle, aside }: { d
  * One dated slot: the time, the rail (desktop) and the item. As on the original timeline, the rail is a
  * 1px line from this node's centre to the next one's, so the day reads as one continuous thread.
  */
-export function TimelineSlot({ at, children, fresh = false, delay = 0, dataKey }: { at: string; children: React.ReactNode; fresh?: boolean; delay?: number; dataKey?: string }) {
+export function TimelineSlot({ at, children, fresh = false, delay = 0, dataKey, approximate = false }: { at: string; children: React.ReactNode; fresh?: boolean; delay?: number; dataKey?: string; approximate?: boolean }) {
   return (
     <li
       data-card-key={dataKey}
@@ -110,8 +110,8 @@ export function TimelineSlot({ at, children, fresh = false, delay = 0, dataKey }
     >
       {/* Phones: the row without the rail (the item shows its time); a hairline between rows. */}
       <div className="grid grid-cols-[minmax(0,1fr)] border-b border-line-soft py-3.5 group-last/slot:border-b-0 lg:grid-cols-[64px_22px_minmax(0,1fr)] lg:border-b-0 lg:py-0 lg:pb-3 lg:group-last/slot:pb-0">
-        <time dateTime={at} className="mono hidden text-ink-3 lg:block lg:pt-[17px] lg:text-[12.5px] lg:font-semibold lg:leading-6">
-          {beijingTime(at)}
+        <time dateTime={approximate ? tokyoDate(at) : at} className="mono hidden text-ink-3 lg:block lg:pt-[17px] lg:text-[12.5px] lg:font-semibold lg:leading-6">
+          {approximate ? "日付のみ" : tokyoTime(at)}
         </time>
         <span aria-hidden="true" className="relative hidden lg:block">
           <span className="absolute -bottom-[41px] left-[10.5px] top-[29px] w-px bg-line-strong group-last/slot:hidden" />
@@ -262,11 +262,11 @@ export function Timeline({ initial, filters }: { initial: TimelineResponse; filt
     return () => io.disconnect();
   }, [state.nextCursor, state.batches, loadMore]);
 
-  const today = beijingDate(Date.now());
+  const today = tokyoDate(Date.now());
   const days = useMemo(() => {
     const out: Array<{ day: string; cards: TimelineCard[] }> = [];
     for (const c of state.cards) {
-      const d = beijingDate(c.anchorAt);
+      const d = tokyoDate(c.anchorAt);
       const last = out[out.length - 1];
       if (last && last.day === d) last.cards.push(c);
       else out.push({ day: d, cards: [c] });
@@ -282,7 +282,7 @@ export function Timeline({ initial, filters }: { initial: TimelineResponse; filt
     <div className="relative">
       {days.length === 0 && (
         <div className="lg:card">
-          <EmptyState title="这个筛选下还没有精选内容">换个类别看看，或者去全部动态里找找。</EmptyState>
+          <EmptyState title="このフィルターにはまだピックアップ記事がありません">別のカテゴリーを試すか、すべての投稿を確認してください。</EmptyState>
         </div>
       )}
 
@@ -298,7 +298,7 @@ export function Timeline({ initial, filters }: { initial: TimelineResponse; filt
                     const fresh = freshKeys.has(c.key);
                     const delay = fresh ? Math.min(order++, 10) * 40 : 0;
                     return (
-                      <TimelineSlot key={c.key} dataKey={c.key} at={c.anchorAt} fresh={fresh} delay={delay}>
+                      <TimelineSlot key={c.key} dataKey={c.key} at={c.anchorAt} approximate={approximateTimeline(c.item, c.anchorAt)} fresh={fresh} delay={delay}>
                         <FeedItem item={c.item} group={c.group} filters={filters} read={readSet.has(c.item.id)} onOpen={markRead} at={c.anchorAt} />
                       </TimelineSlot>
                     );
@@ -321,20 +321,20 @@ function FeedEnd({ loading, error, hasMore, manual, empty, onMore }: { loading: 
     <div className="flex justify-center py-6">
       {loading ? (
         <span className="inline-flex items-center gap-2 text-[12.5px] text-ink-4">
-          <RingMark className="size-4 text-accent" spinning /> 正在加载
+          <RingMark className="size-4 text-accent" spinning /> 読み込み中
         </span>
       ) : error ? (
         <button type="button" onClick={onMore} className="h-9 rounded-full border border-hot/30 px-4 text-[13px] text-hot hover:bg-hot-soft">
-          加载失败，点此重试
+          読み込みに失敗しました。タップして再試行
         </button>
       ) : hasMore ? (
         manual && (
           <button type="button" onClick={onMore} className="h-9 rounded-full border border-line-strong bg-surface px-5 text-[13px] font-medium text-ink-2 transition-colors hover:border-ink-4 hover:text-ink">
-            加载更多
+            さらに読み込む
           </button>
         )
       ) : (
-        !empty && <span className="text-[12px] text-ink-4">已经到底了</span>
+        !empty && <span className="text-[12px] text-ink-4">これ以上ありません</span>
       )}
     </div>
   );

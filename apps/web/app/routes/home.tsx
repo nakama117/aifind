@@ -7,8 +7,10 @@ import type { Screen } from "../components/shell/screens";
 import { Timeline } from "../features/feed/Timeline";
 import { HotTopics } from "../features/feed/HotTopics";
 import { ActiveFilters, CategoryTabs, FeedBar, SearchField } from "../features/feed/Filters";
+import { loadParts } from "../site-modules";
+const PARTS = await loadParts(m => m.home);
 
-export const handle: Screen = { tab: "featured", name: "精选" };
+export const handle: Screen = { tab: "featured", name: "おすすめ" };
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -18,13 +20,15 @@ export async function loader({ request }: Route.LoaderArgs) {
   const filters = readFilters(url.searchParams);
   const upstream = new Headers();
   const data = await loadOr404<TimelineResponse>(listPath("/api/site/timeline", filterParams(filters)), { responseHeaders: upstream, signal: request.signal });
-  return withHeaders({ data, filters }, { headers: apiDeadlineCache(60, Date.now(), upstream) });
+  const modules = Object.fromEntries(await Promise.all(PARTS.map(async ({ name, part }) =>
+    [name, await loadOr404<unknown>(part.apiPath, { signal: request.signal })])));
+  return withHeaders({ data, filters, modules }, { headers: PARTS.length ? { "Cache-Control": "no-store" } : apiDeadlineCache(60, Date.now(), upstream) });
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
   const path = listPath("/", loaderData ? filterParams(loaderData.filters) : {});
   const titles = loaderData?.data.cards.map((c) => c.item.title) ?? [];
-  return pageMeta({ path, jsonLd: path === "/" ? [...siteLd(), itemListLd("/", "精选", titles)] : undefined });
+  return pageMeta({ path, jsonLd: path === "/" ? [...siteLd(), itemListLd("/", "おすすめ", titles)] : undefined });
 }
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
@@ -32,8 +36,8 @@ export function headers({ loaderHeaders }: Route.HeadersArgs) {
 }
 
 export default function Home() {
-  const { data, filters } = useLoaderData<typeof loader>();
-  const title = filters.tag ? `#${filters.tag}` : "精选";
+  const { data, filters, modules } = useLoaderData<typeof loader>();
+  const title = filters.tag ? `#${filters.tag}` : "おすすめ";
   return (
     <div className="pb-6">
       {/* Phones: the bar (精选 | 全部, filter, search), the filter in use, today's hot topics, the feed. */}
@@ -47,6 +51,7 @@ export default function Home() {
         </div>
       </div>
 
+      {PARTS.map(({name, part}) => <part.Block key={name} data={modules[name]} />)}
       {data.hot && <HotTopics entries={data.hot} />}
 
       <Timeline initial={data} filters={data.filters} />

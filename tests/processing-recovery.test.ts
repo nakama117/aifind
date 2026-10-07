@@ -37,10 +37,17 @@ const provider = await stub(async (_hit, request) => {
   const content = step === "prefilter" ? { label: original ? "BLOCK" : "PASS", reason: "local fixture" }
     : step === "score" ? { attentionScore: 80 }
     : step === "structure" ? { category: "ai-models", tags: [], subjects: [], fact: null }
-    : { itemType: "model_release", authorRole: "principal", tags: ["模型发布"], editorialJudgment: "模型能力提升", titleZh: `新判断 ${T}`, summaryZh: "模型发布并提供评测和价格。" };
+    : { itemType: "model_release", authorRole: "principal", tags: ["モデル公開"], editorialJudgment: "模型能力提升", titleZh: `新判断 ${T}`, summaryZh: "模型发布并提供评测和价格。" };
   return { choices: [{ message: { content: JSON.stringify(content) } }] };
 });
 pointModels(provider.url);
+
+let contentJobsStarted = false;
+async function startContentJobs() {
+  if (contentJobsStarted) return;
+  await registerContentJobs(await getBoss());
+  contentJobsStarted = true;
+}
 
 before(async () => {
   await sql`INSERT INTO sources (id,name,kind,tier,participation_mode,next_fetch_at)
@@ -137,7 +144,7 @@ test("a temporary provider failure resumes the manual evaluation instead of rein
   const id = await article("retry");
   assert.equal((await processArticle(id)).state, "block");
   original = false;
-  await registerContentJobs(await getBoss());
+  await startContentJobs();
   const result = await rerun(id, "analyze", `retry-${T}`, "test");
   await waitFor(async () => (await sql`SELECT state FROM pgboss.job WHERE id=${result!.jobId}`)[0]?.state === "completed");
   assert.equal((await sql`SELECT processing_attempts FROM articles WHERE id=${id}`)[0]!.processing_attempts, 1);
@@ -153,6 +160,7 @@ test("a temporary provider failure resumes the manual evaluation instead of rein
 // Failure modes: an old paid call can fail after a new material revision has already finished;
 // its refusal must neither replace that verdict nor restore retries or clear the new queue state.
 test("a late refusal for an old revision preserves the new revision's completed processing", async () => {
+  await startContentJobs();
   const id = await article("revision-race");
   const asked = gate();
   const release = gate();

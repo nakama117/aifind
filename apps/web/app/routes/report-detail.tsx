@@ -4,13 +4,13 @@ import type { ReportDetail, ReportNavigationResponse, ReportKind } from "@aihot/
 import { SITE, subjectAfter, withSubject } from "@aihot/site";
 import { apiGet, edgeTtl, loadOr404 } from "../lib/api.server";
 import { pageMeta, reportLd, titled } from "../lib/seo";
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { ReportLayout } from "../features/report/ReportLayout";
 import { ReportPaper, reportOutline } from "../features/report/ReportPaper";
 import { KIND_LABEL, feedLink, kindFromPath } from "../features/report/format";
 import type { Screen } from "../components/shell/screens";
 
-export const handle: Screen = { tab: "daily", name: "日报" };
+export const handle: Screen = { tab: "daily", name: "日報" };
 
 const PATTERN: Record<ReportKind, RegExp> = {
   daily: /^\d{4}-\d{2}-\d{2}$/,
@@ -26,16 +26,16 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     loadOr404<ReportDetail>(`/api/site/reports/${kind}/${key}`, { signal: request.signal }),
     apiGet<ReportNavigationResponse>(`/api/site/reports/${kind}/navigation/${key}`, { signal: request.signal }),
   ]);
-  return { report, index, today: beijingDate(Date.now()) };
+  return { report, index, today: tokyoDate(Date.now()) };
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
-  if (!loaderData) return [{ title: titled("报告不存在") }, { name: "robots", content: "noindex" }];
+  if (!loaderData) return [{ title: titled("レポートが見つかりません") }, { name: "robots", content: "noindex" }];
   const r = loaderData.report;
-  const description = r.lead?.leadParagraph ?? r.overview?.slice(0, 150) ?? `${SITE.name} ${r.key} ${subjectAfter("的", KIND_LABEL[r.kind])}。`;
+  const description = r.lead?.leadParagraph ?? r.overview?.slice(0, 150) ?? `${SITE.name} ${r.key} ${subjectAfter("の", KIND_LABEL[r.kind])}。`;
   const path = `/${r.kind}/${r.key}`;
   return [...pageMeta({
-    title: r.kind === "daily" ? `${withSubject("日报")} ${r.key}` : r.title.replace(`${SITE.name} ${KIND_LABEL[r.kind]}`, withSubject(KIND_LABEL[r.kind])),
+    title: r.kind === "daily" ? `${withSubject("日報")} ${r.key}` : r.title.replace(`${SITE.name} ${KIND_LABEL[r.kind]}`, withSubject(KIND_LABEL[r.kind])),
     description,
     path,
     image: `/og/reports/${r.kind}/${r.key}.png`,

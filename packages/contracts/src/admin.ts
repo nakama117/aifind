@@ -137,6 +137,27 @@ export interface AdminContentRow {
 
 export interface AdminContentSearch {
   rows: AdminContentRow[];
+  total: number;
+  page: number;
+  pageSize: number;
+  sources: Array<{ id: string; name: string }>;
+}
+
+export interface AdminSeo {
+  siteUrl: string;
+  preview: boolean;
+  https: boolean;
+  publicOrigin: boolean;
+  locale: string;
+  title: string;
+  description: string;
+  contactConfigured: boolean;
+  sitemap: string;
+  robots: string;
+  indexableArticles: number;
+  selectedArticles: number;
+  verification: { google: { configured: boolean; verified: null }; bing: { configured: boolean; verified: null } };
+  indexNow: { enabled: boolean; keyConfigured: boolean };
 }
 
 /** The publications row of an item, as the publish step wrote it. */

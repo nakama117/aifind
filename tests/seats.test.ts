@@ -88,8 +88,8 @@ test("one fact holds one selected seat on v1, RSS and the sync ledger", async ()
   const detail = (await get(`/api/site/items/${first}`)).json as { reason: string | null; sameEvent?: { id: string } | null };
   assert.equal(detail.sameEvent?.id, official);
   assert.equal(detail.reason, null);
-  assert.ok(!(await get(`/items/${first}/markdown`)).body.includes("推荐理由"));
-  assert.ok((await get(`/items/${official}/markdown`)).body.includes("推荐理由"));
+  assert.ok(!(await get(`/items/${first}/markdown`)).body.includes("おすすめの理由"));
+  assert.ok((await get(`/items/${official}/markdown`)).body.includes("おすすめの理由"));
   // The website still folds every report of the fact into the reading group.
   const home = (await get(`/api/site/timeline?limit=40&tag=${encodeURIComponent(`t-${T}`)}`)).json.cards as Array<{ item: { id: string }; group: { reportCount: number } | null }>;
   const card = home.find((c) => c.item.id === official);

@@ -6,6 +6,7 @@ import { Presence } from "../components/ui/Presence";
 import { edgeTtl } from "../lib/api.server";
 import { pageMeta } from "../lib/seo";
 import { exportBundle, importBundle, removeStar, useStarred, type ImportReport } from "../lib/local-state";
+import { tokyoDate } from "@aihot/contracts/time";
 import { fullDateTime } from "../lib/format";
 import { IconBookmark, IconDownload, IconClose } from "../components/icons";
 import { readSnapshot, restoreAnchor, useSaveOnLeave } from "../lib/restore";
@@ -13,21 +14,21 @@ import { PhoneBar } from "../components/shell/PhoneBar";
 import type { Screen } from "../components/shell/screens";
 import { webModules } from "../site-modules";
 
-export const handle: Screen = { tab: "me", name: "收藏" };
+export const handle: Screen = { tab: "me", name: "お気に入り" };
 
 export function headers() {
   return edgeTtl(300);
 }
 
 export function meta() {
-  return pageMeta({ title: "我的收藏", description: `保存在这台设备上的 ${SITE.name} 收藏。`, path: "/starred", noindex: true });
+  return pageMeta({ title: "お気に入り", description: `この端末に保存されている${SITE.name}のお気に入り。`, path: "/starred", noindex: true });
 }
 
 function reportText(r: ImportReport): string {
-  const parts = [`新增收藏 ${r.starredAdded} 条`, `已读记录 ${r.readAdded} 条`];
-  if (r.starredSkipped || r.readSkipped) parts.push(`超出上限或格式不对而跳过 ${r.starredSkipped + r.readSkipped} 条`);
-  if (r.themeApplied) parts.push("已沿用导入的主题");
-  if (r.readFailed) parts.push("已读记录没能保存（浏览器存储已满或不可用）");
+  const parts = [`お気に入りに${r.starredAdded}件追加`, `既読履歴に${r.readAdded}件追加`];
+  if (r.starredSkipped || r.readSkipped) parts.push(`上限超過または形式不正のため、${r.starredSkipped + r.readSkipped}件をスキップ`);
+  if (r.themeApplied) parts.push("インポートしたテーマを引き継ぎました");
+  if (r.readFailed) parts.push("既読履歴を保存できませんでした（ブラウザーのストレージがいっぱいか、利用できません）");
   return parts.join("，");
 }
 
@@ -82,9 +83,9 @@ export default function StarredPage() {
     if (!file) return;
     try {
       const report = importBundle(await file.text());
-      setNotice({ kind: report.readFailed ? "error" : "ok", text: `导入完成：${reportText(report)}` });
+      setNotice({ kind: report.readFailed ? "error" : "ok", text: `インポート完了：${reportText(report)}` });
     } catch (e) {
-      setNotice({ kind: "error", text: e instanceof Error ? e.message : "导入失败" });
+      setNotice({ kind: "error", text: e instanceof Error ? e.message : "インポートに失敗しました" });
     }
   };
 
@@ -98,11 +99,11 @@ export default function StarredPage() {
   const action = "text-[12.5px] text-ink-3 transition-colors hover:text-accent";
   return (
     <div className="pb-12">
-      <PhoneBar back={{ to: "/more", label: "我的" }} title="收藏" />
+      <PhoneBar back={{ to: "/more", label: "マイページ" }} title="お気に入り" />
       <header className="flex flex-col gap-2 pb-4 pt-3 sm:flex-row sm:items-start sm:justify-between lg:pt-1">
         <div>
-          <h1 data-page-title="" className="text-[24px] font-semibold leading-[1.3] text-ink">收藏</h1>
-          <p className="mt-1.5 text-[13px] text-ink-3">{`本机收藏的 ${SITE.name} 内容，适合稍后阅读和回看。`}</p>
+          <h1 data-page-title="" className="text-[24px] font-semibold leading-[1.3] text-ink">お気に入り</h1>
+          <p className="mt-1.5 text-[13px] text-ink-3">{`端末に保存したお気に入り ${SITE.name} 件。後で読むときや読み返すときに便利です。`}</p>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 sm:pt-1.5">
           {webModules().flatMap((m) => m.starredImports ?? []).map((i) => (
@@ -111,24 +112,24 @@ export default function StarredPage() {
             </button>
           ))}
           <button type="button" onClick={() => fileRef.current?.click()} className={action}>
-            导入文件
+            ファイルをインポート
           </button>
           {mounted && starred.length > 0 && (
             <button type="button" onClick={doExport} className={`${action} inline-flex items-center gap-1`}>
-              <IconDownload size={13} /> 导出
+              <IconDownload size={13} /> エクスポート
             </button>
           )}
           <input ref={fileRef} type="file" accept="application/json,.json" className="sr-only" onChange={(e) => doImport(e.target.files?.[0])} />
         </div>
       </header>
-      <p className="rounded-tile border border-line bg-surface px-4 py-2.5 text-[12.5px] text-ink-3">收藏只保存在当前浏览器；清除浏览器数据或换设备后不会同步。</p>
+      <p className="rounded-tile border border-line bg-surface px-4 py-2.5 text-[12.5px] text-ink-3">お気に入りは現在のブラウザーにのみ保存されます。ブラウザーのデータを削除したり、別の端末に変えたりしても同期されません。</p>
       <Presence show={!!notice} enter="anim-notice-in" exit="anim-fade-out" duration={160}>
         <div
           role="status"
           className={`mt-3 flex items-start justify-between gap-3 rounded-tile px-4 py-2.5 text-[13px] ${notice?.kind === "ok" ? "bg-accent-soft text-accent-ink dark:text-accent" : "bg-hot-soft text-hot"}`}
         >
           {notice?.text}
-          <button type="button" aria-label="关闭" onClick={() => setNotice(null)} className="shrink-0 opacity-70 hover:opacity-100">
+          <button type="button" aria-label="閉じる" onClick={() => setNotice(null)} className="shrink-0 opacity-70 hover:opacity-100">
             <IconClose size={14} />
           </button>
         </div>
@@ -136,9 +137,9 @@ export default function StarredPage() {
       {!mounted ? null : starred.length === 0 ? (
         <div className="mt-3 flex flex-col items-center rounded-card border border-dashed border-line-strong px-6 py-12 text-center">
           <IconBookmark size={20} className="text-ink-4" />
-          <p className="mt-3 text-[13px] text-ink-3">还没有收藏内容。点开任意一条内容，在详情页点击收藏即可添加。</p>
+          <p className="mt-3 text-[13px] text-ink-3">お気に入りはまだありません。記事を開き、詳細ページでお気に入りに追加してください。</p>
           <Link to="/" className="mt-4 text-[12.5px] font-medium text-accent hover:text-accent-ink">
-            去看精选 →
+            おすすめを見る →
           </Link>
         </div>
       ) : (
@@ -151,11 +152,11 @@ export default function StarredPage() {
               <li key={s.id} data-card-key={s.id} className={`relative border-b border-line-soft py-4 lg:card lg:px-[18px] lg:py-[15px] ${unavailable ? "opacity-70" : "lg:card-hover"}`}>
                 <div className="flex items-center gap-2 text-[12.5px] text-ink-4">
                   <span className="min-w-0 truncate text-ink-3">{current?.sourceName ?? s.sourceName}</span>
-                  {s.publishedAt && <span className="num shrink-0">· {fullDateTime(s.publishedAt)}</span>}
+                  {s.publishedAt && <span className="num shrink-0">· {tokyoDate(s.publishedAt)}</span>}
                   <span className="ml-auto hidden shrink-0 sm:inline">
-                    收藏于 <span className="num">{fullDateTime(s.savedAt)}</span>
+                    お気に入り登録日 <span className="num">{fullDateTime(s.savedAt)}</span>
                   </span>
-                  <button type="button" aria-label="取消收藏" title="取消收藏" onClick={() => removeStar(s.id)} className="relative z-10 -my-1 ml-auto grid size-7 shrink-0 place-items-center rounded-full text-ink-4 transition-colors hover:bg-bg-sunk hover:text-ink sm:ml-0">
+                  <button type="button" aria-label="お気に入りを解除" title="お気に入りを解除" onClick={() => removeStar(s.id)} className="relative z-10 -my-1 ml-auto grid size-7 shrink-0 place-items-center rounded-full text-ink-4 transition-colors hover:bg-bg-sunk hover:text-ink sm:ml-0">
                     <IconClose size={14} />
                   </button>
                 </div>
@@ -169,8 +170,8 @@ export default function StarredPage() {
                   )}
                 </h2>
                 {s.summary && <p className="mt-1.5 line-clamp-2 text-[14px] leading-[1.75] text-ink-3">{s.summary}</p>}
-                {unavailable && <p className="mt-2 text-[12.5px] text-hot">这条内容已不再公开，收藏会保留直到你手动移除。</p>}
-                {status === "summary-only" && <p className="mt-2 text-[12.5px] text-amber-ink">应来源方要求，这条内容现在只提供摘要。</p>}
+                {unavailable && <p className="mt-2 text-[12.5px] text-hot">この記事は公開を終了しましたが、手動で削除するまでお気に入りに残ります。</p>}
+                {status === "summary-only" && <p className="mt-2 text-[12.5px] text-amber-ink">提供元の要請により、この記事は現在、要約のみを表示しています。</p>}
               </li>
             );
           })}

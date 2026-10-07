@@ -8,8 +8,6 @@ import { useChangelogDot } from "./Sidebar";
 const subscribe = () => () => {};
 const serverTab = () => null;
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
-/** One grid column per tab, as whole class names the stylesheet can see. */
-const COLUMNS: Record<number, string> = { 4: "grid-cols-4", 5: "grid-cols-5" };
 
 /**
  * The phone tab bar (below lg). A page lights the tab it declares; pages reached from several tabs keep
@@ -35,10 +33,10 @@ export function TabBar({ changelogVersion }: { changelogVersion: string | null }
   const items = tabs();
   return (
     <nav
-      aria-label="底部导航"
+      aria-label="下部ナビゲーション"
       className="fixed inset-x-0 bottom-0 z-40 bg-surface/90 pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] shadow-[0_-1px_0_var(--line)] backdrop-blur-xl backdrop-saturate-150 lg:hidden"
     >
-      <div className={`mx-auto grid h-[50px] max-w-[640px] ${COLUMNS[items.length]}`}>
+      <div className="mx-auto grid h-[50px] max-w-[640px]" style={{ gridTemplateColumns: `repeat(${items.length},minmax(0,1fr))` }}>
         {items.map((t) => {
           const on = t.key === active;
           const Icon = t.icon;
@@ -60,11 +58,11 @@ export function TabBar({ changelogVersion }: { changelogVersion: string | null }
                   void revalidator.revalidate();
                 }
               }}
-              className={`relative flex flex-col items-center justify-center gap-[2px] text-[10.5px] transition-colors ${on ? "font-semibold text-accent" : "text-ink-3 active:text-ink"}`}
+              className={`relative flex min-w-0 flex-col items-center justify-center gap-[2px] text-center text-[10.5px] transition-colors ${on ? "font-semibold text-accent" : "text-ink-3 active:text-ink"}`}
             >
               <Icon size={23} />
-              <span>{t.label}</span>
-              {dot && t.changelog && <span className="absolute left-[calc(50%+9px)] top-[7px] size-1.5 rounded-full bg-hot" aria-label="有新的更新" />}
+              <span className="leading-3">{t.label}</span>
+              {dot && t.changelog && <span className="absolute left-[calc(50%+9px)] top-[7px] size-1.5 rounded-full bg-hot" aria-label="新しい更新があります" />}
             </Link>
           );
         })}

@@ -9,7 +9,7 @@ import { CONTACT_ALIASES, PUBLIC_INTERFACE_VERSION } from "@aihot/contracts/http
 import { PUBLIC_API_CATEGORY_KEYS } from "@aihot/contracts/taxonomy";
 import { REPO_ROOT, config } from "@aihot/backend/config";
 import { applyPublicHeaders, sendTextWithEtag } from "../http/respond.ts";
-import { sitemapXml } from "@aihot/backend/publication/sitemap";
+import { sitemapXml, sitemapIndexXml } from "@aihot/backend/publication/sitemap";
 import { llmsTxt, loadLlmsAvailability } from "@aihot/backend/publication/llms";
 import { loadContact } from "@aihot/backend/site/contact";
 
@@ -104,6 +104,7 @@ export async function sendFile(req: FastifyRequest, reply: FastifyReply, file: s
 }
 
 export function registerStatic(app: FastifyInstance) {
+  app.get("/sitemap-index.xml", async (_req, reply) => reply.header("Cache-Control", "no-store").type("application/xml").send(sitemapIndexXml()));
   app.get("/sitemap.xml", async (req, reply) => {
     try {
       const xml = await sitemapXml();

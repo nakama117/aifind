@@ -1,0 +1,26 @@
+{
+  "name": "@aihot/model-leaderboard",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./module.ts",
+    "./web": "./web.tsx",
+    "./*": "./*.ts"
+  },
+  "dependencies": {
+    "@aihot/backend": "*",
+    "@aihot/contracts": "*",
+    "@aihot/site": "*",
+    "@paralleldrive/cuid2": "3.3.0",
+    "highs": "1.15.3",
+    "hyparquet": "1.31.1",
+    "zod": "4.6.5",
+    "fastify": "5.12.5",
+    "react": "19.3.0",
+    "react-router": "8.4.0",
+    "@aihot/api": "*"
+  },
+  "scripts": {
+    "test": "node --test-global-setup=../../tests/databases.ts --import ../../tests/databases.ts --test tests/*.test.ts"
+  }
+}

@@ -72,7 +72,7 @@ function FacesButton({ participants, total, names, children }: { participants: H
         title={names}
         aria-expanded={open}
         aria-controls={id}
-        aria-label={`${total} 位参与者，查看名单`}
+        aria-label={`${total}人が参加・リストを見る`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -86,20 +86,20 @@ function FacesButton({ participants, total, names, children }: { participants: H
         {children}
       </button>
       {open && createPortal(
-        <span ref={popup} id={id} role="dialog" aria-label="参与讨论的来源" style={at} className="fixed z-50 max-h-[240px] w-[240px] overflow-y-auto rounded-control border border-line bg-raised p-3 text-[12.5px] leading-relaxed text-ink-2 shadow-[var(--shadow-pop)]">
+        <span ref={popup} id={id} role="dialog" aria-label="議論に参加した情報源" style={at} className="fixed z-50 max-h-[240px] w-[240px] overflow-y-auto rounded-control border border-line bg-raised p-3 text-[12.5px] leading-relaxed text-ink-2 shadow-[var(--shadow-pop)]">
           {editorial.length > 0 && (
             <>
-              <span className="block text-[11.5px] font-semibold text-ink-4">精选组</span>
+              <span className="block text-[11.5px] font-semibold text-ink-4">ピックアップ組</span>
               <span className="mt-0.5 block">{editorial.map((p) => p.name).join("、")}</span>
             </>
           )}
           {signal.length > 0 && (
             <>
-              <span className={`block text-[11.5px] font-semibold text-ink-4 ${editorial.length ? "mt-2" : ""}`}>氛围组</span>
+              <span className={`block text-[11.5px] font-semibold text-ink-4 ${editorial.length ? "mt-2" : ""}`}>雰囲気組</span>
               <span className="mt-0.5 block">{signal.map((p) => p.name).join("、")}</span>
             </>
           )}
-          {more > 0 && <span className="mt-2 block text-[11.5px] text-ink-4">另有 {more} 位未列出</span>}
+          {more > 0 && <span className="mt-2 block text-[11.5px] text-ink-4">ほか {more} 人は非表示</span>}
         </span>, document.body
       )}
     </span>

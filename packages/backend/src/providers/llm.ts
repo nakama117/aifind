@@ -7,6 +7,7 @@ import { PRESETS } from "@aihot/site/models";
 import { config, credential } from "../config.ts";
 import { sha256 } from "../lib/ids.ts";
 import { assertAccepted, paidRequest, ProviderRejectedError, rejectReceivedResponse } from "./receipts.ts";
+import { openaiCost } from "./openai-cost.ts";
 
 export interface ModelSpec {
   key: string;
@@ -18,6 +19,7 @@ export interface ModelSpec {
   extra?: Record<string, unknown>;
   jsonMode: boolean;
   vision?: boolean;
+  protocol?: "openai";
 }
 
 function extraFromEnv(value: string | undefined): Record<string, unknown> | undefined {
@@ -121,7 +123,7 @@ export async function chatJson<S extends z.ZodType>(opts: ChatJsonOptions<S>): P
   const spec = MODELS[opts.model];
   if (!spec) throw new Error(`Unknown model ${opts.model}`);
   if (!config.modelCallsEnabled) throw new Error("Model calls are disabled (MODEL_CALLS_ENABLED=false)");
-  const baseUrl = credential("models", spec.baseUrlEnv);
+  const baseUrl = credential("models", spec.baseUrlEnv) ?? (spec.protocol === "openai" ? "https://api.openai.com/v1" : null);
   const apiKey = credential("models", spec.apiKeyEnv);
   if (!baseUrl || !apiKey || !spec.model) throw new Error(`Model ${opts.model} is not configured (${spec.baseUrlEnv}, ${spec.apiKeyEnv}${spec.key === "default" ? ", LLM_MODEL" : ""})`);
 
@@ -136,8 +138,7 @@ export async function chatJson<S extends z.ZodType>(opts: ChatJsonOptions<S>): P
       // Multimodal parts go through as parts; plain objects are sent as JSON text.
       { role: "user", content: typeof opts.user === "string" || Array.isArray(opts.user) ? opts.user : userText },
     ],
-    temperature,
-    max_tokens: maxTokens,
+    ...(spec.protocol === "openai" ? { max_completion_tokens: maxTokens } : { temperature, max_tokens: maxTokens }),
     ...(spec.jsonMode && opts.json !== false ? { response_format: { type: "json_object" } } : {}),
     ...(spec.extra ?? {}),
   };
@@ -148,7 +149,7 @@ export async function chatJson<S extends z.ZodType>(opts: ChatJsonOptions<S>): P
       model: spec.model,
       purpose: opts.purpose,
       subject: opts.subject,
-      identity: { model: spec.model, promptVersion: opts.promptVersion, system: sha256(opts.system), user: sha256(userText), temperature, maxTokens, extra: spec.extra ?? null },
+      identity: { model: spec.model, promptVersion: opts.promptVersion, bodyHash: sha256(JSON.stringify(body)) },
       requestSummary: { promptVersion: opts.promptVersion, systemHash: sha256(opts.system), userHash: sha256(userText), userChars: userText.length, temperature, maxTokens },
       attemptTag: opts.attemptTag,
     },
@@ -180,7 +181,7 @@ export async function chatJson<S extends z.ZodType>(opts: ChatJsonOptions<S>): P
         response: { ...json, _latencyMs: Date.now() - started },
         requestId: (json.id as string | undefined) ?? res.headers.get("x-request-id"),
         usage,
-        cost: null,
+        cost: spec.protocol === "openai" ? openaiCost(spec.model, usage) : null,
       };
     },
   );
@@ -189,6 +190,7 @@ export async function chatJson<S extends z.ZodType>(opts: ChatJsonOptions<S>): P
   const content = response.choices?.[0]?.message?.content ?? "";
   let parsed: z.infer<S>;
   try {
+    if (["length", "content_filter"].includes(response.choices?.[0]?.finish_reason ?? "")) throw new ModelOutputError("Incomplete or filtered completion");
     parsed = opts.schema.parse(opts.parse ? opts.parse(content) : extractJson(content));
   } catch (error) {
     // Unusable output: record it and let a later attempt pay for a fresh answer.

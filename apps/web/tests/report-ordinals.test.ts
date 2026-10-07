@@ -91,8 +91,8 @@ for (const kind of kinds) {
     const response = await fetch(`${origin}/${kind}`);
     assert.equal(response.status, 200, logs);
     const visible = masthead(await response.text());
-    assert.match(visible, /第\s*405\s*期/);
-    assert.doesNotMatch(visible, /第\s*400\s*期/);
+    assert.match(visible, /第\s*405\s*号/);
+    assert.doesNotMatch(visible, /第\s*400\s*号/);
   });
 
   test(`the oldest ${kind} issue, outside the navigation, keeps its number`, async () => {
@@ -100,7 +100,7 @@ for (const kind of kinds) {
     assert.ok(!index(kind).some((entry) => entry.key === first));
     const response = await fetch(`${origin}/${kind}/${first}`);
     assert.equal(response.status, 200, logs);
-    assert.match(masthead(await response.text()), /第\s*1\s*期/);
+    assert.match(masthead(await response.text()), /第\s*1\s*号/);
   });
 
   test(`the ${kind} calendar labels this issue with its own number and makes up none for others`, () => {
@@ -108,17 +108,17 @@ for (const kind of kinds) {
     const { cells } = periodGrid(kind, first, index(kind), 1);
     const current = cells.find((cell) => cell.key === first)!;
     assert.equal(current.state, "current");
-    assert.match(current.label, /第 1 期/);
+    assert.match(current.label, /第\s*1\s*号/);
     const unlisted = cells.find((cell) => cell.key === keys[kind][1])!;
-    assert.doesNotMatch(unlisted.label, /第 \d+ 期/, "an issue the navigation does not list gets no number");
+    assert.doesNotMatch(unlisted.label, /第\s*\d+\s*号/, "an issue the navigation does not list gets no number");
     assert.equal(issueNumber(index(kind), keys[kind].at(-1)!), 405);
     const stale = periodGrid(kind, first, [{ key: first, issueNumber: 9 }], 10);
-    assert.match(stale.cells.find((cell) => cell.key === first)!.label, /第 10 期/, "the report's own number wins over an older navigation");
+    assert.match(stale.cells.find((cell) => cell.key === first)!.label, /第\s*10\s*号/, "the report's own number wins over an older navigation");
   });
 }
 
 test("the daily archive counts every issue, as the masthead numbers them", async () => {
   const response = await fetch(`${origin}/daily/archive`);
   assert.equal(response.status, 200, logs);
-  assert.match(masthead(await response.text()), /共\s*405\s*期/);
+  assert.match(masthead(await response.text()), /合計\s*405\s*号/);
 });

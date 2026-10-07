@@ -1,0 +1,23 @@
+import '../../../tests/setup.ts';
+import {test,after} from 'node:test';
+import assert from 'node:assert/strict';
+import {sql} from '@aihot/backend/db';
+import {readLaunchCorpus} from '../launch/corpus.ts';
+import {stageLaunchCorpus,rehearseLaunchPublication} from '../launch/staging.ts';
+after(()=>sql.end());
+const check=()=>import('../launch/preflight.ts');
+const good={nodeVersion:process.versions.node,siteUrl:'http://localhost:3900',databaseConfigured:true,dataDirPresent:true,credentialsConfigured:true,previewEnabled:false,productionImportDisabled:true,externalEnabled:[],syntheticCount:0,products:12,eligible:12,comparison:2,category:2,guide:2,needsRetest:0,ownerPending:12,missingEvidence:0,staleEvidence:0,brokenOfficial:0,missingAssets:0,unreviewedAssets:0,unreviewedSources:0,blockedEnabledSources:0,backupOk:true,restoreOk:true,workerHealthy:true,pendingReceipts:0,unknownReceipts:0,failedJobs:0,operatorConfigured:true,policiesReviewed:true};
+async function result(changes:Record<string,unknown>={}){return(await check()).evaluateLaunchChecks({...good,...changes});}
+const find=(r:Awaited<ReturnType<typeof result>>,id:string)=>r.find(c=>c.id===id)!;
+test('LP01 synthetic content blocks release',async()=>assert.equal(find(await result({syntheticCount:1}),'safety.synthetic').status,'BLOCK'));
+test('LP02 missing SITE_URL blocks',async()=>assert.equal(find(await result({siteUrl:''}),'runtime.siteUrl').status,'BLOCK'));
+test('LP03 missing operator information and policy placeholders block',async()=>{const r=await result({operatorConfigured:false,policiesReviewed:false});assert.equal(find(r,'content.operator').status,'BLOCK');assert.equal(find(r,'content.policies').status,'BLOCK');});
+test('LP04 missing Product Evidence blocks engineering',async()=>assert.equal(find(await result({missingEvidence:1}),'evidence.missing').status,'BLOCK'));
+test('LP05 broken asset blocks engineering',async()=>assert.equal(find(await result({missingAssets:1}),'assets.files').status,'BLOCK'));
+test('LP06 unreviewed source policy blocks collection readiness',async()=>assert.equal(find(await result({unreviewedSources:1}),'sources.policy').status,'BLOCK'));
+test('LP07 needs_retest is surfaced separately from live Product facts',async()=>assert.equal(find(await result({needsRetest:1}),'content.retest').status,'WARN'));
+test('LP08 failed backup and unproven restore are surfaced',async()=>{const r=await result({backupOk:false,restoreOk:false});assert.equal(find(r,'operations.backup').status,'BLOCK');assert.equal(find(r,'operations.restore').status,'BLOCK');});
+test('LP09 unknown receipts are visible and block operations readiness',async()=>assert.equal(find(await result({unknownReceipts:1}),'operations.receipts').status,'BLOCK'));
+test('LP11 intentionally disabled model and collection valves are PASS without requests',async()=>assert.equal(find(await result(),'safety.external').status,'PASS'));
+test('LP12 production secret checks and missing backup configuration cannot be waved through',async()=>{const r=await result({production:true,productionSecretsOk:false,backupConfigured:false});assert.equal(find(r,'runtime.productionSecrets').status,'BLOCK');assert.equal(find(r,'operations.backupConfig').status,'BLOCK');});
+test('LP10 clean real staging passes engineering checks; preflight GET is read only',async()=>{const c=await readLaunchCorpus();await stageLaunchCorpus(c,'preflight-local-simulation');await rehearseLaunchPublication(c,'preflight-local-simulation','Phase 8 publication simulation; Owner review required');const before=(await sql`SELECT count(*)::int AS n FROM audit_log`)[0].n;const r=await(await check()).readLaunchPreflight({env:{...process.env,SITE_URL:'http://localhost:3900',ADMIN_PASSWORD:'local-fake-credential-for-tests-only',COLLECT_ENABLED:'false',MODEL_CALLS_ENABLED:'false',AIFIND_DETECTOR_ENABLED:'false',FEISHU_CONTENT_PUSH_ENABLED:'false',FEISHU_INTERNAL_ENABLED:'false',INDEXNOW_SUBMIT_ENABLED:'false'}});assert.equal(r.gates.engineering,'READY');assert.equal(r.counts.eligible,12);assert.equal(r.gates.content,'READY');assert.equal(r.checks.find(c=>c.id==='content.owner')?.status,'INFO');assert.equal(r.checks.find(c=>c.id==='content.sourceBacked')?.status,'PASS');assert.equal((await sql`SELECT count(*)::int AS n FROM audit_log`)[0].n,before);assert.doesNotMatch(JSON.stringify(r),/postgres:\/\/|sk-proj-|ADMIN_PASSWORD/);});

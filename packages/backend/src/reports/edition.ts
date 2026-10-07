@@ -121,10 +121,10 @@ export async function periodReports(start: Date, end: Date): Promise<ReportRow[]
 }
 
 function roleOf(kind: string, official: boolean): string {
-  if (official) return kind === "x_search" ? "X·官方" : "官方";
+  if (official) return kind === "x_search" ? "X・公式" : "公式";
   if (kind === "x_search") return "X·KOL";
-  if (kind === "mp_account") return "公众号";
-  return "媒体";
+  if (kind === "mp_account") return "公式アカウント";
+  return "メディア";
 }
 
 function reportEntry(r: ReportRow): ReportEntry {
@@ -148,8 +148,8 @@ function groupBy<T>(rows: T[], key: (row: T) => string): Map<string, T[]> {
 }
 
 /** A weekly's or monthly's candidates: each fact once, by its representative, best scored first. */
-export async function candidates(start: Date, end: Date): Promise<Candidate[]> {
-  const rows = await periodReports(start, end);
+export async function candidates(start: Date, end: Date, retrospective = false): Promise<Candidate[]> {
+  const rows = await (retrospective ? retrospectiveReports(start, end) : periodReports(start, end));
   return [...groupBy(rows, factKeyOf)]
     .map(([factKey, members]): Candidate => {
       const r = pickRepresentative(members);
@@ -164,7 +164,7 @@ export async function candidates(start: Date, end: Date): Promise<Candidate[]> {
  * authoritative) in the reports' current public wording, ranked by how the dailies treated it (lead,
  * highlight, the days it was carried), its coverage and its best score. Reports withdrawn since drop out.
  */
-export async function periodEntries(startDate: string, endDate: string): Promise<{ entries: Candidate[]; issues: number }> {
+export async function periodEntries(startDate: string, endDate: string): Promise<{ entries: Candidate[]; issues: number; retrospective?: boolean }> {
   const issues = await sql<{ key: string; content: Record<string, any> }[]>`
     SELECT key, content FROM reports WHERE kind = 'daily' AND key >= ${startDate} AND key <= ${endDate} ORDER BY key`;
   const carried = issues.flatMap((issue) => (issue.content.sections ?? []).flatMap((s: any) => (s.items ?? []).filter((it: any) => it.itemId).map((it: any) => ({
@@ -194,7 +194,8 @@ export async function periodEntries(startDate: string, endDate: string): Promise
     return { candidate: { ...reportEntry(main), category: main.category, factKey: factKeyOf(main) }, rank };
   });
   ranked.sort((a, b) => b.rank - a.rank || a.candidate.itemId.localeCompare(b.candidate.itemId));
-  return { entries: ranked.map((r) => r.candidate), issues: issues.length };
+  return { entries: ranked.map((r) => r.candidate), issues: issues.length,
+    ...(issues.some((issue) => issue.content.retrospective === true) ? { retrospective: true } : {}) };
 }
 
 /** Every report an issue cites: its entries, what is listed under them, its flashes. */
@@ -288,8 +289,19 @@ interface Fact { key: string; rows: ReportRow[]; selected: boolean; sources: str
  * The daily's events for the window [start, end), most important first, before the editors' pass:
  * selected reports and missed facts, minus what the week's issues already carried, one entry per event.
  */
-export async function dailyEdition(date: string, start: Date, end: Date): Promise<{ entries: EditionEntry[]; stats: Record<string, number> }> {
-  const [memory, selected, missed] = await Promise.all([dailyMemory(date), periodReports(start, end), missedFacts(start, end)]);
+async function retrospectiveReports(start: Date, end: Date): Promise<ReportRow[]> {
+  const rows = await sql<(ReportRow & { source_time: Date })[]>`
+    SELECT ${REPORT_FIELDS}, p.published_at AS source_time
+    FROM publications p JOIN sources s ON s.id = p.source_id
+    LEFT JOIN facts f ON f.id = p.fact_id AND ${ownFactEvidenceCondition()}
+    LEFT JOIN stories st ON st.id = f.story_id
+    WHERE p.visibility = 'public' AND p.eligible AND p.selected AND p.visible_after <= now()
+      AND p.published_at >= ${start} AND p.published_at < ${end}`;
+  return rows.map(({ source_time, ...row }) => ({ ...row, timeline_at: source_time }));
+}
+
+export async function dailyEdition(date: string, start: Date, end: Date, retrospective = false): Promise<{ entries: EditionEntry[]; stats: Record<string, number> }> {
+  const [memory, selected, missed] = await Promise.all([dailyMemory(date), retrospective ? retrospectiveReports(start, end) : periodReports(start, end), retrospective ? [] : missedFacts(start, end)]);
   const raw = [
     ...[...groupBy(selected, factKeyOf)].map(([key, rows]) => ({ key, rows, selected: true })),
     ...missed.map((m) => ({ ...m, selected: false })),

@@ -12,11 +12,11 @@ function hrefOf(e: HotStripEntry): string {
 
 /** Where the heat is heading, as a small arrow (a "新" mark for a story new to the ranking). */
 function TrendMark({ trend }: { trend: HotStripEntry["trend"] }) {
-  if (trend === "up") return <IconTrendUp size={14} strokeWidth={2.2} className="text-hot" aria-label="热度上升" />;
-  if (trend === "down") return <IconTrendDown size={14} strokeWidth={2.2} className="text-ink-4" aria-label="热度回落" />;
-  if (trend === "new") return <span className="rounded-full bg-accent-soft px-1.5 text-[10.5px] font-semibold leading-4 text-accent">新</span>;
+  if (trend === "up") return <IconTrendUp size={14} strokeWidth={2.2} className="text-hot" aria-label="注目度上昇" />;
+  if (trend === "down") return <IconTrendDown size={14} strokeWidth={2.2} className="text-ink-4" aria-label="注目度低下" />;
+  if (trend === "new") return <span className="rounded-full bg-accent-soft px-1.5 text-[10.5px] font-semibold leading-4 text-accent">新着</span>;
   if (trend === "unknown") return null; // sources behind on collection: no comparison to show
-  return <IconMinus size={14} strokeWidth={2.2} className="text-ink-4" aria-label="热度持平" />;
+  return <IconMinus size={14} strokeWidth={2.2} className="text-ink-4" aria-label="注目度横ばい" />;
 }
 
 /**
@@ -38,10 +38,10 @@ export function HotTopics({ entries }: { entries: HotStripEntry[] }) {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-hot opacity-40" />
             <span className="relative inline-flex size-2 rounded-full bg-hot" />
           </span>
-          当前热点
+          現在の注目トピック
         </h2>
         <Link to="/hot" className="group -my-2 -mr-1.5 inline-flex h-10 items-center gap-1 px-1.5 text-[12.5px] text-ink-3 transition-colors hover:text-accent lg:my-0 lg:mr-0 lg:h-auto lg:px-0">
-          完整榜单 <IconArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          ランキング全体 <IconArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       </div>
       <ol>
@@ -57,8 +57,8 @@ export function HotTopics({ entries }: { entries: HotStripEntry[] }) {
                 <Faces participants={e.participants} total={e.participantCount} size={20} interactive={false} />
               </span>
               <span className="flex items-center justify-end gap-2.5 sm:contents">
-                <span className="whitespace-nowrap text-right text-[12.5px] text-ink-4" title="热度指数">
-                  <span className="num text-[13.5px] font-semibold text-ink-2">{Math.round(e.heat)}</span> 热度
+                <span className="whitespace-nowrap text-right text-[12.5px] text-ink-4" title="注目度指数">
+                  <span className="num text-[13.5px] font-semibold text-ink-2">{Math.round(e.heat)}</span> 注目度
                 </span>
                 <span className="flex w-5 justify-center">
                   <TrendMark trend={e.trend} />

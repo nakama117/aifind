@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-04T13:26:28.1334500Z",
+  "externalLimitations": [
+    "Official Codex sources HTTP 403",
+    "X credentials absent; real model recognition not exercised",
+    "Linux Docker and cloud deployment not exercised"
+  ],
+  "closedFindings": [
+    "Leaderboard CLI --round respects LEADERBOARD_AUTO_PUBLISH",
+    "Codex withdrawn/manual event cannot reappear under another ID or time offset",
+    "Invalid final Codex event enters review and does not block subsequent documents"
+  ],
+  "scope": "read-only review of completion increment",
+  "unresolvedP1P2": 0
+}

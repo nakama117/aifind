@@ -1,0 +1,37 @@
+import { defineModule } from "@aihot/contracts/modules";
+
+export const aifindModule = defineModule({
+  name: "aifind",
+  pages: [{ path: "products", file: "web/public-products.tsx" }, { path: "products/:slug", file: "web/public-product.tsx" },
+    { path: "compare", file: "web/public-editorial-list.tsx", id: "aifind-compare-directory" },
+    { path: "categories", file: "web/public-editorial-list.tsx", id: "aifind-category-directory" },
+    { path: "compare/:slug", file: "web/public-editorial.tsx", id: "aifind-compare-detail" },
+    { path: "categories/:slug", file: "web/public-editorial.tsx", id: "aifind-category-detail" },
+    { path: "howto", file: "web/public-guides.tsx", id: "aifind-guide-directory" },
+    { path: "howto/:slug", file: "web/public-guide.tsx", id: "aifind-guide-detail" },
+    {path:"editorial-policy",file:"web/editorial-policy.tsx"},{path:"contact",file:"web/contact.tsx"}],
+  adminPages: [
+    { path: "admin/aifind", file: "web/dashboard.tsx" },
+    { path: "admin/aifind/products", file: "web/products.tsx" },
+    { path: "admin/aifind/products/:id", file: "web/product-detail.tsx" },
+    { path: "admin/aifind/review", file: "web/review.tsx" },
+    { path: "admin/aifind/review/:id", file: "web/review-detail.tsx" },
+    { path: "admin/aifind/monitors", file: "web/monitors.tsx" },
+    { path: "admin/aifind/preview", file: "web/preview-hub.tsx" },
+    { path: "admin/aifind/preview/product-domain", file: "web/product-preview.tsx" },
+    { path: "admin/aifind/preview/change-detector", file: "web/change-detector-preview.tsx" },
+    { path: "admin/aifind/preview/product-discovery", file: "web/discovery-preview.tsx" },
+    { path: "admin/aifind/compare", file: "web/editorial-list.tsx", id: "aifind-compare-admin" },
+    { path: "admin/aifind/categories", file: "web/editorial-list.tsx", id: "aifind-category-admin" },
+    { path: "admin/aifind/compare/:id", file: "web/editorial-detail.tsx", id: "aifind-compare-admin-detail" },
+    { path: "admin/aifind/categories/:id", file: "web/editorial-detail.tsx", id: "aifind-category-admin-detail" },
+    { path: "admin/aifind/preview/compare-category", file: "web/editorial-preview.tsx" },
+    { path: "admin/aifind/howto", file: "web/editorial-list.tsx", id: "aifind-guide-admin" },
+    { path: "admin/aifind/howto/:id", file: "web/editorial-detail.tsx", id: "aifind-guide-admin-detail" },
+    { path: "admin/aifind/preview/howto-guide", file: "web/guide-preview.tsx" },
+    { path: "admin/aifind/preview/launch-readiness", file: "web/launch-preview.tsx" },
+    { path: "admin/aifind/launch-readiness", file: "web/launch-readiness.tsx" },
+  ],
+  apiPaths: [/^\/api\/admin\/aifind(?:\/|$)/, /^\/api\/site\/aifind\/(?:products|compare|categories|howto|assets|home)(?:\/|$)/, /^\/sitemap-products\.xml$/, /^\/sitemap-aifind-editorial\.xml$/],
+});
+export default aifindModule;

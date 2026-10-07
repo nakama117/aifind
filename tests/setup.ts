@@ -5,20 +5,31 @@
 // the database (databases.ts).
 import { createHash } from "node:crypto";
 import http from "node:http";
+import { MockAgent, setGlobalDispatcher } from "undici";
 import { DEFAULTS, PRESETS } from "@aihot/site/models";
 
 const database = new URL(process.env.DATABASE_URL ?? "postgres://unset/unset").pathname.slice(1);
+// Never let the workstation's real OpenAI credentials reach test providers.
+delete process.env.OPENAI_API_KEY;
+delete process.env.OPENAI_BASE_URL;
 if (!/_(test|ci)$/.test(database)) {
   throw new Error(`Invariant tests write rows: point DATABASE_URL at a throwaway database named *_test or *_ci (got "${database}")`);
 }
+// Default HTTP can reach only local stubs. Tests with synthetic external URLs supply a MockAgent
+// or an in-process fetch double of their own; no workstation provider can be contacted by accident.
+const network = new MockAgent();
+network.disableNetConnect();
+network.enableNetConnect(/^(?:127\.0\.0\.1|localhost|\[::1\])(?::\d+)?$/);
+setGlobalDispatcher(network);
 process.env.AIHOT_CREDENTIALS_DIR = "/nonexistent-test-credentials";
 process.env.SESSION_SECRET ??= "test-session-secret-0123456789";
 process.env.IMG_PROXY_SIGN_SECRET ??= "test-img-secret-0123456789";
 process.env.FEISHU_CONTENT_PUSH_ENABLED = "false";
 process.env.INDEXNOW_SUBMIT_ENABLED = "false";
 process.env.LOG_LEVEL ??= "error";
-// Paid providers are local stubs in these tests: calls and collection may run (the valves default off).
-process.env.MODEL_CALLS_ENABLED ??= "true";
+// This test process permits fake models even when its parent carries the production's closed valve.
+// The network guard above keeps real providers unreachable; production config is unchanged.
+process.env.MODEL_CALLS_ENABLED = "true";
 process.env.COLLECT_ENABLED ??= "true";
 // The tests were written against named model presets, one per step (each provider is pointed at a
 // local stub by the test that needs it). A step the site leaves on the `default` model gets its
@@ -29,13 +40,17 @@ const STEP_MODELS: Record<string, [env: string, model: string]> = {
   groupReview: ["GROUP_REVIEW_MODEL", "mimo-v2.6-flash"], digest: ["DIGEST_MODEL", "deepseek-flash"], report: ["REPORT_MODEL", "deepseek-flash"],
   translate: ["TRANSLATE_MODEL", "deepseek-flash"],
 };
-for (const [step, [env, model]] of Object.entries(STEP_MODELS)) if (!DEFAULTS[step]) process.env[env] ??= model;
+for (const [, [env, model]] of Object.entries(STEP_MODELS)) process.env[env] ??= model;
 
 /**
  * Sends the calls of the named model presets to a stub: sets each one's address and key variables, which
  * the site's presets name. By default the providers of the article analysis (DashScope, GLM, DeepSeek).
  */
 export function pointModels(url: string, models = ["qwen3.7-flash", "glm-5.3-flash", "deepseek-flash"], env: NodeJS.ProcessEnv = process.env) {
+  const endpoint = new URL(url);
+  if (endpoint.protocol !== "http:" || !["127.0.0.1", "localhost", "[::1]"].includes(endpoint.hostname)) {
+    throw new Error("model fixtures must use a local HTTP stub");
+  }
   for (const name of models) {
     const preset = PRESETS[name];
     if (!preset) throw new Error(`the site has no model preset ${name}`);

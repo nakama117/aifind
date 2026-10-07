@@ -21,7 +21,7 @@ after(async () => {
   await closeDb();
 });
 
-const bj = (s: string) => new Date(`${s}+08:00`);
+const bj = (s: string) => new Date(`${s}+09:00`);
 
 test("a late run writes the issue that was due, not today's", () => {
   assert.equal(dueDaily(bj("2026-09-29T08:00:05")), "2026-09-29");

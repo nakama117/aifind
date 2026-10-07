@@ -30,12 +30,12 @@ function enhanceCode(root: HTMLElement): () => void {
     const head = document.createElement("div");
     head.className = "code-block-head";
     const label = document.createElement("span");
-    label.textContent = "代码";
+    label.textContent = "コード";
     const button = document.createElement("button");
     button.type = "button";
     button.className = "code-block-copy";
-    button.textContent = "复制";
-    button.setAttribute("aria-label", "复制代码");
+    button.textContent = "コピー";
+    button.setAttribute("aria-label", "コードをコピー");
     button.addEventListener("click", async () => {
       let ok = true;
       try {
@@ -44,11 +44,11 @@ function enhanceCode(root: HTMLElement): () => void {
         ok = false;
       }
       button.dataset.status = ok ? "copied" : "error";
-      button.textContent = ok ? "已复制" : "请手动复制";
+      button.textContent = ok ? "コピーしました" : "手動でコピーしてください";
       const timer = setTimeout(() => {
         timers.delete(timer);
         button.dataset.status = "";
-        button.textContent = "复制";
+        button.textContent = "コピー";
       }, ok ? 1800 : 2400);
       timers.add(timer);
     });
@@ -91,7 +91,7 @@ export function ArticleBody({ html }: { html: string }) {
           img.classList.add("zoomable");
           img.tabIndex = 0;
           img.setAttribute("role", "button");
-          img.setAttribute("aria-label", img.alt ? `查看大图：${img.alt}` : "查看大图");
+          img.setAttribute("aria-label", img.alt ? `拡大画像を見る：${img.alt}` : "拡大画像を見る");
         } else if (img.classList.contains("zoomable")) {
           img.classList.remove("zoomable");
           img.removeAttribute("tabindex");

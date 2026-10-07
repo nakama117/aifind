@@ -1,0 +1,7 @@
+{
+  "Rules": [
+    { "ID": "daily-seven-days", "Status": "Enabled", "Filter": { "Prefix": "daily/" }, "Expiration": { "Days": 7 }, "NoncurrentVersionExpiration": { "NoncurrentDays": 7 }, "AbortIncompleteMultipartUpload": { "DaysAfterInitiation": 1 } },
+    { "ID": "weekly-four-weeks", "Status": "Enabled", "Filter": { "Prefix": "weekly/" }, "Expiration": { "Days": 28 }, "NoncurrentVersionExpiration": { "NoncurrentDays": 28 }, "AbortIncompleteMultipartUpload": { "DaysAfterInitiation": 1 } },
+    { "ID": "upstream-monthly-bounded", "Status": "Enabled", "Filter": { "Prefix": "monthly/" }, "Expiration": { "Days": 35 }, "NoncurrentVersionExpiration": { "NoncurrentDays": 35 } }
+  ]
+}

@@ -6,4 +6,4 @@ Disallow: /admin/
 Disallow: /starred
 Disallow: /feedback
 
-Sitemap: {{siteUrl}}/sitemap.xml
+Sitemap: {{siteUrl}}/sitemap-index.xml

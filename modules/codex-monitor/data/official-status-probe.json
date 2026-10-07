@@ -1,0 +1,13 @@
+{
+  "url": "https://status.openai.com/api/v2/incidents.json",
+  "checkedAt": "2026-10-04T11:03:40.396Z",
+  "httpStatus": 200,
+  "contentType": "application/json",
+  "schema": "PASS",
+  "bytes": 38298,
+  "sha256": "25670bffc6ec01180220460a1334f36aff5e48ef9a1ea03dbbd2e5b324c6b4fb",
+  "incidentCount": 25,
+  "codexIncidentCount": 3,
+  "newestCodexIncidentUpdatedAt": "2026-09-29T23:14:02Z",
+  "note": "Read-only schema probe. No database writes. Service incidents do not confirm usage resets."
+}

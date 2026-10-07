@@ -15,6 +15,7 @@ import { sweepUngrouped } from "@aihot/backend/jobs/events";
 import { enqueue, getBoss, QUEUES, stopBoss } from "@aihot/backend/jobs/queue";
 import { recoverStaleWork, releaseReceipt } from "@aihot/backend/operations/recover";
 import { publishArticle } from "@aihot/backend/publication/publish";
+import { BudgetExceededError } from "@aihot/backend/providers/receipts";
 
 const T = tag();
 const sourceId = `group-reliability-${T}`;
@@ -52,6 +53,21 @@ before(async () => {
   await groupArticle(id);
 });
 after(async () => { await provider.close(); await embeddings.close(); await stopBoss(); await closeDb(); });
+
+test("a billing-paused grouping remains pending and the missing-job sweep recovers it after the pause", async () => {
+  const id = await report("billing-pause");
+  await sql`UPDATE articles SET created_at=now()-interval '10 minutes' WHERE id=${id}`;
+  await sql`INSERT INTO provider_pauses (service, reason) VALUES ('deepseek', 'billing paused fixture')`;
+  try {
+    await assert.rejects(groupArticle(id), BudgetExceededError);
+    assert.equal((await sql`SELECT grouping_status FROM articles WHERE id=${id}`)[0]!.grouping_status, "pending");
+    await sweepUngrouped();
+    assert.ok((await sql`SELECT 1 FROM pgboss.job WHERE name=${QUEUES.group} AND data->>'articleId'=${id} AND state='created'`).length);
+  } finally { await sql`DELETE FROM provider_pauses WHERE service='deepseek'`; }
+  await sql`DELETE FROM pgboss.job WHERE name=${QUEUES.group} AND data->>'articleId'=${id}`;
+  await groupArticle(id);
+  assert.equal((await sql`SELECT grouping_status FROM articles WHERE id=${id}`)[0]!.grouping_status, "complete");
+});
 
 test("missing and invalid identity answers cannot silently assert unrelated", () => {
   assert.equal(BatchSchema.safeParse({}).success, false);

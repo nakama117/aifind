@@ -1,5 +1,5 @@
 // What the judging steps read about an article: loaded once per analysis and rendered per step.
-import { beijingDate, beijingTime } from "@aihot/contracts/time";
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
 import { sql } from "../db.ts";
 import { collapseWhitespace, truncate } from "../lib/text.ts";
 import { produceImage } from "../media/images.ts";
@@ -31,7 +31,7 @@ export interface AnalyzeInputArticle {
     /** The source asks for the article page (fetchPublicContent, detail pages, web listings). */
     fetchesBody?: boolean;
   };
-  /** Stored Chinese translation of the body (e.g. a full post whose original was truncated). */
+  /** Stored Japanese translation of the body (e.g. a full post whose original was truncated). */
   translationZh?: string | null;
 }
 
@@ -56,7 +56,7 @@ export async function loadAnalyzeInput(articleId: string): Promise<AnalyzeInputA
            s.name AS source_name, s.kind AS source_kind, s.tier, s.first_party, s.tags AS source_tags, s.owner_entity_id, s.config,
            tr.body_text AS translation_zh
     FROM articles a JOIN sources s ON s.id = a.source_id
-    LEFT JOIN translations tr ON tr.article_id = a.id AND tr.lang = 'zh' AND tr.revision >= a.revision
+    LEFT JOIN translations tr ON tr.article_id = a.id AND tr.lang = 'ja' AND tr.revision >= a.revision
     WHERE a.id = ${articleId}`;
   if (!row) return null;
   return {
@@ -85,7 +85,7 @@ export function buildMaterial(a: AnalyzeInputArticle): string {
   lines.push(`类型：${KIND_LABEL[a.source.kind] ?? a.source.kind}；分级：${a.source.tier}；一手来源：${a.source.firstParty ? "是" : "否"}`);
   lines.push("</source>");
   lines.push("<material>");
-  if (a.publishedAt) lines.push(`发布时间：${beijingDate(a.publishedAt)} ${beijingTime(a.publishedAt)}（北京时间）`);
+  if (a.publishedAt) lines.push(`发布时间：${tokyoDate(a.publishedAt)} ${tokyoTime(a.publishedAt)}（日本时间）`);
   if (a.author) lines.push(`作者：${a.author}`);
   if (a.xPost) {
     lines.push(`作者：${a.xPost.authorName ?? ""} (@${a.xPost.handle ?? ""})`);

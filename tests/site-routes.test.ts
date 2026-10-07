@@ -42,7 +42,7 @@ test("agents read Markdown answers under /api/v1/agent", async () => {
   for (const url of answers) {
     const res = await get(url);
     assert.equal(res.statusCode, 200, `${url}: ${res.body}`);
-    assert.match(res.body, /## 回答提示/, url);
+    assert.match(res.body, /## 回答のヒント/, url);
     assert.match(String(res.headers["cache-control"]), /^public/, url);
     assert.equal(res.headers["access-control-allow-origin"], "*", url);
   }

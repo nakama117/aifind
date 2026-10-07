@@ -19,7 +19,7 @@ export interface RiverSource {
 export const STAGES = [0, 0.25, 0.5, 0.75, 1] as const;
 
 const STEP = 3;
-const KIND: Record<string, string> = { x_search: "X 账号", rss: "RSS", web_list: "网页", mp_account: "公众号", json_list: "接口" };
+const KIND: Record<string, string> = { x_search: "Xアカウント", rss: "RSS", web_list: "ウェブサイト", mp_account: "公式アカウント", json_list: "API" };
 const FLASH_MS = 900;
 const INTRO_MS = 1800;
 /** Slow in, slow out: the river starts gently, crosses, and settles. */
@@ -481,7 +481,7 @@ export function SignalRiver({
       const p = L.paper;
       if (x >= p.x - 8 && x <= p.x + p.w + 8 && y >= p.y - 8 && y <= p.y + p.h + 8) {
         hover = { s: null, bundle: null, paper: true };
-        place(x, y, withSubject("日报"), "每天 08:00 出刊");
+        place(x, y, withSubject("日報"), "毎日08:00配信");
         redraw();
         return;
       }
@@ -504,13 +504,13 @@ export function SignalRiver({
       const b = L.bundles[s.bundle]!;
       if (x < L.x2) {
         hover = { s: best, bundle: null, paper: false };
-        const kind = s.source ? (KIND[s.source.kind] ?? "信源") : "信源";
-        place(x, y, s.source ? s.source.name : "一个信源", s.source?.heatOnly ? `${kind} · 只计入热度` : kind);
+        const kind = s.source ? (KIND[s.source.kind] ?? "情報源") : "情報源";
+        place(x, y, s.source ? s.source.name : "情報源1件", s.source?.heatOnly ? `${kind}は注目度にのみ加算` : kind);
       } else {
         hover = { s: null, bundle: s.bundle, paper: false };
-        if (x < L.gate) place(x, y, "同一件事", `${b.n} 个来源的报道合成一条`);
-        else if (b.kept) place(x, y, "进了精选", "有信息量，分数也够");
-        else place(x, y, "没进精选", "信息不够、重复或只是营销");
+        if (x < L.gate) place(x, y, "同じ出来事", `${b.n}件の情報源の記事を1つに統合`);
+        else if (b.kept) place(x, y, "注目記事に選出", "情報量があり、スコアも十分");
+        else place(x, y, "厳選対象外", "情報不足、重複、または宣伝目的");
       }
       redraw();
     };

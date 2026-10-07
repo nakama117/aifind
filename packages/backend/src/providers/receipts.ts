@@ -9,6 +9,7 @@
 import { sql, type Db } from "../db.ts";
 import { sha256, stableJson } from "../lib/ids.ts";
 import { shutdownSignal } from "../lib/shutdown.ts";
+import { openaiMonthUsage } from "./openai-cost.ts";
 
 export class BudgetExceededError extends Error {
   readonly service: string;
@@ -41,12 +42,19 @@ export class ProviderRejectedError extends Error {
   }
 }
 
+export class BillingPausedError extends ProviderRejectedError {}
+
 /**
  * The HTTP rule for every provider: an answer outside 2xx means the request was not taken. Rate limits
  * and server errors may pass; any other status is a refusal the same request would meet again.
  */
 export function assertAccepted(service: string, status: number, body: string): void {
   if (status >= 200 && status < 300) return;
+  let code: unknown;
+  try { code = JSON.parse(body)?.error?.code; } catch { /* Non-JSON provider error. */ }
+  if (status === 429 && ["project_spend_limit_exceeded", "organization_spend_limit_exceeded", "organization_usage_limit_exceeded", "credit_balance_exhausted", "insufficient_quota"].includes(String(code))) {
+    throw new BillingPausedError(`${service} billing paused: ${String(code)}`, status, false);
+  }
   throw new ProviderRejectedError(`${service} HTTP ${status}: ${body.slice(0, 500)}`, status, status === 429 || status >= 500);
 }
 
@@ -92,6 +100,12 @@ interface ReceiptRow {
 }
 
 async function checkBudget(tx: Db, service: string): Promise<void> {
+  const [pause] = await tx`SELECT reason FROM provider_pauses WHERE service=${service}`;
+  if (pause) throw new BudgetExceededError(service, `billing paused: ${pause.reason}`, 3600);
+  if (service === "openai") {
+    const { spent, limit } = await openaiMonthUsage(tx);
+    if (!Number.isFinite(limit) || limit <= 0 || spent >= limit) throw new BudgetExceededError(service, "monthly USD estimate", 3600);
+  }
   const [budget] = await tx<{ per_minute: number; per_hour: number; per_day: number }[]>`
     SELECT per_minute, per_hour, per_day FROM budgets WHERE service = ${service}`;
   if (!budget) return; // default rows come with the migrations; a service an operator removed is unlimited
@@ -168,11 +182,18 @@ export async function paidRequest(req: ReceiptRequest, call: () => Promise<CallO
     // "unknown": the request may have reached the provider (timeout, reset): do not re-send automatically.
     const message = (error instanceof ProviderRejectedError ? error.message : String(error)).slice(0, 2000);
     await sql.begin(async (tx) => {
+      if (error instanceof BillingPausedError) {
+        await tx`INSERT INTO provider_pauses (service, reason) VALUES (${req.service}, ${message})
+                 ON CONFLICT (service) DO UPDATE SET reason=EXCLUDED.reason, paused_at=now()`;
+      }
       await tx`UPDATE receipts SET status = ${status}, error = ${message}, updated_at = now() WHERE id = ${receiptId}`;
       await tx`UPDATE receipt_attempts SET status = ${status}, error = ${message}, latency_ms = ${Date.now() - started}, finished_at = now() WHERE id = ${attemptId}`;
     });
     // The first transport failure needs the same durable identity as a later unknown-result retry.
     if (status === "unknown") throw new ReceiptUnknownError(receiptId, message, { cause: error });
+    // The request was rejected, but the material is still valid. Pause the first affected job just
+    // like subsequent jobs; after an operator clears the provider pause, its failed receipt can retry.
+    if (error instanceof BillingPausedError) throw new BudgetExceededError(req.service, `billing paused: ${message}`, 3600);
     throw error;
   }
 

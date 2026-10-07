@@ -1,0 +1,11 @@
+import {test,after} from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {randomUUID} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {prepareLaunchRun} from '../../../scripts/lib/aifind-launch-runtime.ts';
+const parent=path.resolve('.data','phase85-runtime-test-'+randomUUID()),dataDir=path.join(parent,'runtime');
+after(()=>{assert.equal(path.dirname(parent),path.resolve('.data'));fs.rmSync(parent,{recursive:true,force:true});});
+test('RC26 normal candidate login receipt has no Preview path and preserves exclusive run history',()=>{const first=prepareLaunchRun(dataDir,4000,'/aifind_runtime_launch_candidate_test','/admin/aifind/launch-readiness');first.record({launcher:2147483646,api:null,web:null,worker:null});const password=fs.readFileSync(first.passwordFile);assert.match(password.toString(),/URL: http:\/\/localhost:4000\/admin\/aifind\/launch-readiness/);assert.doesNotMatch(password.toString(),/preview/);assert.ok(first.password.length>=16);const second=prepareLaunchRun(dataDir,4000,'/aifind_runtime_launch_candidate_test','/admin/aifind/launch-readiness');assert.deepEqual(fs.readFileSync(second.passwordFile),password);assert.equal(second.password,first.password);assert.ok(fs.existsSync(first.receiptFile));});
+test('RC27 actual candidate launcher refuses Preview and production databases before spawning',()=>{const launcher=path.resolve('scripts/serve-aifind-launch-candidate.ts');for(const env of [{DATABASE_URL:'postgres://postgres@127.0.0.1:55432/old_launch_preview',NODE_ENV:'development',AIHOT_ENVIRONMENT:'development'}, {DATABASE_URL:'postgres://postgres@127.0.0.1:55432/aifind_runtime_launch_candidate_test',NODE_ENV:'production',AIHOT_ENVIRONMENT:'production'}]){const r=spawnSync(process.execPath,[launcher],{env:{...process.env,...env,AIHOT_DATA_DIR:dataDir,AIHOT_CREDENTIALS_DIR:path.join(parent,'missing-credentials')},encoding:'utf8',windowsHide:true});assert.equal(r.status,1);assert.match(r.stderr,/Dedicated local .*launch_candidate_test|non-production loopback/);assert.doesNotMatch(r.stdout,/seedOnStartup|web started|api started/);}});

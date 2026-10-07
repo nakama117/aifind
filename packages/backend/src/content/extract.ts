@@ -2,7 +2,9 @@
 // Jina Reader is the budgeted fallback for pages that only render in a browser.
 import { Readability } from "@mozilla/readability";
 import { parseHTML } from "linkedom";
+import * as cheerio from "cheerio";
 import { sql } from "../db.ts";
+import { credential } from "../config.ts";
 import { guardedFetch } from "../lib/http-fetch.ts";
 import { stripTags } from "../lib/text.ts";
 import { jinaRead } from "../providers/jina.ts";
@@ -23,7 +25,8 @@ export interface ExtractedBody {
 const MIN_BODY_CHARS = 200;
 
 export function readable(html: string, url: string): ExtractedBody | null {
-  const { document } = parseHTML(html);
+  // Publishers may omit html/body tags. Readability expects a browser-normalized document tree.
+  const { document } = parseHTML(cheerio.load(html).html());
   try {
     const base = document.createElement("base");
     base.setAttribute("href", url);
@@ -57,6 +60,7 @@ export async function extractFromUrl(url: string, subject: string): Promise<Extr
   } catch {
     // fall through to Jina
   }
+  if (!credential("collectors", "JINA_API_KEY")) return null;
   try {
     const page = await jinaRead(url, { purpose: "body_fallback", subject });
     const html = markdownBody(page.markdown, url);

@@ -1,4 +1,4 @@
-// Daily, weekly and monthly reports. Windows are Beijing calendar based and written into the report;
+// Daily, weekly and monthly reports. Windows are Tokyo calendar based and written into the report;
 // missed schedule points are caught up; regeneration creates a revision. What every issue carries is
 // decided by rule: a daily from edition.ts without a model; a weekly or monthly is compiled from its
 // dailies and a model only writes its overview and introductions, from the brief in the industry pack
@@ -9,7 +9,7 @@ import { PLAIN_TERMS, RELEASE } from "@aihot/industry/taxonomy";
 import { promptText, promptVersion } from "../editorial/prompts.ts";
 import { modelFor } from "../editorial/models.ts";
 import { ENTITIES, isRelease } from "../editorial/vocabulary.ts";
-import { addDays, beijingDate, beijingMidnight, isoWeekLabel, isoWeekRange, monthRange } from "@aihot/contracts/time";
+import { addDays, tokyoDate, tokyoMidnight, isoWeekLabel, isoWeekRange, monthRange } from "@aihot/contracts/time";
 import { sql } from "../db.ts";
 import { chatJson } from "../providers/llm.ts";
 import { completeReceipt } from "../providers/receipts.ts";
@@ -74,21 +74,23 @@ async function saveReport(kind: ReportKind, key: string, start: Date, end: Date,
 }
 
 /**
- * Daily report for Beijing date D covers [D-1 08:00, D 08:00) Beijing time. Its most important entry
+ * Daily report for Tokyo date D covers [D-1 08:00, D 08:00) Tokyo time. Its most important entry
  * leads, in its own words, and the next three are today's highlights.
  */
-export async function composeDaily(date: string, reason?: string): Promise<{ key: string; entries: number }> {
+export async function composeDaily(date: string, reason?: string, options: { retrospective?: boolean } = {}): Promise<{ key: string; entries: number }> {
   const previous = await savedReport("daily", date);
   if (previous && reason === undefined) return { key: date, entries: previous.entries };
-  const end = new Date(beijingMidnight(date).getTime() + 8 * 3600 * 1000);
+  const end = new Date(tokyoMidnight(date).getTime() + 8 * 3600 * 1000);
   const start = new Date(end.getTime() - 86400000);
-  const edition = await dailyEdition(date, start, end);
+  if (options.retrospective && end.getTime() > Date.now()) throw new Error("A retrospective window must have ended");
+  const edition = await dailyEdition(date, start, end, options.retrospective);
   // An issue with nothing in it is a failure upstream, not a report: the run fails and is caught up later.
   if (edition.entries.length === 0) throw new Error(`daily ${date}: no selected items in its window`);
   const issue = arrangeDaily(edition.entries);
   const [lead, ...rest] = issue.main as [EditionEntry, ...EditionEntry[]];
   const content = {
     date,
+    ...(options.retrospective ? { retrospective: true } : {}),
     lead: { title: lead.entry.title, leadParagraph: lead.entry.summary },
     leadItemId: lead.entry.itemId,
     highlights: rest.slice(0, 3).map((e) => e.entry.itemId),
@@ -183,12 +185,12 @@ async function composePeriod(kind: "weekly" | "monthly", key: string, startDate:
   const previous = await savedReport(kind, key);
   if (previous && reason === undefined) return { key, entries: previous.entries };
   // The dailies' windows run from 08:00 the day before the first to 08:00 on the last.
-  const start = new Date(beijingMidnight(startDate).getTime() - 16 * 3600 * 1000);
-  const end = new Date(beijingMidnight(endDateInclusive).getTime() + 8 * 3600 * 1000);
-  const { entries, issues } = await periodEntries(startDate, endDateInclusive);
+  const start = new Date(tokyoMidnight(startDate).getTime() - 16 * 3600 * 1000);
+  const end = new Date(tokyoMidnight(endDateInclusive).getTime() + 8 * 3600 * 1000);
+  const { entries, issues, retrospective } = await periodEntries(startDate, endDateInclusive);
   const top = entries.slice(0, PERIOD_EVENTS[kind]);
   if (!top.length) throw new Error(`${kind} ${key}: no daily entries in the period`);
-  const selected = await candidates(start, end);
+  const selected = await candidates(start, end, retrospective);
   const groups = SECTION_ORDER
     .map((label) => ({ label, items: top.filter((e) => sectionOf(e.category) === label) }))
     .filter((g) => g.items.length > 0);
@@ -217,7 +219,8 @@ async function composePeriod(kind: "weekly" | "monthly", key: string, startDate:
   const [lead] = top as [Candidate, ...Candidate[]];
   const content = {
     kind,
-    title: kind === "weekly" ? `${SITE.name} 周报 · ${key}` : `${SITE.name} 月报 · ${key}`,
+    ...(retrospective ? { retrospective: true } : {}),
+    title: kind === "weekly" ? `${SITE.name} 週報 · ${key}` : `${SITE.name} 月報 · ${key}`,
     ...(kind === "weekly" ? { isoLabel: key } : { monthLabel: key }),
     periodStart: startDate,
     periodEnd: endDateInclusive,
@@ -246,29 +249,29 @@ export async function composeMonthly(label: string, reason?: string) {
   return composePeriod("monthly", label, range.start, range.end, reason);
 }
 
-const bjParts = (now: Date) => {
-  const iso = new Date(now.getTime() + 8 * 3600000).toISOString();
+const tokyoParts = (now: Date) => {
+  const iso = new Date(now.getTime() + 9 * 3600000).toISOString();
   return { hour: Number(iso.slice(11, 13)), minute: Number(iso.slice(14, 16)) };
 };
 
-/** The newest daily due by `now`: today's from 08:00 Beijing time, yesterday's before. */
+/** The newest daily due by `now`: today's from 08:00 Tokyo time, yesterday's before. */
 export function dueDaily(now = new Date()): string {
-  const today = beijingDate(now);
-  return bjParts(now).hour >= 8 ? today : addDays(today, -1);
+  const today = tokyoDate(now);
+  return tokyoParts(now).hour >= 8 ? today : addDays(today, -1);
 }
 
 /** The newest weekly due by `now`: the last complete ISO week from Monday 10:00, the one before until then. */
 export function dueWeekly(now = new Date()): string {
-  const today = beijingDate(now);
+  const today = tokyoDate(now);
   const dow = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
-  const due = dow > 0 || bjParts(now).hour >= 10;
+  const due = dow > 0 || tokyoParts(now).hour >= 10;
   return isoWeekLabel(addDays(today, -dow - (due ? 7 : 14)));
 }
 
 /** The newest monthly due by `now`: the last complete month from the 1st 10:30, the one before until then. */
 export function dueMonthly(now = new Date()): string {
-  const [y, m, d] = beijingDate(now).split("-").map(Number) as [number, number, number];
-  const { hour, minute } = bjParts(now);
+  const [y, m, d] = tokyoDate(now).split("-").map(Number) as [number, number, number];
+  const { hour, minute } = tokyoParts(now);
   const due = d > 1 || hour > 10 || (hour === 10 && minute >= 30);
   const back = due ? 1 : 2;
   const month = (y * 12 + (m - 1) - back);
@@ -296,8 +299,11 @@ export async function composeDueReports(now = new Date(), limit = 8): Promise<{ 
     { kind: "monthly", due: dueMonthly(now), next: nextMonth, compose: composeMonthly },
   ];
   kinds: for (const k of kinds) {
-    const have = new Set((await sql<{ key: string }[]>`SELECT key FROM reports WHERE kind = ${k.kind}`).map((r) => r.key));
-    const first = [...have].sort()[0] ?? k.due;
+    const saved = await sql<{ key: string; retrospective: boolean | null }[]>`
+      SELECT key, content->>'retrospective' = 'true' AS retrospective FROM reports WHERE kind = ${k.kind}`;
+    const have = new Set(saved.map((r) => r.key));
+    // Sparse historical compilations are not evidence of missed live deliveries between their dates.
+    const first = saved.filter((r) => !r.retrospective).map((r) => r.key).sort()[0] ?? k.due;
     for (let key = first; key <= k.due; key = k.next(key)) {
       if (have.has(key)) continue;
       if (shutdownSignal.signal.aborted || generated.length >= limit) break kinds;

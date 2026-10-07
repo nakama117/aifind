@@ -8,7 +8,8 @@ import type { GroupInfo, FeedItemSummary, TimelineFilters } from "@aihot/contrac
 import { CATEGORY_LABELS } from "@aihot/contracts/taxonomy";
 import { SameEventBadge, SelectedBadge } from "../../components/ui/Badge";
 import { ScoreLabel } from "../../components/ui/Score";
-import { beijingTime } from "@aihot/contracts/time";
+import { tokyoDate, tokyoTime } from "@aihot/contracts/time";
+import { approximateTimeline } from "../../lib/format";
 import { MediaThumbs, SourceLine, StarButton } from "./parts";
 import { GroupButton, GroupSources } from "./ReadingGroup";
 import { QuotedLine } from "../item/QuotedPost";
@@ -34,14 +35,15 @@ export const FeedItem = memo(function FeedItem({ item, group, filters, read = fa
   };
   const showSources = !!group && (group.additionalSourceCount > 0 || group.reportCount > 1);
   const tags = showTags ? item.tags.slice(0, 3) : [];
+  const approximate = at ? approximateTimeline(item, at) : false;
 
   return (
     <article className="relative min-w-0 lg:card lg:card-hover lg:px-[18px] lg:pb-[14px] lg:pt-[15px]" data-item-id={item.id}>
       <header className="flex min-h-[22px] items-center gap-1.5 text-[12.5px] leading-[18px] text-ink-4 lg:min-h-[18px] lg:gap-2">
         <SourceLine item={item} className="text-ink-4" />
         {at && (
-          <time dateTime={at} className="mono shrink-0 text-[12px] lg:hidden">
-            · {beijingTime(at)}
+          <time dateTime={approximate ? tokyoDate(at) : at} className="mono shrink-0 text-[12px] lg:hidden">
+            · {approximate ? "日付のみ" : tokyoTime(at)}
           </time>
         )}
         {item.selected && (
@@ -99,7 +101,7 @@ export const FeedItem = memo(function FeedItem({ item, group, filters, read = fa
 
       {item.sameEvent && (
         <p className="relative z-10 mt-2 line-clamp-1 text-[12.5px] text-ink-4">
-          同一新闻，精选展示
+          同じニュースを厳選して表示
           <Link viewTransition to={`/items/${item.sameEvent.id}`} className="text-ink-3 transition-colors hover:text-accent">
             《{item.sameEvent.title}》
           </Link>
@@ -113,7 +115,7 @@ export const FeedItem = memo(function FeedItem({ item, group, filters, read = fa
 
       {item.reason && (
         <div className="mt-1 lg:mt-3 lg:border-t lg:border-line-soft lg:pt-3">
-          <p className="line-clamp-1 text-[13px] leading-[1.65] text-note lg:line-clamp-none lg:leading-[1.75]">推荐理由：{item.reason}</p>
+          <p className="line-clamp-1 text-[13px] leading-[1.65] text-note lg:line-clamp-none lg:leading-[1.75]">おすすめの理由：{item.reason}</p>
         </div>
       )}
 

@@ -4,7 +4,7 @@
 //      item; UNKNOWN goes on like PASS (a BLOCK given while material is missing counts as UNKNOWN);
 //   2. score: two independent scores against the source tier's threshold (industry/selection.ts) decide 精选;
 //   3. structure: category, tags, subjects and the current news fact, beside scoring;
-//   4. writing, once the structure is in: the Chinese title, summary and reason by the content
+//   4. writing, once the structure is in: the Japanese title, summary and reason by the content
 //      understanding for selected and near-selected items, by the cheaper title/summary prompts for the rest.
 // Material with only a title or a feed summary has its article page fetched before it is judged.
 import { z } from "zod";
@@ -20,7 +20,7 @@ import { buildMaterial, firstImagePart, loadAnalyzeInput, type AnalyzeInputArtic
 import { pageFetchable } from "../content/extract.ts";
 import { shutdownSignal } from "../jobs/queue.ts";
 import {
-  buildArticlePrompt, buildLongTweetPrompt, buildShortTweetPrompt, finalizeCopy, isShortTweetInput, looksZh, MAX_BODY_CHARS, missingEvidence,
+  buildArticlePrompt, buildLongTweetPrompt, buildShortTweetPrompt, finalizeCopy, isShortTweetInput, looksJapaneseCopy, MAX_BODY_CHARS, missingEvidence,
   needsShortTweetTranslation, parseTranslateOutput, PREFILTER_SYSTEM, prefilterUser, translateInputOf, UNDERSTAND_SYSTEM, understandUser,
   type IdentityGuard,
 } from "./writing.ts";
@@ -71,13 +71,13 @@ export const SCORE_SYSTEM = promptText("selection-score");
 export const ScoreSchema = z.object({ attentionScore: z.coerce.number().int().min(0).max(100) });
 
 const SCORE_TIME = new Intl.DateTimeFormat("sv-SE", {
-  timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
+  timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
 });
 
-/** The score input's time: Beijing time, ISO 8601 with +08:00 (the form the prompt was tuned on). */
+/** The score input's time: Tokyo time, ISO 8601 with +09:00 (the form the prompt was tuned on). */
 export function scoreInputTime(at: Date): string {
   const ms = at.getTime() % 1000;
-  return `${SCORE_TIME.format(at).replace(" ", "T")}${ms ? `.${String(ms).padStart(3, "0")}` : ""}+08:00`;
+  return `${SCORE_TIME.format(at).replace(" ", "T")}${ms ? `.${String(ms).padStart(3, "0")}` : ""}+09:00`;
 }
 
 /**
@@ -96,7 +96,7 @@ export function buildScoreInput(a: AnalyzeInputArticle): string {
   const at = a.publishedAt ?? a.discoveredAt ?? null;
   return [
     "请按系统规则评估以下单篇材料所代表的事件。只输出 attentionScore。",
-    `【发布时间（北京时间）】\n${at ? scoreInputTime(at) : ""}`,
+    `【发布时间（日本时间）】\n${at ? scoreInputTime(at) : ""}`,
     `【标题】\n${a.title.trim()}`,
     `【完整正文】\n${body.length > MAX_BODY_CHARS ? body.slice(0, MAX_BODY_CHARS) : body}`,
   ].join("\n\n");
@@ -375,9 +375,9 @@ async function runSummarize(a: AnalyzeInputArticle, opts: StepOpts): Promise<Non
   const short = isShortTweetInput(t);
   const main = collapseWhitespace(t.mainText || t.title);
   const plain = { reasonZh: null, receiptIds: [] as number[], reused: true };
-  // A short post already in Chinese is its own copy, and too little text is not written up from a title.
-  if (short && !needsShortTweetTranslation(main)) return { kind: "verbatim", model: null, titleZh: main, summaryZh: main, ...plain };
-  if (!short && t.text.trim().length < 20) return { kind: "none", model: null, titleZh: looksZh(t.title) ? t.title : "", summaryZh: "", ...plain };
+  // A short post already in Japanese is its own copy; shared Han alone is not enough evidence.
+  if (short && !needsShortTweetTranslation(main, a.xPost?.lang)) return { kind: "verbatim", model: null, titleZh: main, summaryZh: main, ...plain };
+  if (!short && t.text.trim().length < 20) return { kind: "none", model: null, titleZh: looksJapaneseCopy(t.title) ? t.title : "", summaryZh: "", ...plain };
   const model = await modelFor("summarize");
   checkAnalysisRunning();
   const res = await chatJson({
@@ -396,10 +396,10 @@ async function runSummarize(a: AnalyzeInputArticle, opts: StepOpts): Promise<Non
   });
   const p = res.data;
   const draft = short
-    ? { titleZh: p.titleZh || (looksZh(main) ? main : ""), summaryZh: p.bodyZh || p.summaryZh }
+    ? { titleZh: p.titleZh || (looksJapaneseCopy(main) ? main : ""), summaryZh: p.bodyZh || p.summaryZh }
     : isX
       ? { titleZh: p.titleZh, summaryZh: p.summaryZh || p.bodyZh }
-      : { titleZh: p.titleZh || (looksZh(t.title) ? t.title : ""), summaryZh: p.summaryZh };
+      : { titleZh: p.titleZh || (looksJapaneseCopy(t.title) ? t.title : ""), summaryZh: p.summaryZh };
   const copy = finalizeCopy(t, draft);
   return { kind: "summarize", model: res.model, titleZh: copy.titleZh, summaryZh: copy.summaryZh, reasonZh: null, identityGuard: copy.identityGuard, receiptIds: [res.receiptId], reused: res.reused };
 }
@@ -432,7 +432,7 @@ export function normalizeAnalysis(run: AnalysisRun) {
   const label = run.prefilter.label;
   const titleZh = collapseWhitespace(run.writing?.titleZh ?? "");
   const summaryZh = (run.writing?.summaryZh ?? "").trim();
-  // Past the prefilter (PASS or UNKNOWN) an item is relevant, but without a usable Chinese title and
+  // Past the prefilter (PASS or UNKNOWN) an item is relevant, but without a usable Japanese title and
   // summary it cannot be published: it waits.
   const relevance = label === "BLOCK" ? "block" : run.writing && (!titleZh || !summaryZh) ? "unknown" : "pass";
   // Selected when the two scores add up to twice the tier threshold; the mean, floored, is the score

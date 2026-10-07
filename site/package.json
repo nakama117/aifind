@@ -3,6 +3,12 @@
   "private": true,
   "type": "module",
   "sideEffects": false,
+  "dependencies": {
+    "@aihot/aifind": "*",
+    "@aihot/model-leaderboard": "*",
+    "@aihot/codex-monitor": "*",
+    "@aihot/topic-chronicle": "*"
+  },
   "exports": {
     ".": "./site.ts",
     "./models": "./models.ts",

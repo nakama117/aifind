@@ -6,6 +6,7 @@ import { createHash, createHmac } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { mkdir, readdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
+import { devNull } from "node:os";
 import { promisify } from "node:util";
 import { config, credential } from "../config.ts";
 import { sql } from "../db.ts";
@@ -102,7 +103,7 @@ export async function runBackup(now = new Date()) {
     kept.push(d);
   }
   let filesError: string | null = null;
-  if (!kept.length) await run("tar", ["-czf", files, "-T", "/dev/null"]);
+  if (!kept.length) await run("tar", ["-czf", files, "-T", devNull]);
   else {
     const pack = () => run("tar", ["-czf", files, "-C", config.dataDir, ...kept]);
     await pack().catch(() => pack()).catch((error: unknown) => {
@@ -112,10 +113,10 @@ export async function runBackup(now = new Date()) {
     });
   }
   const out: Array<{ key: string; bytes: number; sha256: string }> = [];
-  const bj = new Date(now.getTime() + 8 * 3600_000);
+  const tokyo = new Date(now.getTime() + 9 * 3600_000);
   const prefixes = ["daily"];
-  if (bj.getUTCDay() === 0) prefixes.push("weekly");
-  if (bj.getUTCDate() === 1) prefixes.push("monthly");
+  if (tokyo.getUTCDay() === 0) prefixes.push("weekly");
+  if (tokyo.getUTCDate() === 1) prefixes.push("monthly");
   for (const file of filesError ? [dump] : [dump, files]) {
     const size = (await stat(file)).size;
     const sha = await fileSha256(file);

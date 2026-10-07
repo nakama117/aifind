@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, redirect, useLoaderData, useLocation, useNavigation, useSearchParams } from "react-router";
 import type { Route } from "./+types/all";
 import type { PoolResponse } from "@aihot/contracts/site";
-import { SITE, subjectAfter } from "@aihot/site";
-import { beijingTime } from "@aihot/contracts/time";
+import { SITE } from "@aihot/site";
+import { tokyoTime } from "@aihot/contracts/time";
 import { edgeTtl, loadOr404 } from "../lib/api.server";
 import { filterParams, itemListLd, listPath, pageMeta, readFilters } from "../lib/seo";
 import { ActiveFilters, CategoryTabs, FeedBar, SearchField } from "../features/feed/Filters";
@@ -17,9 +17,9 @@ import { isPhone, type Screen } from "../components/shell/screens";
 import { openSearch } from "../features/search/SearchOverlay";
 import { addRecentSearch } from "../lib/local-state";
 
-export const handle: Screen = { tab: "featured", name: "全部" };
+export const handle: Screen = { tab: "featured", name: "すべて" };
 
-const ALL_TITLE = subjectAfter("全部", "动态");
+const ALL_TITLE = `${SITE.subject}ニュース一覧`;
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -43,8 +43,8 @@ export function meta({ loaderData }: Route.MetaArgs) {
   const page = loaderData?.data.page ?? 1;
   const path = listPath("/all", { ...(f && filterParams(f)), q, tab: f?.tab === "relevance" ? "relevance" : null, page: page > 1 ? page : null });
   return pageMeta({
-    title: q ? `搜索：${q}` : ALL_TITLE,
-    description: `${SITE.name} 收录的${subjectAfter("全部", "相关动态")}，可按频道、类别与标签筛选，支持中英文搜索。`,
+    title: q ? `検索：${q}` : ALL_TITLE,
+    description: `${SITE.name}に掲載された${SITE.subject}のニュースを一覧できます。チャンネル、カテゴリ、タグで絞り込めるほか、日本語と英語で検索できます。`,
     path,
     noindex: !!q,
     jsonLd: q ? undefined : itemListLd(path, ALL_TITLE, loaderData?.data.items.map((i) => i.title) ?? []),
@@ -81,8 +81,8 @@ export default function AllPage() {
     else sp.delete("tab");
     return `/all?${sp}`;
   };
-  const title = f.q ? `搜索“${f.q}”` : f.tag ? `#${f.tag}` : null;
-  const updated = beijingTime(data.freshness);
+  const title = f.q ? `「${f.q}」` : f.tag ? `#${f.tag}` : null;
+  const updated = tokyoTime(data.freshness);
   // Searches are remembered in this browser for the phone search (listed in the privacy notice).
   useEffect(() => {
     if (f.q) addRecentSearch(f.q);
@@ -97,7 +97,7 @@ export default function AllPage() {
       {/* Phones: the feed bar, or for a search the query (tap to change it) and back to 全部. */}
       {f.q ? (
         <PhoneBar
-          back={{ to: "/all", label: "全部" }}
+          back={{ to: "/all", label: "すべて" }}
           center={
             <button type="button" onClick={(event) => openSearch(f.q ?? "", event.currentTarget)} className="flex h-11 min-w-0 max-w-full items-center gap-2 rounded-full bg-bg-sunk px-3.5 text-[15px] text-ink ring-1 ring-inset ring-line-soft dark:bg-bg-muted/60">
               <IconSearch size={16} className="shrink-0 text-ink-4" />
@@ -124,12 +124,12 @@ export default function AllPage() {
           <PillTabs
             size="xs"
             layoutId="all-search-sort"
-            label="搜索排序"
+            label="検索の並び順"
             active={f.tab}
-            items={(["time", "relevance"] as const).map((t) => ({ key: t, label: t === "time" ? "最新（标题与摘要）" : "全文相关", to: searchTabHref(t) }))}
+            items={(["time", "relevance"] as const).map((t) => ({ key: t, label: t === "time" ? "新着（タイトルと概要）" : "全文検索", to: searchTabHref(t) }))}
           />
           <span className="text-[12px] text-ink-4">
-            找到 <span className="num">{data.total >= 2000 ? "2000+" : data.total}</span> 条 · 更新于 <span className="num">{updated}</span>
+            見つかった件数： <span className="num">{data.total >= 2000 ? "2000+" : data.total}</span> 件 · 更新日時： <span className="num">{updated}</span>
           </span>
         </div>
       )}
@@ -138,16 +138,16 @@ export default function AllPage() {
         {data.items.length === 0 ? (
           <div className="mt-2 lg:card">
             <EmptyState
-              title="没有找到相关内容"
+              title="関連するコンテンツが見つかりませんでした"
               action={
                 f.q && f.tab === "time" ? (
                   <Link to={searchTabHref("relevance")} className="text-[13px] font-medium text-accent hover:underline">
-                    试试“全文相关”，连正文一起搜
+                    「全文検索」を試すと、本文も検索できます
                   </Link>
                 ) : undefined
               }
             >
-              {f.q ? "换个说法，或者去掉筛选再试。" : "这个筛选下暂时没有内容。"}
+              {f.q ? "別の言葉で検索するか、絞り込みを解除してお試しください。" : "この条件に該当するコンテンツはありません。"}
             </EmptyState>
           </div>
         ) : (
@@ -155,7 +155,7 @@ export default function AllPage() {
         )}
       </div>
       <Pagination page={data.page} pageCount={data.pageCount} href={(p) => pageHref(params, p)} />
-      {data.page >= 50 && <p className="mt-4 text-center text-[12px] text-ink-4">最多提供 50 页，更早的内容请使用搜索或主题页。</p>}
+      {data.page >= 50 && <p className="mt-4 text-center text-[12px] text-ink-4">表示できるのは最大50ページです。それ以前のコンテンツは検索またはトピックページをご利用ください。</p>}
     </div>
   );
 }
@@ -180,20 +180,20 @@ export function SearchBusy() {
   const button = "inline-flex h-9 items-center rounded-full px-4 text-[13.5px]";
   return (
     <>
-    <PhoneBar back={{ to: base, label: base === "/all" ? "全部" : "精选" }} />
+    <PhoneBar back={{ to: base, label: base === "/all" ? "すべて" : "おすすめ" }} />
     <div className="mx-auto max-w-sm py-24 text-center" aria-live="polite">
       <RingMark className="mx-auto mb-5 size-10 text-accent" spinning />
-      <h1 className="text-[20px] font-bold text-ink">搜索有点忙</h1>
-      <p className="mt-2 text-[14px] leading-relaxed text-ink-3">现在搜索的人比较多，请 {RETRY_AFTER_SECONDS} 秒以后重试。列表浏览不受影响。</p>
+      <h1 className="text-[20px] font-bold text-ink">検索が混み合っています</h1>
+      <p className="mt-2 text-[14px] leading-relaxed text-ink-3">ただいま検索の利用が集中しています。 {RETRY_AFTER_SECONDS} 秒後に再試行してください。リストの閲覧には影響ありません。</p>
       <div className="mt-6 flex flex-wrap justify-center gap-2.5">
         {hasSearch &&
           (wait > 0 ? (
-            <span aria-disabled="true" className={`${button} num cursor-default bg-bg-sunk font-medium text-ink-4`}>{wait} 秒后可重试</span>
+            <span aria-disabled="true" className={`${button} num cursor-default bg-bg-sunk font-medium text-ink-4`}>{wait} 秒後に再試行できます</span>
           ) : (
-            <Link to={retry} className={`${button} bg-accent font-medium text-accent-contrast hover:bg-accent-ink`}>重试这次搜索</Link>
+            <Link to={retry} className={`${button} bg-accent font-medium text-accent-contrast hover:bg-accent-ink`}>検索を再試行</Link>
           ))}
-        <Link to="/all" className={`${button} ${hasSearch ? "border border-line-strong bg-surface text-ink-2 hover:border-ink-4" : "bg-accent font-medium text-accent-contrast hover:bg-accent-ink"}`}>浏览全部动态</Link>
-        <Link to="/" className={`${button} border border-line-strong bg-surface text-ink-2 hover:border-ink-4`}>回到精选</Link>
+        <Link to="/all" className={`${button} ${hasSearch ? "border border-line-strong bg-surface text-ink-2 hover:border-ink-4" : "bg-accent font-medium text-accent-contrast hover:bg-accent-ink"}`}>すべてのニュースを見る</Link>
+        <Link to="/" className={`${button} border border-line-strong bg-surface text-ink-2 hover:border-ink-4`}>厳選記事に戻る</Link>
       </div>
     </div>
     </>

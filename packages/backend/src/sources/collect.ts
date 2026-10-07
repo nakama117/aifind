@@ -1,6 +1,7 @@
 // Collection run for one source: fetch listing → filter → store material → enqueue processing.
 // A failed fetch never advances the success cursor; the source's health reflects consecutive failures.
 import { sql, type Db } from "../db.ts";
+import { SOURCE_DEFAULTS } from "@aihot/site";
 import { identityKeyFor, upsertMaterial } from "../content/materials.ts";
 import { identityKeyForUrl } from "../lib/url.ts";
 import { enqueue, QUEUES, shutdownSignal } from "../jobs/queue.ts";
@@ -362,7 +363,7 @@ export async function adaptIntervals(): Promise<{ updated: number }> {
     // hot signals may wait longer.
     const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 60;
     // Listings read through Jina are not looked at more than hourly: busy ones would outrun its daily budget.
-    const min = r.paid_listing ? 60 : 15;
+    const min = Math.max(SOURCE_DEFAULTS.minimumIntervalMinutes, r.paid_listing ? 60 : 15);
     // X accounts read by shard follow the shard's pace, whatever their own volume.
     const target = shardHandle(r) ? shardMinutes(r.participation_mode) : perDay <= 0.15 ? max : Math.round(Math.min(max, Math.max(min, (24 * 60) / (perDay * 3))));
     const res = await sql`UPDATE sources SET interval_minutes = ${target} WHERE id = ${r.id} AND interval_minutes <> ${target}`;

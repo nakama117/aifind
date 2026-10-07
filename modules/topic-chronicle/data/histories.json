@@ -1,0 +1,530 @@
+[
+  {
+    "topic": "openai",
+    "compiledOn": "2026-10-04",
+    "through": "2026-09",
+    "events": [
+      {
+        "date": "2022-11-30",
+        "kind": "product",
+        "title": "ChatGPTの研究プレビューを公開",
+        "summary": "対話型AIを無料の研究プレビューとして公開し、利用者からのフィードバックを募った。",
+        "major": true,
+        "source": "OpenAI",
+        "url": "https://openai.com/index/chatgpt/"
+      },
+      {
+        "date": "2023-03-14",
+        "kind": "model",
+        "title": "GPT-4を発表",
+        "summary": "GPT-4を発表し、ChatGPT Plusと開発者向けAPIで提供した。",
+        "major": true,
+        "source": "OpenAI",
+        "url": "https://openai.com/index/gpt-4/"
+      },
+      {
+        "date": "2024-05-13",
+        "kind": "model",
+        "title": "GPT-4oを発表",
+        "summary": "音声・視覚・テキストを横断して扱うモデルGPT-4oを発表した。",
+        "major": true,
+        "source": "OpenAI",
+        "url": "https://openai.com/index/hello-gpt-4o/"
+      },
+      {
+        "date": "2025-08-07",
+        "kind": "model",
+        "title": "GPT-5を発表",
+        "summary": "通常の応答と深い推論を組み合わせるGPT-5を発表。コーディングや複雑な業務への対応を強化した。",
+        "major": true,
+        "source": "OpenAI",
+        "url": "https://openai.com/index/introducing-gpt-5/"
+      },
+      {
+        "date": "2026-09-29",
+        "kind": "model",
+        "title": "GPT-6.1 Solの提供を開始",
+        "summary": "GPT-6 Solの後継を発表。ChatGPT Work、Codex、APIで提供を開始し、コーディングと業務タスクの能力を強化した。",
+        "major": true,
+        "source": "OpenAI",
+        "url": "https://openai.com/index/introducing-gpt-6-1-sol/"
+      }
+    ]
+  },
+  {
+    "topic": "anthropic",
+    "compiledOn": "2026-10-04",
+    "through": "2026-09",
+    "events": [
+      {
+        "date": "2023-03-14",
+        "kind": "model",
+        "title": "ClaudeとClaude Instantを発表",
+        "summary": "パートナーとの限定テストを経て、対話や文章処理を行うClaudeの提供範囲を拡大した。",
+        "major": true,
+        "source": "Anthropic",
+        "url": "https://www.anthropic.com/news/introducing-claude"
+      },
+      {
+        "date": "2024-03-04",
+        "kind": "model",
+        "title": "Claude 3シリーズを発表",
+        "summary": "Opus・Sonnet・Haikuを発表。OpusとSonnetは当日から提供し、Haikuは後日提供とした。",
+        "major": true,
+        "source": "Anthropic",
+        "url": "https://www.anthropic.com/news/claude-3-family"
+      },
+      {
+        "date": "2025-05-22",
+        "kind": "model",
+        "title": "Claude 4とClaude Codeの一般提供を発表",
+        "summary": "Opus 4とSonnet 4を発表。ツールを使う拡張思考を導入し、Claude Codeも研究プレビューから一般提供へ移行した。",
+        "major": true,
+        "source": "Anthropic",
+        "url": "https://www.anthropic.com/news/claude-4"
+      },
+      {
+        "date": "2026-09-22",
+        "kind": "model",
+        "title": "Claude Opus 5.5を発表",
+        "summary": "Claude 5.5系列の最初のモデルを発表。コーディングや長時間のエージェント業務を強化し、外部評価と安全対策も説明した。",
+        "major": true,
+        "source": "Anthropic",
+        "url": "https://www.anthropic.com/claude-opus-5-5"
+      }
+    ]
+  },
+  {
+    "topic": "google",
+    "compiledOn": "2026-10-04",
+    "through": "2026-09",
+    "events": [
+      {
+        "date": "2023-12-06",
+        "kind": "model",
+        "title": "Gemini 1.0を発表",
+        "summary": "Ultra・Pro・Nanoの3種類を発表。テキスト、画像、音声などを扱うモデル系列として展開した。",
+        "major": true,
+        "source": "Google",
+        "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/"
+      },
+      {
+        "date": "2024-12-11",
+        "kind": "model",
+        "title": "Gemini 2.0を発表",
+        "summary": "エージェント用途を重視したGemini 2.0を発表し、2.0 Flashの実験版を公開した。",
+        "major": true,
+        "source": "Google",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/google-gemini-ai-update-december-2024/"
+      },
+      {
+        "date": "2025-03-25",
+        "kind": "model",
+        "title": "Gemini 2.5 Proの実験版を公開",
+        "summary": "応答前に推論するGemini 2.5を発表。最初のモデルとして2.5 Pro Experimentalを提供した。",
+        "major": true,
+        "source": "Google",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/gemini-model-thinking-updates-march-2025/"
+      },
+      {
+        "date": "2026-09-30",
+        "kind": "model",
+        "title": "Gemini 4 Argonを発表、限定提供を開始",
+        "summary": "長時間の複雑な推論に対応するモデルを発表。Fairwind Programの信頼されたサイバー防御組織に段階的に提供するとした。",
+        "major": true,
+        "source": "Google",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
+      }
+    ]
+  },
+  {
+    "topic": "deepseek",
+    "compiledOn": "2026-10-04",
+    "through": "2026-09",
+    "events": [
+      {
+        "date": "2024-05-06",
+        "kind": "model",
+        "title": "DeepSeek-V2を公開",
+        "summary": "効率的な学習と推論を目指すMoE型言語モデルDeepSeek-V2を公開した。",
+        "major": true,
+        "source": "DeepSeek",
+        "url": "https://github.com/deepseek-ai/DeepSeek-V2"
+      },
+      {
+        "date": "2024-12-26",
+        "kind": "model",
+        "title": "DeepSeek-V3をAPIに導入",
+        "summary": "deepseek-chatの基盤モデルをDeepSeek-V3に更新し、従来のAPI呼び出し方法を維持した。",
+        "major": true,
+        "source": "DeepSeek",
+        "url": "https://api-docs.deepseek.com/updates/#date-2024-12-26"
+      },
+      {
+        "date": "2025-01-20",
+        "kind": "model",
+        "title": "推論モデルDeepSeek-R1を公開",
+        "summary": "推論モデルR1と蒸留した小型モデルを公開し、ウェブとAPIでの提供を開始した。",
+        "major": true,
+        "source": "DeepSeek",
+        "url": "https://api-docs.deepseek.com/news/news250120/"
+      },
+      {
+        "date": "2026-09-10",
+        "kind": "model",
+        "title": "DeepSeek-V4.1-Flashを公開",
+        "summary": "新しいアーキテクチャ系列の小型モデルを公開。視覚理解を備え、APIではdeepseek-flashとして提供した。",
+        "major": true,
+        "source": "DeepSeek",
+        "url": "https://api-docs.deepseek.com/updates/#date-2026-09-10"
+      }
+    ]
+  },
+  {
+    "topic": "qwen",
+    "compiledOn": "2026-10-04",
+    "through": "2026-08",
+    "events": [
+      {
+        "date": "2023-08-03",
+        "kind": "model",
+        "title": "Qwen-7Bを公開",
+        "summary": "Qwen系列の70億パラメータモデルを公開し、開発者が利用できるモデル群の展開を始めた。",
+        "major": true,
+        "source": "Qwen Team",
+        "url": "https://github.com/QwenLM/Qwen"
+      },
+      {
+        "date": "2024-09-19",
+        "kind": "model",
+        "title": "Qwen2.5モデル群を公開",
+        "summary": "汎用モデルに加え、コード向けと数学向けのモデルを発表。複数サイズの重みを公開した。",
+        "major": true,
+        "source": "Qwen Team",
+        "url": "https://qwenlm.github.io/blog/qwen2.5/"
+      },
+      {
+        "date": "2025-04-29",
+        "kind": "model",
+        "title": "Qwen3の重みを公開",
+        "summary": "推論と非推論のモードを備えるQwen3を発表。2種類のMoEモデルと6種類のDenseモデルの重みを公開した。",
+        "major": true,
+        "source": "Qwen Team",
+        "url": "https://qwenlm.github.io/blog/qwen3/"
+      },
+      {
+        "date": "2026-08-12",
+        "kind": "model",
+        "title": "Qwen3.8-2.4T-A95Bを公開",
+        "summary": "Qwen3.8系列のMoEモデルをHugging FaceとModelScopeで公開した。",
+        "major": true,
+        "source": "Qwen Team",
+        "url": "https://github.com/QwenLM/Qwen3.8"
+      }
+    ]
+  },
+  {
+    "topic": "meta",
+    "compiledOn": "2026-10-04",
+    "through": "2026-09",
+    "events": [
+      {
+        "date": "2023-02-24",
+        "kind": "model",
+        "title": "研究用言語モデルLLaMAを発表",
+        "summary": "研究者による大規模言語モデルの検証を支えるため、LLaMAモデル群を発表した。",
+        "major": true,
+        "source": "Meta",
+        "url": "https://ai.meta.com/blog/large-language-model-llama-meta-ai/"
+      },
+      {
+        "date": "2023-07-18",
+        "kind": "model",
+        "title": "Llama 2を公開",
+        "summary": "Microsoftとの協力を発表し、研究と商用利用に向けてLlama 2を提供した。利用には独自ライセンスが適用される。",
+        "major": true,
+        "source": "Meta",
+        "url": "https://ai.meta.com/blog/llama-2/"
+      },
+      {
+        "date": "2024-04-18",
+        "kind": "model",
+        "title": "Llama 3を公開",
+        "summary": "8Bと70Bの事前学習済み・指示調整済みモデルを公開し、Meta AIにも導入した。",
+        "major": true,
+        "source": "Meta",
+        "url": "https://ai.meta.com/blog/meta-llama-3/"
+      },
+      {
+        "date": "2025-04-05",
+        "kind": "model",
+        "title": "Llama 4 ScoutとMaverickを公開",
+        "summary": "画像とテキストを扱うMoE型モデル2種類を公開。Behemothは学習中のモデルとして紹介した。",
+        "major": true,
+        "source": "Meta",
+        "url": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/"
+      },
+      {
+        "date": "2026-09-08",
+        "kind": "product",
+        "title": "個人向けAIエージェントMuseを発表",
+        "summary": "専用のクラウド環境でタスクを進めるMuseを発表。米国でiOS、Android、ウェブへの展開を開始した。",
+        "major": true,
+        "source": "Meta",
+        "url": "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/"
+      }
+    ]
+  },
+  {
+    "topic": "microsoft",
+    "compiledOn": "2026-10-04",
+    "through": "2026-03",
+    "events": [
+      {
+        "date": "2023-02-07",
+        "kind": "product",
+        "title": "AIを組み込んだBingとEdgeを発表",
+        "summary": "検索、チャット、コンテンツ生成を統合したBingとEdgeのプレビューを発表した。",
+        "major": true,
+        "source": "Microsoft",
+        "url": "https://blogs.microsoft.com/blog/2023/02/07/reinventing-search-with-a-new-ai-powered-microsoft-bing-and-edge-your-copilot-for-the-web/"
+      },
+      {
+        "date": "2023-03-16",
+        "kind": "product",
+        "title": "Microsoft 365 Copilotを発表",
+        "summary": "Microsoft Graphの業務データとOfficeアプリを大規模言語モデルに結び付ける構想を発表し、少数の顧客とのテストを開始した。",
+        "major": true,
+        "source": "Microsoft",
+        "url": "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/"
+      },
+      {
+        "date": "2024-05-20",
+        "kind": "product",
+        "title": "Copilot+ PCを発表",
+        "summary": "NPUを備えるWindows PCの新カテゴリーを発表。端末上でAI処理を行う機能と、6月18日からの製品提供計画を示した。",
+        "major": true,
+        "source": "Microsoft",
+        "url": "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/"
+      },
+      {
+        "date": "2026-03-30",
+        "kind": "product",
+        "title": "Copilot CoworkをFrontierで提供",
+        "summary": "Microsoft 365の複数段階の業務を計画・実行するCoworkを、早期提供プログラムFrontierで利用可能にした。",
+        "major": true,
+        "source": "Microsoft",
+        "url": "https://www.microsoft.com/en-us/copilot/blog/2026/03/30/copilot-cowork-now-available-in-frontier/"
+      }
+    ]
+  },
+  {
+    "topic": "nvidia",
+    "compiledOn": "2026-10-04",
+    "through": "2026-01",
+    "events": [
+      {
+        "date": "2022-03-22",
+        "kind": "product",
+        "title": "HopperとH100 GPUを発表",
+        "summary": "次世代の計算基盤としてHopperアーキテクチャを発表し、最初の搭載GPUであるH100を紹介した。",
+        "major": true,
+        "source": "NVIDIA",
+        "url": "https://nvidianews.nvidia.com/news/nvidia-announces-hopper-architecture-the-next-generation-of-accelerated-computing"
+      },
+      {
+        "date": "2024-03-18",
+        "kind": "product",
+        "title": "Blackwellプラットフォームを発表",
+        "summary": "大規模な生成AIの学習・推論を支えるGPU、接続技術、ソフトウェアを含むBlackwell基盤を発表した。",
+        "major": true,
+        "source": "NVIDIA",
+        "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-platform-arrives-to-power-a-new-era-of-computing"
+      },
+      {
+        "date": "2025-01-06",
+        "kind": "model",
+        "title": "物理AI向けCosmosを公開",
+        "summary": "ロボットや自動運転の開発を支える世界基盤モデル、トークナイザー、動画処理基盤を発表し、最初のモデル群を公開した。",
+        "major": true,
+        "source": "NVIDIA",
+        "url": "https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development"
+      },
+      {
+        "date": "2026-01-05",
+        "kind": "product",
+        "title": "6種類のチップを統合するRubinを発表",
+        "summary": "Vera CPUとRubin GPUなどを統合するAI計算基盤を発表。提携企業による製品提供は2026年後半の予定とした。",
+        "major": true,
+        "source": "NVIDIA",
+        "url": "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer"
+      }
+    ]
+  },
+  {
+    "topic": "sakana-ai",
+    "compiledOn": "2026-10-04",
+    "through": "2026-06",
+    "events": [
+      {
+        "date": "2024-03-21",
+        "kind": "research",
+        "title": "進化的モデルマージを発表",
+        "summary": "既存モデルの組み合わせを進化的に探索する手法を報告し、日本語モデルを公開した。",
+        "major": true,
+        "source": "Sakana AI",
+        "url": "https://sakana.ai/evolutionary-model-merge/"
+      },
+      {
+        "date": "2024-08-13",
+        "kind": "research",
+        "title": "The AI Scientistを発表",
+        "summary": "研究アイデアの生成、実験、結果の分析、論文執筆までを自動化する研究システムを発表した。",
+        "major": true,
+        "source": "Sakana AI",
+        "url": "https://sakana.ai/ai-scientist/"
+      },
+      {
+        "date": "2025-03-12",
+        "kind": "research",
+        "title": "AI生成論文のワークショップ査読通過を報告",
+        "summary": "主催者と協力した実験で、AI Scientist-v2が生成した論文がICLR 2025のワークショップ査読を通過したと報告した。",
+        "source": "Sakana AI",
+        "url": "https://sakana.ai/ai-scientist-first-publication/"
+      },
+      {
+        "date": "2026-06-19",
+        "kind": "research",
+        "title": "Sakana Fuguの技術報告を公開",
+        "summary": "複数のLLMエージェントを組み合わせ、役割分担と協調を制御するモデル群Sakana Fuguの設計を報告した。",
+        "major": true,
+        "source": "Sakana AI 研究チーム",
+        "url": "https://arxiv.org/abs/2606.21228"
+      }
+    ]
+  },
+  {
+    "topic": "preferred-networks",
+    "compiledOn": "2026-10-04",
+    "through": "2026-06",
+    "events": [
+      {
+        "date": "2023-09-28",
+        "kind": "model",
+        "title": "日本語・英語モデルPLaMo-13Bを公開",
+        "summary": "日本語と英語を扱う130億パラメータの事前学習モデルを公開。公開データで学習し、Apache 2.0ライセンスで提供した。",
+        "major": true,
+        "source": "Preferred Networks",
+        "url": "https://www.preferred.jp/ja/blog/tech/llm-plamo"
+      },
+      {
+        "date": "2024-10-10",
+        "kind": "research",
+        "title": "PLaMo-100Bの技術報告を公開",
+        "summary": "Preferred Elementsが、日本語能力を重視してゼロから学習した100Bモデルの学習方法と評価を報告した。",
+        "source": "Preferred Elements",
+        "url": "https://arxiv.org/abs/2410.07563"
+      },
+      {
+        "date": "2025-09-05",
+        "kind": "research",
+        "title": "PLaMo 2の技術報告を公開",
+        "summary": "日本語に重点を置くモデル群の設計を報告。合成データ、継続事前学習、構造的な枝刈りによる効率化を説明した。",
+        "source": "Preferred Networks",
+        "url": "https://arxiv.org/abs/2509.04897"
+      },
+      {
+        "date": "2026-06-22",
+        "kind": "model",
+        "title": "PLaMo 3.0 Primeを正式リリース",
+        "summary": "ベータ版へのフィードバックを反映した新しい主力モデルをChatとAPIで提供。推論能力を強化し、非推論モデルも開発した。",
+        "major": true,
+        "source": "Preferred Networks",
+        "url": "https://www.preferred.jp/ja/blog/tech/plamo-3-0-prime-release"
+      }
+    ]
+  },
+  {
+    "topic": "geniac",
+    "compiledOn": "2026-10-04",
+    "through": "2026-07",
+    "events": [
+      {
+        "date": "2024-02-02",
+        "kind": "industry",
+        "title": "生成AI開発支援GENIACが始動",
+        "summary": "経済産業省とNEDOが、基盤モデル開発向けの計算資源支援と開発者間の連携を進めるプロジェクトを開始した。",
+        "major": true,
+        "source": "経済産業省",
+        "url": "https://www.meti.go.jp/press/2023/02/20240202003/20240202003.html"
+      },
+      {
+        "date": "2025-06-09",
+        "kind": "industry",
+        "title": "第2期の開発成果を報告",
+        "summary": "採択事業者が開発と社会実装の成果を発表する報告会を開催し、モデル開発や実用化の進展を共有した。",
+        "source": "経済産業省 GENIAC",
+        "url": "https://geniac.meti.go.jp/geniac_magazine/resultsreport_2.html"
+      },
+      {
+        "date": "2026-06-04",
+        "kind": "industry",
+        "title": "第4期の基盤モデル開発16テーマを採択",
+        "summary": "AI基盤モデルの開発に必要な計算資源を支援する第4期として、16件のテーマを採択した。",
+        "major": true,
+        "source": "経済産業省",
+        "url": "https://www.meti.go.jp/press/2026/06/20260604003/20260604003.html"
+      },
+      {
+        "date": "2026-07-02",
+        "kind": "industry",
+        "title": "データエコシステムの研究開発9件を採択",
+        "summary": "生成AIの開発と社会実装を支えるデータエコシステムの構築等に向け、9件の研究開発テーマを採択した。",
+        "source": "経済産業省",
+        "url": "https://www.meti.go.jp/press/2026/07/20260702001/20260702001.html"
+      }
+    ]
+  },
+  {
+    "topic": "riken-aip",
+    "compiledOn": "2026-10-04",
+    "through": "2026-04",
+    "events": [
+      {
+        "date": "2016-04-14",
+        "kind": "company",
+        "title": "理研AIPを設立",
+        "summary": "革新的なAI基盤技術を研究する拠点として、理化学研究所に革新知能統合研究センターを設置した。",
+        "major": true,
+        "source": "理化学研究所",
+        "url": "https://www.riken.jp/pr/news/2017/20170310_1/index.html"
+      },
+      {
+        "date": "2017-03-10",
+        "kind": "company",
+        "title": "東芝・NEC・富士通との連携センター設置を発表",
+        "summary": "3社それぞれと連携センターを設ける決定を発表。4月1日から、AIの基盤研究と社会実装を共同で進める計画を示した。",
+        "source": "理化学研究所",
+        "url": "https://www.riken.jp/pr/news/2017/20170310_1/index.html"
+      },
+      {
+        "date": "2018-04",
+        "kind": "product",
+        "title": "AI研究用計算機RAIDENを増強",
+        "summary": "AI研究用計算機システムを増強して稼働を開始。半精度での理論演算性能を4から54ペタフロップスへ高めた。",
+        "major": true,
+        "source": "理研AIP・富士通",
+        "url": "https://aip.riken.jp/pressrelease/raiden180420/?lang=ja"
+      },
+      {
+        "date": "2026-04",
+        "kind": "company",
+        "title": "研究体制を3グループへ再編",
+        "summary": "数理的基盤、分野知識と融合するAI、実世界で行動する知能を担う3グループを中核とする研究体制に再編した。",
+        "major": true,
+        "source": "理研AIP",
+        "url": "https://aip.riken.jp/about-aip/?lang=ja"
+      }
+    ]
+  }
+]

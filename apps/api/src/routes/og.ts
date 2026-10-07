@@ -2,7 +2,7 @@
 // gets a card; anything else is a real 404.
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { CATEGORY_LABELS } from "@aihot/contracts/taxonomy";
-import { beijingDate } from "@aihot/contracts/time";
+import { tokyoDate } from "@aihot/contracts/time";
 import { loadItemShare } from "@aihot/backend/publication/og";
 import { loadReport, type ReportKind } from "@aihot/backend/publication/reports";
 import { findTopic, TOPIC_GROUPS, TOPICS } from "@aihot/backend/publication/topics";
@@ -59,7 +59,7 @@ export function registerOg(app: FastifyInstance) {
       kicker: d.category ? CATEGORY_LABELS[d.category] : withSubject("动态"),
       title: d.title,
       subtitle: d.summary,
-      meta: `${d.source.name} · ${beijingDate(d.timelineAt)}`,
+      meta: `${d.source.name} · ${tokyoDate(d.timelineAt)}`,
       badge: d.selected && d.score !== null ? { value: String(Math.round(d.score)), label: "精选评分" } : null,
     }, 3600, CONTENT_IMAGE_CACHE);
   });
@@ -76,7 +76,7 @@ export function registerOg(app: FastifyInstance) {
       title: d.title,
       summary: d.summary,
       source: d.source.name,
-      date: beijingDate(d.timelineAt),
+      date: tokyoDate(d.timelineAt),
       score: d.selected ? d.score : null,
     };
     const tag = `"poster-${posterEtag(poster)}"`;

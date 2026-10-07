@@ -39,6 +39,7 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   // Central redirect table (shared with the web server).
   app.addHook("onRequest", async (req, reply) => {
+    if (process.env.SITE_PREVIEW === "true") reply.header("X-Robots-Tag", "noindex, nofollow");
     const raw = req.raw.url ?? "/";
     const qi = raw.indexOf("?");
     const pathname = qi >= 0 ? raw.slice(0, qi) : raw;

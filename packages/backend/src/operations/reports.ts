@@ -1,7 +1,7 @@
 // The Monday source-health report for the ops chat. It goes through the same gated channel as the
 // alerts (off unless FEISHU_INTERNAL_ENABLED).
 import { sql } from "../db.ts";
-import { beijingDay, sendAlert } from "../notify/feishu.ts";
+import { tokyoDay, sendAlert } from "../notify/feishu.ts";
 import { serverModules } from "../modules.ts";
 
 /** The change from b to a: "+12%", "—" without a b. Also the modules' reports. */
@@ -41,8 +41,8 @@ export async function sourceHealthWeekly(now = Date.now()) {
   ];
   // The modules' own collectors, a line each.
   for (const m of serverModules()) if (m.sourceHealth) lines.push(...(await m.sourceHealth(now)));
-  if (failing.length) lines.push("", "抓取失败的信源（这些来源的新内容暂时收不到）：", ...failing.map((f) => `· ${f.name}：连续失败 ${f.fail_count} 次${f.last_ok_at ? `，上次成功 ${beijingDay(f.last_ok_at)}` : ""}${f.last_error ? `（${f.last_error}）` : ""}`));
-  if (silent.length) lines.push("", "7 天没有新内容的信源（可能是对方没更新，也可能是抓取方式失效）：", ...silent.map((s) => `· ${s.name}${s.last ? `（最近 ${beijingDay(s.last)}）` : "（从没产出过）"}`));
+  if (failing.length) lines.push("", "抓取失败的信源（这些来源的新内容暂时收不到）：", ...failing.map((f) => `· ${f.name}：连续失败 ${f.fail_count} 次${f.last_ok_at ? `，上次成功 ${tokyoDay(f.last_ok_at)}` : ""}${f.last_error ? `（${f.last_error}）` : ""}`));
+  if (silent.length) lines.push("", "7 天没有新内容的信源（可能是对方没更新，也可能是抓取方式失效）：", ...silent.map((s) => `· ${s.name}${s.last ? `（最近 ${tokyoDay(s.last)}）` : "（从没产出过）"}`));
   lines.push("", failing.length || silent.length ? "需要处理的话，把这条转给 AI；详情在后台“信源”与“运行”页。" : "没有需要处理的信源。");
   await sendAlert("📊 信源周报", lines);
   return { failing: failing.length, silent: silent.length };

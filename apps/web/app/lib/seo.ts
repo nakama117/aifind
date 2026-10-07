@@ -150,8 +150,8 @@ export function siteLd() {
       "@context": "https://schema.org",
       "@type": "Dataset",
       "@id": `${base}/#dataset`,
-      name: `${SITE.name} — ${withSubject("行业动态数据集")}`,
-      description: `${subjectAfter("持续更新的中文", "行业动态")}：每条附中文摘要、评分与原文出处，${subjectAfter("另有每日精选与", "日报")}，可通过 RSS 与公开 API 获取。`,
+      name: `${SITE.name} — ${withSubject("業界ニュースデータセット")}`,
+      description: `${subjectAfter("継続的に更新される日本語", "業界ニュース")}：各記事に日本語の要約、評価、原文の出典を掲載しています。${subjectAfter("毎日の厳選記事と", "日報")}はRSSと公開APIで取得できます。`,
       url: base,
       inLanguage: SITE.locale,
       isAccessibleForFree: true,
@@ -160,12 +160,12 @@ export function siteLd() {
       creator: orgRef(),
       publisher: orgRef(),
       distribution: [
-        { "@type": "DataDownload", name: "精选 RSS", encodingFormat: "application/rss+xml", contentUrl: `${base}/feed.xml` },
-        { "@type": "DataDownload", name: "全部动态 RSS", encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/all.xml` },
-        { "@type": "DataDownload", name: `${withSubject("日报")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/daily.xml` },
-        { "@type": "DataDownload", name: `${withSubject("周报")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/weekly.xml` },
-        { "@type": "DataDownload", name: `${withSubject("月报")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/monthly.xml` },
-        { "@type": "DataDownload", name: "公开 API v1", encodingFormat: "application/json", contentUrl: `${base}/api/v1/items` },
+        { "@type": "DataDownload", name: "厳選RSS", encodingFormat: "application/rss+xml", contentUrl: `${base}/feed.xml` },
+        { "@type": "DataDownload", name: "すべてのニュースRSS", encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/all.xml` },
+        { "@type": "DataDownload", name: `${withSubject("日報")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/daily.xml` },
+        { "@type": "DataDownload", name: `${withSubject("週報")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/weekly.xml` },
+        { "@type": "DataDownload", name: `${withSubject("月報")} RSS`, encodingFormat: "application/rss+xml", contentUrl: `${base}/feed/monthly.xml` },
+        { "@type": "DataDownload", name: "公開API v1", encodingFormat: "application/json", contentUrl: `${base}/api/v1/items` },
         { "@type": "DataDownload", name: "OpenAPI", encodingFormat: "application/json", contentUrl: `${base}/openapi-v1.json` },
       ],
     },
@@ -189,7 +189,7 @@ export function itemListLd(path: string, name: string, titles: string[]) {
 }
 
 /** An item page: the site's reading of a third-party report, based on (not claiming) the original. */
-export function articleLd(input: { path: string; headline: string; description?: string | null; publishedAt?: string | null; modifiedAt?: string | null; basedOn?: string | null; section?: string[] }) {
+export function articleLd(input: { path: string; headline: string; description?: string | null; image?: string; publishedAt?: string | null; modifiedAt?: string | null; basedOn?: string | null; section?: string[] }) {
   const base = siteUrl();
   const url = `${base}${input.path}`;
   const description = input.description?.trim();
@@ -201,6 +201,7 @@ export function articleLd(input: { path: string; headline: string; description?:
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     headline: input.headline.slice(0, 110),
+    image: input.image ? new URL(input.image, base).href : `${base}/og/site.png`,
     ...(description ? { description: description.slice(0, 300) } : {}),
     inLanguage: SITE.locale,
     ...(input.publishedAt ? { datePublished: input.publishedAt, dateModified: input.modifiedAt ?? input.publishedAt } : {}),
@@ -226,13 +227,14 @@ export function archiveLd(path: string, name: string, entries: Array<{ path: str
   };
 }
 
-const REPORT_NAME = { daily: "日报", weekly: "周报", monthly: "月报" } as const;
+const REPORT_NAME = { daily: "日報", weekly: "週報", monthly: "月報" } as const;
 
 /** One report issue: an editorial round-up by the site (no personal byline), sections as its sections. */
 export function reportLd(r: ReportDetail, path: string, description: string) {
   return articleLd({
     path,
     headline: `${SITE.name} ${REPORT_NAME[r.kind]} · ${r.key}`,
+    image: `/og/reports/${r.kind}/${r.key}.png`,
     description,
     publishedAt: r.generatedAt,
     section: r.sections.map((s) => s.label),

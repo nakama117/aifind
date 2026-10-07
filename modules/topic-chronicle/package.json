@@ -1,0 +1,11 @@
+{
+  "name": "@aihot/topic-chronicle",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./module.ts", "./web": "./web.tsx", "./*": "./*.ts" },
+  "dependencies": {
+    "@aihot/api": "*", "@aihot/backend": "*", "@aihot/contracts": "*", "@aihot/web": "*",
+    "fastify": "5.12.5", "react": "19.3.0", "react-router": "8.4.0", "zod": "4.6.5"
+  },
+  "scripts": { "test": "node --test-global-setup=../../tests/databases.ts --import ../../tests/databases.ts --test tests/*.test.ts" }
+}

@@ -17,6 +17,10 @@ COPY packages/backend/package.json packages/backend/
 COPY packages/contracts/package.json packages/contracts/
 COPY industry/package.json industry/
 COPY site/package.json site/
+COPY modules/model-leaderboard/package.json modules/model-leaderboard/
+COPY modules/codex-monitor/package.json modules/codex-monitor/
+COPY modules/topic-chronicle/package.json modules/topic-chronicle/
+COPY modules/aifind/package.json modules/aifind/
 RUN npm ci --no-audit --no-fund ${NPM_REGISTRY:+--registry=$NPM_REGISTRY}
 COPY . .
 RUN npm run build -w @aihot/web && npm prune --omit=dev --no-audit --no-fund

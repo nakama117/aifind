@@ -2,7 +2,7 @@
 // state in settings and sends its own alerts.
 import { ALERTS } from "@aihot/site";
 import { sql } from "../db.ts";
-import { beijingStamp, formatAlert, formatRecovery, sendAlert, type Finding } from "../notify/feishu.ts";
+import { tokyoStamp, formatAlert, formatRecovery, sendAlert, type Finding } from "../notify/feishu.ts";
 
 // The process manager restarts a crashed worker within seconds and a deploy restarts it on purpose;
 // half an hour without a heartbeat means those did not help.
@@ -33,7 +33,7 @@ export async function checkWorkerHeartbeat(): Promise<void> {
     if (prior?.value.state === state) return;
     // A first check that finds the worker running only records it.
     const msg = stale
-      ? formatAlert({ ...WORKER_DOWN, detail: `worker 心跳停在 ${beijingStamp(hb.updated_at)}；${ALERTS.workerLogs}` }, hb.updated_at, Date.now())
+      ? formatAlert({ ...WORKER_DOWN, detail: `worker 心跳停在 ${tokyoStamp(hb.updated_at)}；${ALERTS.workerLogs}` }, hb.updated_at, Date.now())
       : prior && formatRecovery(WORKER_DOWN.title, new Date(prior.value.since), Date.now());
     if (msg) await sendAlert(msg.title, msg.lines);
     // "since" of a down state is the last heartbeat, so the recovery can say how long it lasted.

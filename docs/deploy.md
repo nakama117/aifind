@@ -1,5 +1,11 @@
 # 部署
 
+> AI Signal JP 请先按 [本项目运营手册](operations-zh.md) 部署。以下保留上游架构和迁移说明；本站默认整站受限访问、全部来源停用、所有安全阀关闭。
+
+### 2026-10-04 本地预览内容更新
+
+本工作区的 `aisignal_preview` 已在备份后删除旧版 8 篇虚构样例、关联事件与 3 份样例报表，替换为 8 篇真实官方新闻的日文摘要。备份在本地 `.data/preview-before-real-news-20261004.dump`，不进入部署包。生产数据库不受影响。旧包的其他预览库建议使用新的本地 `*_preview` 库启动新版，避免混入旧样例。默认生产种子仍仅导入停用的候选来源，不导入这批预览内容。
+
 ## 用 Docker（推荐）
 
 需要一台装了 Docker（带 Compose）的机器。云服务器建议至少 2 核、4 GB 内存，构建镜像时要用到。
@@ -7,10 +13,10 @@
 ```bash
 git clone https://github.com/KKKKhazix/AIHOT.git myhot
 cd myhot
-node scripts/init-env.ts --llm-key <你的模型 API Key>
+node scripts/init-env.ts
 ```
 
-`init-env.ts` 会生成 `.env`，填好随机密钥和管理员密码，并把密码打印一次。机器上没有 Node 的话，把 `.env.example` 复制成 `.env`，自己填 `ADMIN_PASSWORD`（至少 12 位）、`SESSION_SECRET`、`IMG_PROXY_SIGN_SECRET`、`POSTGRES_PASSWORD`（各用 `openssl rand -hex 32` 生成）和 `LLM_API_KEY`。
+`init-env.ts` 会生成 `.env`，填好随机密钥和管理员密码，已有值保持不变，不向控制台打印密码。机器上没有 Node 的话，把 `.env.example` 复制成 `.env`，自己填 `ADMIN_PASSWORD`（至少 12 位）、`SESSION_SECRET`、`IMG_PROXY_SIGN_SECRET`、`POSTGRES_PASSWORD`（各用 `openssl rand -hex 32` 生成）和 `OPENAI_API_KEY`（安全编辑输入）。
 
 启动前检查 `.env` 的 `SITE_URL`：本机试用保留 `http://localhost:3000`；部署到服务器时改成读者实际访问的地址。例如通过服务器 IP 访问时（把示例 IP 换成自己的）：
 
@@ -26,7 +32,7 @@ RSS、分享链接、站点地图和 Agent Markdown 中的绝对链接都使用�
 docker compose up -d --build
 ```
 
-启动后打开 `http://服务器地址:3000`，后台在 `/admin`，用管理员密码登录。第一次启动会导入示范信源，一两分钟后开始出现内容；第一次导入的一百多条资料大约半小时处理完（每条都要预筛、评分、结构化、写标题摘要，再归组）。
+默认端口只绑定回环地址，服务器通过受限 Caddy HTTPS 访问。后台在 `/admin`。第一次启动仅导入停用的候选信源，不会自动采集或生成内容。
 
 `docker compose` 会起五个容器：`db`（PostgreSQL 17）、`setup`（每次启动先跑数据库迁移和种子数据，然后退出）、`api`、`worker`（抓取、模型处理、定时任务）、`web`（网页）。`web` 只接收网站地址、API 地址等网页配置，通过 HTTP 读取 API；数据库、模型和管理员密钥，以及数据卷，只交给后端容器。
 
@@ -123,9 +129,11 @@ docker compose run --rm setup && docker compose up -d
 
 ### 备份
 
-在 `.env` 里配置 `DB_BACKUP_STORE_*`（任何 S3 兼容的对象存储），每天 04:10 自动备份到那里。一次完整备份包含同一时间戳的数据库 `.dump` 和文件 `aihot-files-*.tar.gz`：文件包保留 `uploads/` 以及仍存本地的 `feedback-screenshots/`，不包含图片缓存或本地备份目录。已经转发到飞书的图片只保留数据库中的外部引用，文件包不保存飞书上的图片。
+在 `.env` 里配置 `DB_BACKUP_STORE_*`（任何 S3 兼容的对象存储），每天日本时间 04:10 自动备份到那里。一次完整备份包含同一时间戳的数据库 `.dump` 和文件 `aihot-files-*.tar.gz`：文件包保留 `uploads/` 以及仍存本地的 `feedback-screenshots/`，不包含图片缓存或本地备份目录。已经转发到飞书的图片只保留数据库中的外部引用，文件包不保存飞书上的图片。
 
 恢复时同时取回这一对文件：使用与数据库版本兼容的 `pg_restore` 将 `.dump` 恢复到空数据库，再把文件包解压到数据目录根目录（Docker 中为 `/data`，非 Docker 使用 `AIHOT_DATA_DIR`，默认 `.data`），保留包内的子目录结构，并确保运行进程可读取这些文件。只恢复数据库不能找回仍由 `local:` 引用的反馈截图；旧备份中没有包含的文件也无法凭数据库引用恢复。
+
+AIFIND Guide 的处理后图片也存放在同一个数据目录的 `uploads/aifind-editorial/` 下，随现有文件包一起备份。数据库保留图片的身份、哈希、审查状态和 revision 引用，原始上传二进制不保留，仅留原始 SHA-256。恢复 Guide 图片必须同时恢复 `.dump` 与文件包；只恢复数据库不算完整恢复。文件缺失或处理后哈希不一致时，Guide 发布检查和公开读取会拒绝该图片及关联 Guide。不要把 `uploads/` 直接映射成匿名静态目录；图片通过受发布资格约束的 Site API 提供。
 
 下面的手动导出只包含数据库，不包含上述附件目录：
 
@@ -151,11 +159,57 @@ docker compose logs -f --tail 100 api worker web
 
 ## 不用 Docker
 
+### AIFIND Phase 8：候选包与本机 launch 演练
+
+Phase 8 不执行生产部署。`site/launch/2026-10-07-corpus.json` 是官方资料候选，不含 Owner 承认；`site/launch/owner-review.json` 的空项是上线 blocker，不得自动补为已审核。
+
+在全新本机 `*_test` / `*_ci` / `*_preview` 库，先显式运行 `scripts/migrate.ts`，再运行 `node scripts/stage-aifind-launch.ts site/launch/2026-10-07-corpus.json`：仅导入 Draft。需要演练时另加 `--publish-simulation`，使用既有带审计的 Publish / Visibility，仍不是 Owner 事实批准。Production、远端、非安全后缀和 URL override 参数继续被原 Catalog Guard 拒绝；没有 force/Production import 选项。启动、GET 和 Preflight 不 seed、不 import、不 Publish。
+
+`node scripts/aifind-launch-preflight.ts` 只读实际数据，输出 PASS / WARN / BLOCK；有 BLOCK 时退出码 2。它不连接外部资料或模型。管理员可在 `/admin/aifind/preview/launch-readiness` 查看同一 Reader；合成 Preview 开关关闭也可读取此页面及 Hub，原合成示例仍受开关保护。页面 noindex/no-store，不进入公开导航、sitemap、RSS、MCP 和公共业务 API。
+
+`node scripts/build-aifind-launch-bundle.ts <input.json> <不存在的新目录>` 为 file-only 构建。显式 input 必须包含 corpus、完整当前 migration SHA 列表、Source policy、Preflight、测试 baseline hashes 和已审查 Asset manifest。每个引用 Asset 都必须包含且文件 hash 一致。输出 manifest、Product pack、Editorial manifest、Asset 文件/manifest、migration list、Source policy、review manifest、preflight 和 baseline hashes；不包含环境文件、凭据、原始 Observation 文本或管理员会话。重复同一 input 字节一致，已存在目录不覆盖。该包是不可变 candidate，未解决 Content/Operations blocker 前不是可自动上线的生产包。
+
+恢复必须配对 `.dump` 与相同时间戳的 uploads `.tar.gz`，先恢复到另一个全新安全库和数据目录，再检查 Product、Compare、Category、Guide、Evidence、旧 slug 重定向及 Asset。DB-only 恢复会因媒体缺失隐藏关联 Guide；不得当作成功。失败回滚采用迁移前成对备份到另一个库恢复并回切经过人工批准的配置，不倒改 0062–0083、不原地降级 migration。恢复演练不等于生产恢复批准。
+
+只读 observability 复用已有 Runs/Settings：worker heartbeat、失败任务、unknown/pending receipts、预算、备份、Candidate age、Source failures、未完成的过期输入及 orphan rows/files；本阶段不自动 GC。正常本机演练所有真实采集/模型/推送/IndexNow/Detector 阀保持 false。Production 联系信息、正式 URL、条款隐私审批、Source 取得权限和对象存储/恢复证据须由运营者另行落实。
+
+### AIFIND Phase 8 数据保留与信源审核
+
+模块迁移 0082 会暂停已有但尚未审核的 Monitor，所有环境都要求先在后台记录 source policy，再单独启用。`approved` 是运营者记录的采集权限审核，不等于法律结论；Jina 还需要单独允许。修改 URL 会撤销审核并停用，已经排队的任务也会重新检查。正常开发的采集、模型、Detector、推送与 IndexNow 安全阀继续关闭。
+
+`evidence_only` 仅保留必要短引用、各最多 160 字符的前后文、原定位和 hash，处理结束后的正文由已有 daily retention 任务单向削减。`short_excerpt` 默认 30 天，可按来源设为 1–365 天。尚未完成的检测输入不会被并发删除；过期未完成数量会作为运营阻塞指标报告，需要处理或结束任务。Evidence、Candidate、Observation 审计与 Published 数据不可删除或改写。生产升级前先备份数据库和 uploads，回滚应恢复到另一个数据库与对应 uploads，不逆改已发布迁移。
+
+0084 追加审批 reviewer/reason 的非 NULL 约束，并将 prune 与真实 Observation 执行区间串行化；0082/0083 不改写。执行锁使用独立短生命周期 PostgreSQL session，覆盖 resolver/model 等待，连接关闭自动释放，避免占住付费回执使用的连接池。prune 遇到执行中的 Observation 跳过；直接 SQL 也不能绕过。每次 robots、source page、Jina 请求前重新检查当前 policy/revision，撤权不允许继续后续请求。
+
+本机 launch launcher 可复用同一安全 `*_preview` 库和已有登录文件；重启前核验并显式停止其 receipt 中的自有进程。仍存活的 PID 会拒绝重启，不自动杀旧进程。每次 run 在 `launch-runs/` 留不可覆盖记录，更新 current runtime pointer 前保留旧 receipt；不自动 seed/migrate/import/publish，也不删除旧日志。会话密钥每次启动更新，管理员需要重新登录。
+
+### AIFIND Phase 8.5：正常入口 Release Candidate
+
+Phase 8 的包、日志和 Owner 待审记录保留为历史证据。Phase 8.5 按用户明确决定，采用 `source_backed` 发布策略：逐项确定事实必须有对应产品的可访问官方 Evidence；不确定项保留 `unknown`，不能表示免费、不可用或已实测。逐产品 Owner 批准不再作为发布 blocker，也不得伪造批准。编辑主体展示为 `AIFIND編集部`，属于编辑项目；联系入口 `/contact` 使用现有 `/feedback` 表单。
+
+每个确定字段及其值还必须匹配该来源 dossier 的 `reviewedFacts`，不能仅凭同一产品的官方 URL 放行。Corpus 和 Published aggregate 使用同一个稳定字段投影（价格使用 planKey及价格上下文，不用数据库 UUID）；国家列表不能支持免费价格或相反的可用性。新事实需先人工核对直接支持的官方来源并更新审核绑定；降为unknown不新增断言。此元数据不替代网页语义人工核验、不代表Owner逐项批准，也不触发模型或采集。
+
+首发 `launchCollectionMode=off`。全部 Product Monitor 保持停用，采集、模型、Detector、Feishu 和 IndexNow 安全阀保持 false；只有这些条件同时成立，Source permission 检查才为 DEFERRED。开启自动采集前必须另行完成 Source permission 审核；一旦任何 Monitor 或阀意外开启，OFF 模式仍 BLOCK。
+
+本机候选必须使用新的 loopback `*_launch_candidate_test` 数据库，不能复用旧 Preview 库。先显式运行 `scripts/migrate.ts` 和 `scripts/stage-aifind-launch.ts <corpus.json>`，只导入 Draft；核对后才显式使用 `--publish-candidate` 走既有 Product/Editorial 审计发布流程。导入后人工改过的 Draft 会拒绝候选自动发布。真实媒体通过 Asset Domain 上传并完成权限/隐私检查。Production、远端、不安全后缀和 URL override 继续被 Catalog Guard 拒绝，没有 force 选项。
+
+`scripts/serve-aifind-launch-candidate.ts` 只启动已准备的数据，默认 web4000 / API4001；无 startup migrate、seed、import 或 publish。保持 `AIFIND_PREVIEW_ENABLED=false`、`SITE_PREVIEW=false`，使用正常 `/products`、`/compare`、`/categories`、`/howto`。正常后台入口为 `/admin/aifind`；readiness 页面和只读 API 为 `/admin/aifind/launch-readiness`、`/api/admin/aifind/launch-readiness`，继续 admin-only / noindex / no-store。登录密码仅写在本机忽略目录，Web 环境不包含数据库连接串、管理员密码或后端密钥。
+
+Release Candidate 要求实际本机配对备份/恢复成功：现有 `runBackup` 产生同时间戳的 `.dump` 与 uploads `.tar.gz`，使用兼容的 `pg_restore` 和 `tar` 恢复到另一个全新安全库/目录，并检查发布 Reader、Evidence、lastVerifiedAt、原新闻日期、Alias 和图片 SHA。restore 证明须绑定当前这一对备份的 SHA-256、来源与恢复数据库名。缺少文件或不匹配不能放行；无对象存储时，`backup made locally but not uploaded` 仅代表本机备份成功，不能当作远端上传成功。
+
+当前门禁分别报告 Engineering、Content、Release Candidate、Operations、Production Deploy。仅远端对象存储及远端灾备缺失时，Operations 为 PARTIAL，Release Candidate 可 READY；真实本机备份/恢复、Admin、Evidence、媒体和公开隔离仍是 blocker。Production Deploy 必须保持 NOT EXECUTED。
+
+部署前仍需单独落实正式 `SITE_URL`、持久化数据目录、强认证密钥、HTTPS/进程托管、远端对象存储与远端配对恢复。正式生产导入、生产 DB 连接、部署、DNS、Detector 和付费模型均需要用户另行授权的 Phase 9。不要用本机候选包暗示这些操作已批准或执行。
+
+Phase 8.5 在 Windows PostgreSQL17 实际复现了测试数据库生命周期 DDL 的 checkpoint / process-barrier 等待，迁移断言本身已通过；只串行化删库仍会取消。`tests/database-cleanup.ts` 统一串行化测试夹具的 `CREATE DATABASE` / `DROP DATABASE`：连接前校验 loopback `*_test` / `*_ci` 来源、安全目标和模板，使用短生命周期独立连接和同一个 session advisory lock；生产代码不使用此工具。完整套件仍保持六文件并发、120000ms 超时和原有断言，不以 skip 或延长超时处理。
+
+单独运行数据库测试时也须保留完整套件的 `--test-global-setup=tests/databases.ts --import ./tests/databases.ts`。`DATABASE_URL` 指向模板，preload 给测试文件创建独立副本；遗漏它会把 fixture 写入模板，污染后续完整运行。模板只能使用显式创建的本机安全测试库，不能指向候选站点或生产库。
+
 需要 Node.js 24.11 以上和 PostgreSQL 16 或 17。
 
 ```bash
 npm ci
-node scripts/init-env.ts --llm-key <你的模型 API Key>
+node scripts/init-env.ts
 createdb myhot
 ```
 

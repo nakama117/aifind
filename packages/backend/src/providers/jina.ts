@@ -16,7 +16,7 @@ const CONTENT = "\nMarkdown Content:\n";
  */
 export async function jinaRead(
   targetUrl: string,
-  opts: { purpose: string; subject: string; format?: "markdown" | "html"; cacheToleranceSeconds?: number; perRead?: boolean },
+  opts: { purpose: string; subject: string; format?: "markdown" | "html"; cacheToleranceSeconds?: number; perRead?: boolean; logicalIdentity?: string },
 ): Promise<{ markdown: string; raw: string; receiptId: number }> {
   const key = credential("collectors", "JINA_API_KEY");
   if (!key) throw new Error("JINA_API_KEY is not configured");
@@ -26,7 +26,9 @@ export async function jinaRead(
   const now = new Date().toISOString();
   const day = opts.perRead ? now : now.slice(0, 10);
   const receipt = await paidRequest(
-    { service: "jina", model: null, purpose: opts.purpose, subject: opts.subject, identity: { url: targetUrl, day, format: opts.format ?? "markdown" }, requestSummary: { url: targetUrl } },
+    { service: "jina", model: null, purpose: opts.purpose, subject: opts.subject,
+      identity: opts.logicalIdentity ? { url: targetUrl, logicalIdentity: opts.logicalIdentity, format: opts.format ?? "markdown" } : { url: targetUrl, day, format: opts.format ?? "markdown" },
+      requestSummary: { url: targetUrl, ...(opts.logicalIdentity ? { logicalIdentity: opts.logicalIdentity } : {}) } },
     async () => {
       const res = await guardedFetch(`${base}/${targetUrl}`, {
         headers: { authorization: `Bearer ${key}`, "x-return-format": opts.format ?? "markdown", accept: "text/plain", ...tolerance },

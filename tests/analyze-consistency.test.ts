@@ -21,7 +21,7 @@ const provider = await stub(async (_hit, request) => {
   const content = prefilter ? { label: "PASS", reason: "local fixture" }
     : system.includes("事件注意力评分器") ? { attentionScore: 80 }
     : system.includes("资料结构化助手") ? { category: "ai-models", tags: [], subjects: [], scope: "single", fact: null }
-    : { itemType: "model_release", authorRole: "principal", tags: ["模型发布"], editorialJudgment: "模型能力提升", titleZh: "实验室发布新模型", summaryZh: "实验室发布新模型，并公布了评测结果与价格。" };
+    : { itemType: "model_release", authorRole: "principal", tags: ["モデル公開"], editorialJudgment: "模型能力提升", titleZh: "实验室发布新模型", summaryZh: "实验室发布新模型，并公布了评测结果与价格。" };
   return { choices: [{ message: { content: JSON.stringify(content) } }] };
 });
 pointModels(provider.url);

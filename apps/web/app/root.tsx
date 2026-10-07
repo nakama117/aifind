@@ -3,6 +3,7 @@ import {
   type ShouldRevalidateFunction,
 } from "react-router";
 import type { SiteMeta } from "@aihot/contracts/site";
+import { searchVerification } from "@aihot/contracts/seo";
 import { SITE } from "@aihot/site";
 import { RingMark } from "@aihot/site/brand/Logo.tsx";
 import { useEffect, useState, type ReactNode } from "react";
@@ -26,20 +27,22 @@ export const links: Route.LinksFunction = () => [
   { rel: "icon", type: "image/png", href: "/icon.png" },
   { rel: "apple-touch-icon", href: "/apple-icon.png" },
   { rel: "manifest", href: "/manifest.webmanifest" },
-  { rel: "alternate", type: "application/rss+xml", title: `${SITE.name} — 精选`, href: "/feed.xml" },
+  { rel: "alternate", type: "application/rss+xml", title: `${SITE.name} — 厳選記事`, href: "/feed.xml" },
 ];
 
 /** The release rendering this document: once a newer one is deployed, a render error reloads the page (entry.client). */
 export async function loader({ request }: Route.LoaderArgs) {
   const release = process.env.AIHOT_RELEASE ?? null;
+  const preview = process.env.SITE_PREVIEW === "true";
+  const verification = searchVerification(process.env);
   try {
     const meta = await apiGet<SiteMeta>("/api/site/meta", {
       headers: Object.assign({}, ...webModules().map((m) => m.root?.documentHeaders?.(request) ?? {})),
       signal: request.signal,
     });
-    return { ...meta, release };
+    return { ...meta, release, preview, verification };
   } catch {
-    return { changelogVersion: null, release };
+    return { changelogVersion: null, release, preview, verification };
   }
 }
 
@@ -57,6 +60,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f6" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#13191c" />
         <meta name="apple-mobile-web-app-title" content={SITE.name} />
+        {site?.preview && <meta name="robots" content="noindex, nofollow" />}
+        {site?.verification.google && <meta name="google-site-verification" content={site.verification.google} />}
+        {site?.verification.bing && <meta name="msvalidate.01" content={site.verification.bing} />}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         {webModules().map((m) => m.root?.bootScript && <script key={m.name} dangerouslySetInnerHTML={{ __html: m.root.bootScript }} />)}
         <Meta />
@@ -75,12 +81,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export function meta({ error }: Route.MetaArgs) {
   if (!error) return [];
   const notFound = isRouteErrorResponse(error) && error.status === 404;
-  return [{ title: titled(notFound ? "页面不存在" : "暂时无法加载") }, { name: "robots", content: "noindex" }];
+  return [{ title: titled(notFound ? "ページが見つかりません" : "一時的に読み込めません") }, { name: "robots", content: "noindex" }];
 }
 
 /** Sidebar, main column and phone tab bar around a page (or an error). */
 function SiteShell({ changelogVersion, children }: { changelogVersion: string | null; children: ReactNode }) {
   const navigation = useNavigation();
+  const meta = useRouteLoaderData<typeof loader>("root");
   // The phone search and pull-to-refresh are client-side, mounted once the page is interactive.
   const [interactive, setInteractive] = useState(false);
   useEffect(() => setInteractive(true), []);
@@ -88,7 +95,7 @@ function SiteShell({ changelogVersion, children }: { changelogVersion: string | 
     <div className="flex min-h-dvh">
       <NavigationProgress active={navigation.state === "loading"} />
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[70] focus:rounded-control focus:bg-surface focus:px-3 focus:py-2">
-        跳到正文
+        本文へ移動
       </a>
       <Sidebar changelogVersion={changelogVersion} />
       {/* Phone shell (≤ 960px): each page's top bar (PhoneBar), one centred column, the tab bar below.
@@ -96,6 +103,7 @@ function SiteShell({ changelogVersion, children }: { changelogVersion: string | 
       <main id="main" className="min-w-0 flex-1 pb-[calc(72px+env(safe-area-inset-bottom))] lg:px-7 lg:pb-[72px] lg:pt-6">
         <div className="mx-auto w-full max-w-[640px] pl-[var(--gutter-l)] pr-[var(--gutter-r)] lg:max-w-[var(--page-max-wide)] lg:px-0">
           {webModules().map((m) => m.root?.Top && <m.root.Top key={m.name} />)}
+          {meta?.preview && <aside className="my-3 rounded-control border border-line bg-accent-softer px-4 py-3 text-xs leading-relaxed text-ink-2">プレビュー版 · 公式発表の日本語要約を掲載しています。自動更新は停止中です。</aside>}
           {children}
         </div>
       </main>
@@ -144,19 +152,19 @@ export function ErrorBoundary() {
       <div className="max-w-sm text-center">
         <RingMark className="mx-auto mb-5 size-10 text-accent" />
         <div className="mono text-[12px] text-ink-4">{status}</div>
-        <h1 className="mt-1.5 text-[20px] font-bold text-ink">{notFound ? "这里没有内容" : "暂时无法加载"}</h1>
+        <h1 className="mt-1.5 text-[20px] font-bold text-ink">{notFound ? "ここにはコンテンツがありません" : "一時的に読み込めません"}</h1>
         <p className="mt-2 text-[13.5px] leading-relaxed text-ink-3">
-          {notFound ? "你访问的页面不存在，或内容已不再公开。" : "页面暂时无法显示，请重新加载后再试。"}
+          {notFound ? "アクセスしたページが見つからないか、コンテンツが公開されていません。" : "ページを一時的に表示できません。再読み込みして、もう一度お試しください。"}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           {!notFound && <Link reloadDocument to={pathname + search + hash} className={buttonClass("primary")}>
-            重新加载
+            再読み込み
           </Link>}
           <Link reloadDocument to="/" className={buttonClass(notFound ? "primary" : "secondary")}>
-            回到精选
+            厳選記事に戻る
           </Link>
           <Link reloadDocument to="/all" className={buttonClass("secondary")}>
-            浏览全部动态
+            すべてのニュースを見る
           </Link>
         </div>
       </div>

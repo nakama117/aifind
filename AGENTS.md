@@ -12,6 +12,8 @@
 
 ## 运行与检查
 
+- AIFIND 项目永久验收规则：每个 Phase 完成时必须提供可在真实浏览器中直接查看的 Preview 页面、URL、截图与 browser smoke 证据；没有 Preview 不算完成。阶段 Preview 默认 admin-only / noindex，使用显式创建的 local/dev/test 示范数据，不在生产启动时 seed。遵守各 Phase 的授权范围。
+
 - Node.js 24 直接运行 TypeScript，后端没有构建步骤。npm workspaces：`apps/*`、`packages/*`、`industry`、`site`、`modules/*`。
 - 本机运行和 Docker 见 `docs/deploy.md`。
 - 改完至少跑：

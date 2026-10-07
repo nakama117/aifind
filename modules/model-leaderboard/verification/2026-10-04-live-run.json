@@ -1,0 +1,324 @@
+{
+  "at": "2026-10-04T11:04:05.311Z",
+  "counts": {
+    "models": 942,
+    "scored_models": 522,
+    "scores": 1915,
+    "snapshots": 14,
+    "published_runs": 1
+  },
+  "round": {
+    "status": "published",
+    "runId": "bs64mal4z663ryufonwtn1etg",
+    "fingerprint": "bb9aaf8a389457117110198de0058ecc796907621ccb953af864a9d9cb7b870d",
+    "boards": [
+      {
+        "board": "overall",
+        "models": 61,
+        "optimal": true,
+        "ms": 255
+      },
+      {
+        "board": "coding",
+        "models": 28,
+        "optimal": true,
+        "ms": 7
+      },
+      {
+        "board": "reasoning",
+        "models": 48,
+        "optimal": true,
+        "ms": 15
+      },
+      {
+        "board": "knowledge",
+        "models": 68,
+        "optimal": true,
+        "ms": 13
+      },
+      {
+        "board": "professional",
+        "models": 42,
+        "optimal": true,
+        "ms": 8
+      }
+    ]
+  },
+  "eligibility": [
+    {
+      "board": "overall",
+      "models": 61,
+      "anchors": 16,
+      "policy": {
+        "sources": 3,
+        "families": 3,
+        "operators": 3,
+        "categories": 3,
+        "directAnchors": 2
+      }
+    },
+    {
+      "board": "coding",
+      "models": 28,
+      "anchors": 11,
+      "policy": {
+        "sources": 2,
+        "families": 1,
+        "operators": 2,
+        "categories": 0,
+        "directAnchors": 1
+      }
+    },
+    {
+      "board": "reasoning",
+      "models": 48,
+      "anchors": 15,
+      "policy": {
+        "sources": 2,
+        "families": 1,
+        "operators": 2,
+        "categories": 0,
+        "directAnchors": 1
+      }
+    },
+    {
+      "board": "knowledge",
+      "models": 68,
+      "anchors": 14,
+      "policy": {
+        "sources": 2,
+        "families": 1,
+        "operators": 1,
+        "categories": 0,
+        "directAnchors": 1
+      }
+    },
+    {
+      "board": "professional",
+      "models": 42,
+      "anchors": 11,
+      "policy": {
+        "sources": 2,
+        "families": 1,
+        "operators": 2,
+        "categories": 0,
+        "directAnchors": 1
+      }
+    }
+  ],
+  "sources": [
+    {
+      "source_key": "arena-creative-writing",
+      "record_count": 385,
+      "published_at": "2026-10-02T00:00:00.000Z",
+      "fetched_at": "2026-10-04T11:02:00.821Z"
+    },
+    {
+      "source_key": "arena-vision",
+      "record_count": 146,
+      "published_at": "2026-10-02T00:00:00.000Z",
+      "fetched_at": "2026-10-04T11:02:01.085Z"
+    },
+    {
+      "source_key": "deepswe-v1-1",
+      "record_count": 28,
+      "published_at": "2026-09-22T06:27:15.860Z",
+      "fetched_at": "2026-10-04T11:02:05.708Z"
+    },
+    {
+      "source_key": "epoch-chess",
+      "record_count": 138,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:02:05.469Z"
+    },
+    {
+      "source_key": "epoch-frontiermath",
+      "record_count": 81,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:02:05.331Z"
+    },
+    {
+      "source_key": "epoch-frontiermath-tier4",
+      "record_count": 62,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:02:05.414Z"
+    },
+    {
+      "source_key": "epoch-gpqa",
+      "record_count": 216,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:00:47.277Z"
+    },
+    {
+      "source_key": "epoch-mystery",
+      "record_count": 73,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:02:05.602Z"
+    },
+    {
+      "source_key": "epoch-simpleqa",
+      "record_count": 77,
+      "published_at": "2026-09-29T22:00:34.000Z",
+      "fetched_at": "2026-10-04T11:00:47.221Z"
+    },
+    {
+      "source_key": "livebench-coding",
+      "record_count": 62,
+      "published_at": "2026-09-29T19:01:46.000Z",
+      "fetched_at": "2026-10-04T11:00:47.153Z"
+    },
+    {
+      "source_key": "livebench-reasoning",
+      "record_count": 62,
+      "published_at": "2026-09-29T19:01:46.000Z",
+      "fetched_at": "2026-10-04T11:00:47.189Z"
+    },
+    {
+      "source_key": "livebench-writing",
+      "record_count": 62,
+      "published_at": "2026-09-29T19:01:46.000Z",
+      "fetched_at": "2026-10-04T11:00:47.109Z"
+    },
+    {
+      "source_key": "mercor-apex-agents",
+      "record_count": 50,
+      "published_at": "2026-09-08T00:00:00.000Z",
+      "fetched_at": "2026-10-04T11:02:07.786Z"
+    },
+    {
+      "source_key": "vals-finance-agent",
+      "record_count": 72,
+      "published_at": "2026-10-01T00:00:00.000Z",
+      "fetched_at": "2026-10-04T11:02:07.822Z"
+    }
+  ],
+  "fetchState": {
+    "at": "2026-10-04T11:02:07.873Z",
+    "sources": {
+      "epoch-gpqa": {
+        "at": "2026-10-04T11:00:47.402Z",
+        "ok": true,
+        "rows": 318,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:00:47.402Z",
+        "newModels": 0
+      },
+      "epoch-chess": {
+        "at": "2026-10-04T11:02:05.593Z",
+        "ok": true,
+        "rows": 227,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:05.593Z",
+        "newModels": 0
+      },
+      "eq-creative": {
+        "at": "2026-10-04T11:02:01.208Z",
+        "ok": false,
+        "error": "GitHub HTTP 403: anonymous API rate limit exceeded",
+        "lastOkAt": null
+      },
+      "eq-longform": {
+        "at": "2026-10-04T11:02:01.208Z",
+        "ok": false,
+        "error": "GitHub HTTP 403: anonymous API rate limit exceeded",
+        "lastOkAt": null
+      },
+      "arena-vision": {
+        "at": "2026-10-04T11:02:01.208Z",
+        "ok": true,
+        "rows": 159,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:01.208Z",
+        "newModels": 0
+      },
+      "deepswe-v1-1": {
+        "at": "2026-10-04T11:02:05.735Z",
+        "ok": true,
+        "rows": 70,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:05.735Z",
+        "newModels": 0
+      },
+      "epoch-mystery": {
+        "at": "2026-10-04T11:02:05.699Z",
+        "ok": true,
+        "rows": 135,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:05.699Z",
+        "newModels": 0
+      },
+      "epoch-simpleqa": {
+        "at": "2026-10-04T11:00:47.257Z",
+        "ok": true,
+        "rows": 86,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:00:47.257Z",
+        "newModels": 0
+      },
+      "livebench-coding": {
+        "at": "2026-10-04T11:00:47.179Z",
+        "ok": true,
+        "rows": 66,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:00:47.179Z",
+        "newModels": 0
+      },
+      "livebench-writing": {
+        "at": "2026-10-04T11:00:47.144Z",
+        "ok": true,
+        "rows": 66,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:00:47.144Z",
+        "newModels": 0
+      },
+      "epoch-frontiermath": {
+        "at": "2026-10-04T11:02:05.403Z",
+        "ok": true,
+        "rows": 114,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:05.403Z",
+        "newModels": 0
+      },
+      "mercor-apex-agents": {
+        "at": "2026-10-04T11:02:07.819Z",
+        "ok": true,
+        "rows": 53,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:07.819Z",
+        "newModels": 0
+      },
+      "vals-finance-agent": {
+        "at": "2026-10-04T11:02:07.873Z",
+        "ok": true,
+        "rows": 74,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:07.873Z",
+        "newModels": 0
+      },
+      "livebench-reasoning": {
+        "at": "2026-10-04T11:00:47.213Z",
+        "ok": true,
+        "rows": 66,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:00:47.213Z",
+        "newModels": 0
+      },
+      "arena-creative-writing": {
+        "at": "2026-10-04T11:02:01.076Z",
+        "ok": true,
+        "rows": 411,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:01.076Z",
+        "newModels": 0
+      },
+      "epoch-frontiermath-tier4": {
+        "at": "2026-10-04T11:02:05.449Z",
+        "ok": true,
+        "rows": 70,
+        "changed": true,
+        "lastOkAt": "2026-10-04T11:02:05.449Z",
+        "newModels": 0
+      }
+    }
+  }
+}

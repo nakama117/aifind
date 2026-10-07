@@ -1,11 +1,12 @@
 // Item detail and Markdown export, both behind the same visibility and licence rules.
 import type { OutlineEntry, SiteItemDetail, StoryRef } from "@aihot/contracts/site";
 import { SITE } from "@aihot/site";
+import { tokyoDate } from "@aihot/contracts/time";
 import { bodyToMarkdown } from "../content/markdown.ts";
 import { sql } from "../db.ts";
 import { proxyBodyImages } from "../media/imgproxy.ts";
 import { textToHtml } from "../content/sanitize.ts";
-import { exportTranslation, isChineseBody, ITEM_COLUMNS, ITEM_FROM, seatHolders, showsPost, toItemSummary, xView, type ItemRow } from "./items.ts";
+import { exportTranslation, isJapaneseBody, ITEM_COLUMNS, ITEM_FROM, seatHolders, showsPost, toItemSummary, xView, type ItemRow } from "./items.ts";
 import { listedCondition } from "./scope.ts";
 import { itemUrl } from "./links.ts";
 import { hasItemPage, publicSourceName } from "./rules.ts";
@@ -120,7 +121,7 @@ export async function loadItemDetail(id: string, language: "zh" | "original" = "
       x = shown;
     }
   } else if (row.body_mode === "full" && row.body_html) {
-    const chinese = isChineseBody(row);
+    const chinese = isJapaneseBody(row);
     const zh = chinese ? { html: row.body_html, kind: "original" as const } : row.tr_html ? { html: row.tr_html, kind: "translation" as const } : null;
     reading = readingBody(language, zh, chinese ? null : row.body_html, chinese ? true : row.tr_complete ?? false, (html) => withOutline(proxyBodyImages(html)));
   }
@@ -178,23 +179,25 @@ export async function exportMarkdown(id: string): Promise<{ filename: string; bo
   if (!row || !markdownAvailable(row)) return null;
   const lines: string[] = [];
   lines.push(`# ${row.title}`, "");
-  if (row.original_title) lines.push(`> 原标题：${row.original_title}`, "");
-  lines.push(`- 来源：${publicSourceName(row.source_name)}`);
-  lines.push(`- 发布时间：${(row.published_at ?? row.discovered_at).toISOString()}`);
+  if (row.original_title) lines.push(`> 元のタイトル：${row.original_title}`, "");
+  lines.push(`- 出典：${publicSourceName(row.source_name)}`);
+  lines.push(row.published_at
+    ? row.channel === "news" ? `- 公開日：${tokyoDate(row.published_at)}` : `- 公開日時：${row.published_at.toISOString()}`
+    : `- 掲載日時：${row.discovered_at.toISOString()}`);
   lines.push(`- ${SITE.name}：${itemUrl(row.id)}`);
   lines.push(`- 原文：${row.url}`, "");
-  if (row.summary) lines.push("## 摘要", "", row.summary, "");
-  if (row.selected && row.seat && row.reason) lines.push("## 推荐理由", "", row.reason, "");
+  if (row.summary) lines.push("## 要約", "", row.summary, "");
+  if (row.selected && row.seat && row.reason) lines.push("## おすすめの理由", "", row.reason, "");
   if (showsPost(row) && row.x_post?.text) {
-    lines.push("## 正文", "", String(row.x_post.text), "");
-    if (row.zh_text) lines.push("## 中文译文", "", row.zh_text, "");
+    lines.push("## 本文", "", String(row.x_post.text), "");
+    if (row.zh_text) lines.push("## 日本語訳", "", row.zh_text, "");
     const q = row.x_post.quoted as { handle?: string; text?: string; url?: string } | null | undefined;
-    if (q?.text) lines.push(`## 引用 @${q.handle ?? ""}`, "", ...String(q.text).split("\n").map((l) => `> ${l}`), "", ...(q.url ? [q.url, ""] : []));
-    if (q?.text && row.quoted_zh) lines.push("### 引用中文译文", "", ...row.quoted_zh.split("\n").map((l) => `> ${l}`), "");
+    if (q?.text) lines.push(`## 引用 @ ${q.handle ?? ""}`, "", ...String(q.text).split("\n").map((l) => `> ${l}`), "", ...(q.url ? [q.url, ""] : []));
+    if (q?.text && row.quoted_zh) lines.push("### 引用の日本語訳", "", ...row.quoted_zh.split("\n").map((l) => `> ${l}`), "");
   } else if (row.body_mode === "full" && row.body_html) {
     const translation = exportTranslation(row);
-    if (translation) lines.push("## 正文 · 中文译文", "", bodyToMarkdown(translation, row.url), "");
-    lines.push(isChineseBody(row) ? "## 正文" : "## 正文 · 原文", "", bodyToMarkdown(row.body_html, row.url), "");
+    if (translation) lines.push("## 本文 · 日本語訳", "", bodyToMarkdown(translation, row.url), "");
+    lines.push(isJapaneseBody(row) ? "## 本文" : "## 本文 · 原文", "", bodyToMarkdown(row.body_html, row.url), "");
   }
   return { filename: `${SITE.mcpPrefix}-${row.id}.md`, body: lines.join("\n").replace(/\n{3,}/g, "\n\n") };
 }

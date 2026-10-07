@@ -1,0 +1,109 @@
+{
+  "events": [
+    {
+      "id": "openai-astra-2026-09-03-banked-reset",
+      "type": "reset_credit",
+      "titleJa": "Astra 公開時の保存型リセット配布（9月3日）",
+      "summaryJa": "OpenAI は、条件を満たす既存の Plus・Pro・Business 利用者に、9月3日分の保存型リセットを配布したと説明しています。これは利用時に適用するリセットです。",
+      "scopeJa": "対象条件を満たす既存の Plus・Pro・Business 契約者。Business Standard / Premium 席を含み、地域やアカウント状態などの条件が適用されます。",
+      "status": "confirmed",
+      "inProgress": false,
+      "reportedAt": null,
+      "schedule": null,
+      "confirmedAt": null,
+      "occurredOn": "2026-09-03",
+      "occurredOnTimezone": "unspecified",
+      "confirmationBasis": "source_post",
+      "evidenceJa": "公式ヘルプがこの日の配布を過去形で記載。具体的な配布時刻と日付のタイムゾーンは示されていません。",
+      "sources": [
+        {
+          "id": "openai-help-astra-reset-offers",
+          "author": "OpenAI Help Center",
+          "publishedAt": null,
+          "verifiedAt": "2026-10-04T10:57:24Z",
+          "url": "https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex",
+          "textJa": "Astra 公開時のリセット提供について記載した公式ヘルプ。文章の正確な公開日時は確認できません。",
+          "originalExcerpt": "",
+          "stage": "confirmation"
+        },
+        {
+          "id": "openai-help-codex-banked-reset-mechanism",
+          "author": "OpenAI Help Center",
+          "publishedAt": null,
+          "verifiedAt": "2026-10-04T10:57:24Z",
+          "url": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
+          "textJa": "保存型のフルリセットは利用時に5時間枠と週次枠を更新し、週次リセット日も変わります。対象条件は提供ごとに異なります。",
+          "originalExcerpt": "",
+          "stage": "context"
+        }
+      ]
+    },
+    {
+      "id": "openai-astra-2026-09-04-banked-reset",
+      "type": "reset_credit",
+      "titleJa": "Astra 公開時の保存型リセット配布（9月4日）",
+      "summaryJa": "OpenAI は、対象条件を満たす既存の Plus・Pro・Business 利用者に、9月4日にも保存型リセットを配布したと説明しています。前日分とは別の日の提供です。",
+      "scopeJa": "対象条件を満たす既存の Plus・Pro・Business 契約者。Business Standard / Premium 席を含みます。個別の付与は公式の対象条件と各アカウントで確認してください。",
+      "status": "confirmed",
+      "inProgress": false,
+      "reportedAt": null,
+      "schedule": null,
+      "confirmedAt": null,
+      "occurredOn": "2026-09-04",
+      "occurredOnTimezone": "unspecified",
+      "confirmationBasis": "source_post",
+      "evidenceJa": "公式ヘルプに9月3日と4日の各日の配布が記載されています。配布時刻および日付のタイムゾーンは不明です。",
+      "sources": [
+        {
+          "id": "openai-help-astra-reset-offers",
+          "author": "OpenAI Help Center",
+          "publishedAt": null,
+          "verifiedAt": "2026-10-04T10:57:24Z",
+          "url": "https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex",
+          "textJa": "Astra 公開時のリセット提供について記載した公式ヘルプ。文章の正確な公開日時は確認できません。",
+          "originalExcerpt": "",
+          "stage": "confirmation"
+        },
+        {
+          "id": "openai-help-codex-banked-reset-mechanism",
+          "author": "OpenAI Help Center",
+          "publishedAt": null,
+          "verifiedAt": "2026-10-04T10:57:24Z",
+          "url": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan",
+          "textJa": "保存型リセットは保管して後から利用できます。将来のリセット提供は保証されていません。",
+          "originalExcerpt": "",
+          "stage": "context"
+        }
+      ]
+    },
+    {
+      "id": "openai-astra-2026-09-07-automatic-reset",
+      "type": "direct_reset",
+      "titleJa": "対象利用者の利用枠を自動リセット（9月7日）",
+      "summaryJa": "OpenAI は9月7日、対象の Plus・Pro・Business 利用枠を自動で更新したと説明しています。保存して使うリセットの追加ではありません。",
+      "scopeJa": "告知の条件を満たす Plus・Pro・Business の利用枠。全ユーザー共通の対象範囲や個々の残量を示すものではありません。",
+      "status": "confirmed",
+      "inProgress": false,
+      "reportedAt": null,
+      "schedule": null,
+      "confirmedAt": null,
+      "occurredOn": "2026-09-07",
+      "occurredOnTimezone": "unspecified",
+      "confirmationBasis": "source_post",
+      "evidenceJa": "公式ヘルプが9月7日の自動適用を明記しています。原文は日付のみで、実施時刻と日付のタイムゾーンは記載していません。",
+      "sources": [
+        {
+          "id": "openai-help-astra-reset-offers",
+          "author": "OpenAI Help Center",
+          "publishedAt": null,
+          "verifiedAt": "2026-10-04T10:57:24Z",
+          "url": "https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex",
+          "textJa": "Astra 公開時のリセット提供について記載した公式ヘルプ。文章の正確な公開日時は確認できません。",
+          "originalExcerpt": "",
+          "stage": "confirmation"
+        }
+      ]
+    }
+  ],
+  "reason": "2026-10-04T10:57:24Z 逐项核对 OpenAI 官方帮助页：仅收录9月3日、4日保存型重置与7日自动重置；原文未给精确发布时间、事件时刻及事件日期时区，全部保留不确定性。"
+}
