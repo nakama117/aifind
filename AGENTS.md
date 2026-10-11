@@ -42,3 +42,12 @@
 ## 写代码
 
 匹配周围代码的写法、命名和注释密度。选能清楚解决问题的简单方案，只定义正在使用的抽象。验证改动涉及的重要行为，不为简单的样式改动写测试。
+
+## Cursor Cloud specific instructions
+
+云端环境每次启动会拉起 PostgreSQL 17，监听 `127.0.0.1:55432`（与网页测试的默认端口一致，仅本机 trust），并在 http://127.0.0.1:3100 提供预览。预览关闭采集和模型调用，不需要 OpenAI 密钥。Node.js 24 安装在 `/usr/local/bin`。
+
+- 后端测试：`DATABASE_URL=postgres://127.0.0.1:55432/aifind_test npm test`。当前用户对回环地址是超级用户，可以建库。
+- 网页测试：`npm run build -w @aihot/web && node --test apps/web/tests/*.test.ts`。
+- 预览起来以后：`node scripts/smoke.ts --base http://127.0.0.1:3100`。
+- `.env` 由启动时的 `node scripts/init-env.ts` 补齐。不要提交 `.env`，也不要把 `COLLECT_ENABLED` 或 `MODEL_CALLS_ENABLED` 改成 `true`。
